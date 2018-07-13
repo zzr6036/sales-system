@@ -1,0 +1,113 @@
+<form id="filter">
+  <script src="moment.js"></script>
+  <script>
+    moment().format();
+  </script>
+  <h3> Manage Merchant Information
+    <!-- <a class="btn btn-primary" style="font-size: 1rem;float: right;" id="createnewuser" [routerLink]="['/formes/createuser']">Create New User!</a> -->
+    <a class="btn btn-primary" style="font-size: 1rem;float: right;" id="createnewuser" (click)="createNewUser()">Create New User!</a>
+  </h3>
+  <div class="card">
+    <div class="card-body">
+      <!-- Search Engine -->
+      <div class="form-group">
+        <font color="blue"><strong>Search by:</strong></font>
+        <div class="row">
+          <div class="col col-md-3" >
+            <select class="from-control amber-border" id="searchSelction" [(ngModel)]="itemSelected" name="itemSelected" (ngModelChange)="onSelect()" style="width: 80%; height: 35px">
+              <option *ngFor="let selection of selections">{{selection}}</option>
+            </select>
+          </div>
+          <div class="col col-md-6">
+            <div class="row">
+              <div class="col col-md-5">
+                <input type="text" class="form-control" name="searchString" placeholder="Search..." [(ngModel)]="term"  (keydown.enter)="onKeydown($event)">
+              </div>
+              <div class="col col-md-1 mt-2" id="searchboxicon">
+                <img src="assets/images/search.png" height="20px" width="20px"  (click)="onKeySearch($event)" >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <div class="no-more-tables">
+        <table class="table table-bordered table-striped mb-0">
+          <thead>
+            <tr>
+              <th>
+                ID
+              </th>
+              <th>
+                Restaurant Name
+              </th>
+              <th class="numeric">
+                Mobile No
+              </th>
+              <th class="numeric">
+                Email
+              </th>
+              <th class="numeric">
+                Created Date
+              </th>
+              <th class="numeric">
+                Status
+              </th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let account of accounts; let i = index">
+              <td data-title="ID">
+                {{account.Id}}
+              </td>
+              <td data-title="Restaurant Name">
+                {{account.RestaurantName}}
+              </td>
+              <td data-title="Mobile No" class="numeric">
+                {{account.Mobile}}
+              </td>
+              <td data-title="Email" class="numeric">
+                {{account.Email}}
+              </td>
+              <td data-title="Date" class="numeric">
+                {{account.LastUpdated | amLocal | amDateFormat: 'YYYY-MM-DD'}}
+              </td>
+              <td data-title="Status" class="numeric">
+                <button type="button" class="btn btn-link" (click)=showDetail(account)>{{account.Status}}</button>
+              </td>
+
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- <div class="container"> -->
+    <!-- items to be paged -->
+    <!-- <div *ngFor="let item of pagedItems">{{item.name}}</div> -->
+    <!-- pager -->
+    <!-- <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+      <li [ngClass]="{disabled:pager.currentPage === 1}">
+        <a (click)="setPage(1)">First</a>
+      </li>
+      <li [ngClass]="{disabled:pager.currentPage === 1}">
+        <a (click)="setPage(pager.currentPage - 1)">Previous</a>
+      </li>
+      <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page }">
+        <a (click)="setPage(page)">{{page}}</a>
+      </li>
+      <li [ngClass]="{disabled:pager.currentPage === pager.totalPage}">
+        <a (click)="setPage(pager.currentPage + 1)">Next</a>
+      </li>
+      <li [ngClass]="{disabled: pager.currentPage === pager.totalPages}">
+        <a (click)="setPage(pager.totalPages)">Last</a>
+      </li>
+    </ul>
+  </div> -->
+  </div>
+  <div class="notification is-success" *ngIf="accounts.length === 0">No Merchant Account!</div>
+</form>
+<router-outlet></router-outlet>

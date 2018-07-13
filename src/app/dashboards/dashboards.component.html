@@ -1,0 +1,39 @@
+<h3>Sales Dashboard</h3>
+<div class="row">
+  <div class="col col-lg-12">
+    <div class="card card-body">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th scope="col" style="width: 10%;">Index</th>
+            <th scope="col" style="width: 20%;">Sales Name</th>
+            <th scope="col" style="width: 20%">Mobile</th>
+            <th scope="col" style="width: 20%;">Sales Amount</th>
+            <th scope="col" style="width: 15%;">Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let salesDetail of salesDetails; let i=index">
+            <td>{{i+1}}</td>
+            <td>{{salesDetail.Name}}</td>
+            <td>{{salesDetail.Mobile}}</td>
+            <td>{{salesDetail.Amount}}</td>
+            <td>
+              <div class="dropdown">
+                <button class="btn btn-outline-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspipup="true"
+                  aria-expanded="false">
+                  Action
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButoon">
+                  <span class="dropdown-item" (click)="viewSalesInto()"> View</span>
+                  <div class="dropdown-divider"></div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,31 @@
+<h3>View Promotion Code Using Detail</h3>
+<div class="card">
+  <div class="card-body">
+    <div class="no-more-tables">
+      <table class="table table-bordered table-striped mb-0">
+        <thead>
+          <tr>
+            <th>Index</th>
+            <th>Promotion Code</th>
+            <th>Promotion Code Id</th>
+            <th>User Name</th>
+            <th>User Id</th>
+            <!-- <th>Merchant Id</th> -->
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let userPromotionUse of userPromotionUses; let i=index">
+            <td>{{i+1}}</td>
+            <td>{{userPromotionUse.UserPromo.Code}}</td>
+            <td>{{userPromotionUse.UserPromo.Id}}</td>
+            <td>{{userPromotionUse.User.FirstName}}</td>
+            <td>{{userPromotionUse.User.Id}}</td>
+            <!-- <td>{{userPromotionUse.UserPromo.MerchantId}}</td> -->
+            <td>{{userPromotionUse.AssignedDate}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

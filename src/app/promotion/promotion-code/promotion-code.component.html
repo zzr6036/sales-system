@@ -1,0 +1,159 @@
+<div class="card card-body mb-0 rounded-0 p-5 col-sm-12 col-md-6 col-lg-8 offset-md-2">
+  <div class="container">
+    <div class="form-group">
+      <label for="code">
+        <strong>Promotion Code</strong>
+      </label>
+      <input type="text" name="code" class="form-control" id="code" [(ngModel)]="promotionDetail.Code">
+    </div>
+
+    <div class="row">
+      <div class="col col-lg-6">
+        <div class="form-group">
+          <label for="startTime">
+            <strong>Start Date</strong>
+          </label>
+          <form class="form-inline">
+            <div class="form-group">
+              <div class="input-group">
+                <input type="datetime-local" class="form-control" placeholder="yyyy-mm-dd" name="startDate" [(ngModel)]="promotionDetail.StartTime">
+              </div>
+            </div>
+          </form>
+
+        </div>
+      </div>
+      <div class="col col-lg-6">
+        <div class="form-group">
+          <label for="endDate">
+            <strong>End Date</strong>
+          </label>
+          <form class="form-inline">
+            <div class="form-group">
+              <div class="input-group">
+                <input type="datetime-local" class="form-control" placeholder="yyyy-mm-dd" name="endDate" [(ngModel)]="promotionDetail.EndTime">
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="tickFollowing">
+        <strong>Please Tick Following</strong>
+      </label>
+      <div class="row">
+        <div class="col col-lg-1">
+          <input type="checkbox" name="perentage" class="form-control" id="isPercent" [(ngModel)]="promotionDetail.IsPercent">
+        </div>
+        <div class="col col-lg-2">
+          Percentage
+        </div>
+        <div class="col col-lg-1">
+          <input type="checkbox" name="joint" class="form-control" id="isJoint" [(ngModel)]="promotionDetail.IsJoint">
+        </div>
+        <div class="col col-lg-2">
+          Join
+        </div>
+        <div class="col col-lg-1">
+          <input type="checkbox" name="special" class="form-control" id="isSpecial" [(ngModel)]="promotionDetail.IsSpecial">
+        </div>
+        <div class="col col-lg-2">
+          Special
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="quantity">
+        <strong>Quantity</strong>
+      </label>
+      <input type="number" name="quantity" class="form-control" id="quantity" min="1" [(ngModel)]="promotionDetail.Qty">
+    </div>
+
+    <div class="form-group">
+      <button type="button" class="btn btn-outline-primary" (click)="toggle()" id="socialMedia">
+        {{buttonName}}
+      </button>
+    </div>
+
+    <div class="form-group">
+      <ng-container *ngIf="show">
+        <label for="merchantId">
+          <strong>Merchant ID</strong>
+        </label>
+        <input type="number" name="merchantId" class="form-control" id="merchantld" [(ngModel)]="promotionDetail.MerchantId">
+      </ng-container>
+    </div>
+
+    <div class="form-group">
+      <ng-container *ngIf="promotionDetail.IsPercent">
+        <label for="amount">
+          <strong>Amount</strong>
+        </label>
+        <input type="number" name="amount" class="form-control" id="amount" [(ngModel)]="promotionDetail.Amount" min="0" max="1"
+        oninput="this.value = Math.abs(this.value)">
+        <small id="amountToPercent" class="form-text text-primary">Amount between 0-1</small>
+      </ng-container>
+    </div>
+
+    <div class="form-group">
+      <ng-container *ngIf ="!promotionDetail.IsPercent">
+        <label for="amount">
+          <strong>Amount</strong>
+        </label>
+        <input type="number" name="amount" class="form-control" id="amount" [(ngModel)]="promotionDetail.Amount" min="0">
+      </ng-container>
+    </div>
+
+    <div class="form-group">
+      <label for="maxRedemptPerUser">
+        <strong>Max Redemption Per User</strong>
+      </label>
+      <input type="number" name="MaxRedemptPerUser" class="form-control" id="amount" [(ngModel)]="promotionDetail.MaxRedemptPerUser"
+        min="0">
+    </div>
+
+    <div class="form-group">
+      <label for="minUsed">
+        <strong>Min Spend</strong>
+      </label>
+      <input type="number" name="minUsed" class="form-control" id="maxDiscount" [(ngModel)]="promotionDetail.MinUsed">
+    </div>
+
+    <div class="form-group">
+      <label for="maxDiscount">
+        <strong>Max Discount</strong>
+      </label>
+      <input type="number" name="maxDiscunt" class="form-control" id="maxDiscount" [(ngModel)]="promotionDetail.MaxDiscount">
+    </div>
+
+    <div class="form-group">
+      <label for="title">
+        <strong>Title</strong>
+      </label>
+      <input type="text" name="title" class="form-control" id="title" [(ngModel)]="promotionDetail.Title">
+    </div>
+
+    <div class="form-group">
+      <label for="description">
+        <strong>Description</strong>
+      </label>
+      <input type="text" name="description" class="form-control" id="description" [(ngModel)]="promotionDetail.Description">
+    </div>
+
+    <div class="form-group">
+      <label for="detailDescription">
+        <strong>Detail Description</strong>
+      </label>
+      <input type="text" name="detailDescription" class="form-control" id="detailDescription" [(ngModel)]="promotionDetail.Description2">
+    </div>
+
+    <br>
+    <div class="row justify-content-end">
+      <button class="btn btn-primary" (click)="addPromotion()"> Add</button>
+      <!-- <button class="btn btn-primary" (click)="addPromotion(Code, StartTime, EndTime, IsPercent, IsJoint, IsSpecial, Qty, MerchantId, Amount, MaxRedemptionPerUser, MinUsed,
+      MaxDiscount, Title, Description)"> Add</button> -->
+    </div>
+  </div>
+</div>

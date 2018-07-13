@@ -1,0 +1,603 @@
+<app-alerts></app-alerts>
+<form>
+  <div class="row">
+    <div class="col col-sm-12 col-md-6 col-lg-6">
+      <div class="card card-body">
+        <!-- outlet photo upload && Application Information -->
+        <div class="col-md-3">
+          <label>Outlet Photo</label>
+          <div *ngIf="outletPhoto != undefined && outletPhoto != ''">
+            <img [src]="outletPhoto" style="width:100px;height:120px;" />
+          </div>
+          <input type="file" accept="image/*" (keyup)="autosave()" base-sixty-four-input (change)="changeListenerOutletPhoto($event)"/>
+          <small id="photosize" class="form-text text-primary">Width:100px, Height:120px</small>
+        </div>
+        <div class="applicationInfo mt-2">
+          <strong>Applicant Information</strong>
+        </div>
+        <div class="form-group mt-2">
+          <label for="username"><font color="red"><strong>* </strong></font>Username<font color="red"> (Compulsory for save draft)</font></label>
+          <input type="text" class="form-control" name="username" id="username" (keyup)="autosave()" [(ngModel)]="username" #username1="ngModel" disabled>
+        </div>
+
+        <div class="form-group">
+          <label for="password"><font color="red"><strong>* </strong></font>Password</label>
+          <input type="text" class="form-control" name="password" id="password" (keyup)="autosave()" [(ngModel)]="password" #password1="ngModel" disabled>
+        </div>
+
+        <div class="form-group">
+          <label for="exampleInputEmail"><font color="red"><strong>* </strong></font>Email Address</label>
+          <input type="email" class="form-control" name="Email" id="exampleInputEmail" (keyup)="autosave()" [(ngModel)]="email" #email1="ngModel" disabled>
+        </div>
+
+        <div class="form-group">
+          <label for="inputFirstName"><font color="red"><strong>* </strong></font>First Name</label>
+          <input type="text" class="form-control" name="firstName" id="inputFirstName" (keyup)="autosave()" [(ngModel)]="firstname"
+            #firstname1="ngModel" disabled>
+        </div>
+
+        <div class="form-group">
+          <label for="inputName"><font color="red"><strong>* </strong></font>Last Name</label>
+          <input type="text" class="form-control" name="lastName" id="inputLastName" (keyup)="autosave()" [(ngModel)]="lastname" #lastname1="ngModel" disabled>
+          <!-- <div [hidden]="lastname1.valid || lastname1.pristine" class="alert alert-danger">LastName is required</div> -->
+        </div>
+
+        <div class="form-group">
+          <label for="inputMobileNumber"><font color="red"><strong>* </strong></font>Mobile Number <font color="red"> (Compulsory for save draft)</font></label>
+          <input type="text" class="form-control" name="mobile" id="inputMobileNumber" (keyup)="autosave()" [(ngModel)]="mobile" #mobile1="ngModel" disabled>
+          <!-- <div [hidden]="mobile1.valid || mobile1.pristine" class="alert alert-danger">Mobile Number is required</div> -->
+        </div>
+
+        <div class="form-group">
+          <label for="inputICNumber"><font color="red"><strong>* </strong></font>IC Number</label>
+          <input type="text" class="form-control" name="icNumber" id="inputICNumber" (keyup)="autosave()" [(ngModel)]="icNumber" #icNumber1="ngModel"
+          disabled>
+        </div>
+
+        <div class="form-group">
+          <label for="accountType" name="accountType"><font color="red"><strong>* </strong></font>Account Type</label>
+          <select class="from-control" [(ngModel)]="accountTypeSelection" name="accountTypeSelection" style="width: 100%; height: 35px" disabled>
+            <option *ngFor="let acctyp of accountType">{{acctyp}}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="subscription" name="subscribe">
+            <strong>Subscription</strong>
+          </label>
+          <angular2-multiselect [data]="dropdownSubscriptionsList" [(ngModel)]="selectedSubscriptionsItems" name="selectedSubscriptionsItems"
+            [settings]="dropdownSettings" [settings]="dropdownSettings" (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event)"
+            (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)">
+          </angular2-multiselect>
+        </div>
+      </div>
+
+      <div class="card card-body">
+        <div class="applicationInfo mb-4">
+          <strong>Bank Information</strong>
+        </div>
+        <div class="form-group">
+          <label for="bankName"><font color="red"><strong>* </strong></font>Bank Name</label>
+          <input type="text" class="form-control" name="bankName" id="bankName" (keyup)="autosave()" [(ngModel)]="bankName" #bankNumber1="ngModel"
+          disabled>
+        </div>
+
+        <div class="form-group">
+          <label for="bankAccountName"><font color="red"><strong>* </strong></font>Bank Account Name</label>
+          <input type="text" class="form-control" name="bankAccountName" id="bankAccountName" (keyup)="autosave()" [(ngModel)]="bankAccountName"
+            #bankAccountName1="ngModel" disabled>
+        </div>
+
+        <div class="form-group">
+          <label for="bankAccountNumber"><font color="red"><strong>* </strong></font>Bank Account Number</label>
+          <input type="text" class="form-control" name="bankAccountNumber" id="bankAccountNumber" (keyup)="autosave()" [(ngModel)]="bankAccountNumber"
+            #bankAccountNumber1="ngModel" disabled>
+        </div>
+
+        <div class="form-group">
+          <label for="bankStatementEmail">Bank Statement Email</label>
+          <input type="text" class="form-control" name="bankStatementEmail" id="bankStatementMail" (keyup)="autosave()" [(ngModel)]="bankStatementEmail"
+            #bankStatementEmail1="ngModel" disabled>
+          <small id="bankAccountNumber" class="form-text text-primary">(If different with above email address)</small>
+        </div>
+      </div>
+
+      <div class="card card-body">
+        <div class="hidden-md">
+          <strong>Documents Required</strong>
+        </div>
+
+        <div class="form-group mt-3">
+          <div class="row">
+            <div class="col col-lg-10">
+              <label for="nricOfFrontApplication"><font color="red"><strong>* </strong></font>NRIC <strong>(Front)</strong> of Applicant</label>
+            </div>
+            <div class="col col-lg-2">
+              <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeFrontIC()" disabled>
+                <span class="glyphicon glyphicon-trash"></span> Remove
+              </button>
+            </div>
+          </div>
+          <div *ngIf="nricFrontImage != undefined && nricFrontImage != ''">
+            <img [src]="nricFrontImage" style="width:300px;height:400px;" />
+          </div>
+          <input type="file" accept="image/*" (keyup)="autosave()" base-sixty-four-input (change)="changeListenerNricFront($event)"/>
+        </div>
+
+        <div class="form-group">
+          <div class="row">
+            <div class="col col-lg-10">
+              <label for="nricOfBackApplication"><font color="red"><strong>* </strong></font>NRIC <strong>(Back)</strong> of Applicant</label>
+            </div>
+            <div class="col col-lg-2">
+              <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeBackIC()" disabled>
+                <span class="glyphicon glyphicon-trash"></span> Remove
+              </button>
+            </div>
+          </div>
+          <div *ngIf="nricBackImage != undefined && nricBackImage != ''">
+            <img [src]="nricBackImage" style="width:300px;height:400px;" />
+          </div>
+          <input type="file" accept="image/*" (keyup)="autosave()" base-sixty-four-input (change)="changeListenerNricBack($event)"/>
+        </div>
+
+        <div class="form-group">
+          <div class="row">
+            <div class="col col-lg-10">
+              <label for="neaLicenseCopy">NEA License Copy</label>
+            </div>
+            <div class="col col-lg-2">
+              <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeNEA()" disabled>
+                <span class="glyphicon glyphicon-trash"></span> Remove
+              </button>
+            </div>
+          </div>
+          <div *ngIf="neaLicenseImage != undefined && neaLicenseImage != ''">
+            <img [src]="neaLicenseImage" style="width:300px;height:400px;" />
+          </div>
+          <input type="file" accept="image/*" (keyup)="autosave()" base-sixty-four-input (change)="changeListenerNea($event)"/>
+        </div>
+
+        <div class="form-group">
+          <div class="row">
+            <div class="col col-lg-10">
+              <label for="tobaccoLicense">Tobacco / Alcohol License</label>
+            </div>
+            <div class="col col-lg-2">
+              <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeTob()" disabled>
+                <span class="glyphicon glyphicon-trash"></span> Remove
+              </button>
+            </div>
+          </div>
+          <div *ngIf="tobaccoAlcoholLicense != undefined && tobaccoAlcoholLicense != ''">
+            <img [src]="tobaccoAlcoholLicense" style="width:300px;height:400px;" />
+          </div>
+          <input type="file" accept="image/*" (keyup)="autosave()" base-sixty-four-input (change)="changeListenerTob($event)"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="col col-sm-12 col-md-6 col-lg-6">
+      <div class="card card-body">
+        <div class="applicationInfo mb-4">
+          <strong>Company Information</strong>
+        </div>
+        <div class="form-group">
+          <label for="restaurantName">
+            <font color="red"><strong>* </strong></font>
+            Name of Restaurant</label>
+          <input type="text" class="form-control" name="restaurantName" id="inputRestaurantName" (keyup)="autosave()" [(ngModel)]="restaurantName"
+            #restaurantName1="ngModel" disabled>
+          <!-- <div [hidden]="restaurantName1.valid || restaurantName1.pristine" class="alert alert-danger">Restaurant Name is Required</div> -->
+        </div>
+
+        <div class="form-group">
+          <label for="businessLegalName"><font color="red"><strong>* </strong></font>Business Legal Name</label>
+          <input type="text" class="form-control" name="businessLegalName" id="businessLegalName" (keyup)="autosave()" [(ngModel)]="businessLegalName"
+            #businessLegalName1="ngModel" disabled>
+        </div>
+
+        <div class="form-group">
+          <label for="ACRANumber"><font color="red"><strong>* </strong></font>ACRA Number</label>
+          <input type="text" class="form-control" name="acra" id="acra" (keyup)="autosave()" [(ngModel)]="acra" #acra1="ngModel" disabled>
+        </div>
+
+        <div class="form-group">
+          <label for="RegisteredAddress"><font color="red"><strong>* </strong></font>Registered Address</label>
+          <input type="text" class="form-control" name="registeredAddress" id="RegisteredAddress" (keyup)="autosave()" [(ngModel)]="registeredAddress"
+            #registeredAddress1="ngModel" disabled>
+        </div>
+
+        <div class="form-group">
+          <label for="servChargeRate"><font color="red"><strong>* </strong></font>Service Charge Rate</label>
+          <input type="number" class="form-control" id="servChargeRate" name="servChargeRate" min="0"
+          (keyup)="autosave()" [(ngModel)]="servChargeRate" #servChargeRate1="ngModel" disabled>
+        </div>
+
+        <div class="form-group">
+          <label for="numberOfOutlet"><font color="red"><strong>* </strong></font>Number of Outlet</label>
+          <input type="number" class="form-control" name="numberOfOutlet" id="numberOfOutlet" (keyup)="autosave()" min="1" aria-describedby="minimumNumber"
+            [(ngModel)]="numberOfOutlet" #numberOfOutlet1="ngModel" disabled>
+          <small id="minimumNumber" class="form-text text-primary">Minimum 1 outlet</small>
+        </div>
+
+        <div class="form-group">
+          <div class="row">
+            <div class="col col-lg-2">
+              <label for="outletAddress">Outlet Address</label>
+            </div>
+            <div class="col col-lg-3">
+              <button type="button" class="btn btn-sm btn-outline-info" (click)="addOutletAddress()" disabled>Add</button>
+            </div>
+          </div>
+          <table class="table table-bordered mt-3">
+            <thead>
+              <th style="width:15%">Index</th>
+              <th style="width: 20%">Outlet Name</th>
+              <th>Address</th>
+              <th style="width:15%">Action</th>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let outletAdd of outletAddress; let i=index">
+                <td>
+                  Address {{i+1}}
+                </td>
+                <td>
+                  <input type="text" class="form-control" id="outletName" [(ngModel)]="outletAdd.Name" name="{{'outletName'+i}}" #outletName1="ngModel" disabled>
+                </td>
+                <td>
+                  <input type="text" class="form-control" id="outletAddress" [(ngModel)]="outletAdd.Address" name="{{'outletAddress'+i}}" #outletAddress1="ngModel" disabled>
+                </td>
+                <td>
+                  <button class="btn btn-default" type="button" (click)="deleteOutletAddress(i)" disabled>Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="row">
+            <div class="col mt-2">
+
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="legalEntityType" name="LegalEntity"><font color="red"><strong>* </strong></font>Legal Entity Type</label>
+          <select class="from-control" [(ngModel)]="legalEntitySelection" name="legalEntitySelection" style="width: 100%; height: 35px" disabled>
+            <option *ngFor="let legalEntity of legalEntityType">{{legalEntity}}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="tickFollowing" name="tickFollowing">Please Tick Following</label>
+          <div class="row">
+            <div class="col col-lg-3">
+              <label for="hasGST">GST</label>
+              <input type="checkbox" id="hasGST" name="hasGST" [(ngModel)]="hasGST" (keyup)="autosave()" [checked]=true disabled>
+            </div>
+            <div class="col col-lg-3">
+              <label for="hasGST">Credit Card</label>
+              <input type="checkbox" id="hasCreditCard" name="hasCreditCard" [(ngModel)]="hasCreditCard" (keyup)="autosave()" [checked]=true disabled>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-body" id="opentiming">
+        <div class="form-group">
+          <div class="row justify-content-between mb-2">
+            <div class="col-4">
+              <label for="openingTime">
+                <strong>Opening Time</strong>
+              </label>
+            </div>
+          </div>
+
+          <table class="table table-striped table-bordered md-8">
+            <thead>
+              <tr>
+                <th>Open Time</th>
+                <th>Close Time</th>
+                <!-- <th>Today Close</th> -->
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <div class="row">
+              <div class="col col-lg-4 mt-2 ml-3">
+                <label class="control-label">
+                  <strong>MONDAY:</strong>
+                </label>
+              </div>
+              <div class="col col-lg-3 mt-2">
+                <input type="checkbox" name="isClosedMonday" [(ngModel)]="openTiming[0].ClosedToday" [checked]=true disabled>Closed
+              </div>
+              <div class="col col-lg-3 mt-1">
+                <button type="button" class="btn btn-sm btn-link pull-right" (click)="addMondayDurations()">
+                  <i class="icon-plus"></i>
+                </button>
+              </div>
+            </div>
+
+            <tbody>
+              <tr *ngFor="let mondayDuration of openTiming[0].OperationHourList; let i = index">
+                <td>
+                  <input class="form-control" type="text" id="newMondayDurationOpenTime" [(ngModel)]="mondayDuration.OpenTime" #openTime="ngModel"
+                    name="{{'mondayOpenTime'+i}}" disabled/>
+                </td>
+                <td>
+                  <input class="form-control" type="text" id="newMondayDurationEndTime" [(ngModel)]="mondayDuration.CloseTime" #endTime="ngModel"
+                    name="{{'mondayEndTime'+i}}" disabled/>
+                </td>
+                <td>
+                  <button class="btn btn-default" type="button" (click)="deleteMondayDurations(i)" disabled>Delete</button>
+                </td>
+              </tr>
+            </tbody>
+
+            <div class="row">
+              <div class="col col-lg-4 mt-2 ml-3">
+                <label class="control-label">
+                  <strong>TUESDAY:</strong>
+                </label>
+              </div>
+              <div class="col col-lg-3 mt-2">
+                <input type="checkbox" name="isClosedTuesday" [(ngModel)]="openTiming[1].ClosedToday" [checked]=true disabled>Closed
+              </div>
+              <div class="col col-lg-3 mt-1">
+                <button type="button" class="btn btn-sm btn-link pull-right" (click)="addTuesdayDurations()">
+                  <i class="icon-plus"></i>
+                </button>
+              </div>
+            </div>
+
+            <tbody>
+              <tr *ngFor="let tuesdayDuration of openTiming[1].OperationHourList; let i = index">
+                <td>
+                  <input class="form-control" type="text" id="newTuesdayDurationOpenTime" [(ngModel)]="tuesdayDuration.OpenTime" #openTime="ngModel"
+                    name="{{'tuesdayOpenTime'+i}}" disabled/>
+                </td>
+                <td>
+                  <input class="form-control" type="text" id="newTuesdayDurationEndTime" [(ngModel)]="tuesdayDuration.CloseTime" #endTime="ngModel"
+                    name="{{'tuesdayEndTime'+i}}" disabled/>
+                </td>
+                <td>
+                  <button class="btn btn-default" type="button" (click)="deleteTuesdayDurations(i)" disabled>Delete</button>
+                </td>
+              </tr>
+            </tbody>
+
+            <div class="row">
+              <div class="col col-lg-4 mt-2 ml-3">
+                <label class="control-label">
+                  <strong>WEDNESDAY:</strong>
+                </label>
+              </div>
+              <div class="col col-lg-3 mt-2">
+                <input type="checkbox" name="isClosedWednesday" [(ngModel)]="openTiming[2].ClosedToday" [checked]=true disabled>Closed
+              </div>
+              <div class="col col-lg-3 mt-1">
+                <button type="button" class="btn btn-sm btn-link pull-right" (click)="addWednesdayDurations()" disabled>
+                  <i class="icon-plus"></i>
+                </button>
+              </div>
+            </div>
+
+            <tbody>
+              <tr *ngFor="let wednesdayDuration of openTiming[2].OperationHourList; let i = index">
+                <td>
+                  <input class="form-control" type="text" id="newWednesdayDurationOpenTime" [(ngModel)]="wednesdayDuration.OpenTime" #openTime="ngModel"
+                    name="{{'wednesdayOpenTime'+i}}" disabled/>
+                </td>
+                <td>
+                  <input class="form-control" type="text" id="newWednesdayDurationEndTime" [(ngModel)]="wednesdayDuration.CloseTime" #endTime="ngModel"
+                    name="{{'wednesdayEndTime'+i}}" disabled/>
+                </td>
+                <td>
+                  <button class="btn btn-default" type="button" (click)="deleteWednesdayDurations(i)" disabled>Delete</button>
+                </td>
+              </tr>
+            </tbody>
+
+            <div class="row">
+              <div class="col col-lg-4 mt-2 ml-3">
+                <label class="control-label">
+                  <strong>THURSDAY:</strong>
+                </label>
+              </div>
+              <div class="col col-lg-3 mt-2">
+                <input type="checkbox" name="isClosedThursday" [(ngModel)]="openTiming[3].ClosedToday" [checked]=true disabled>Closed
+              </div>
+              <div class="col col-lg-3 mt-1">
+                <button type="button" class="btn btn-sm btn-link pull-right" (click)="addThursdayDurations()" disabled>
+                  <i class="icon-plus"></i>
+                </button>
+              </div>
+            </div>
+
+            <tbody>
+              <tr *ngFor="let thursdayDuration of openTiming[3].OperationHourList; let i = index">
+                <td>
+                  <input class="form-control" type="text" id="newThursdayDurationOpenTime" [(ngModel)]="thursdayDuration.OpenTime" #openTime="ngModel"
+                    name="{{'thursdayOpenTime'+i}}" disabled/>
+                </td>
+                <td>
+                  <input class="form-control" type="text" id="newThursdayDurationEndTime" [(ngModel)]="thursdayDuration.CloseTime" #endTime="ngModel"
+                    name="{{'thursdayEndTime'+i}}" disabled/>
+                </td>
+                <td>
+                  <button class="btn btn-default" type="button" (click)="deleteThursdayDurations(i)" disabled>Delete</button>
+                </td>
+              </tr>
+            </tbody>
+
+            <div class="row">
+              <div class="col col-lg-4 mt-2 ml-3">
+                <label class="control-label">
+                  <strong>FRIDAY:</strong>
+                </label>
+              </div>
+              <div class="col col-lg-3 mt-2">
+                <input type="checkbox" name="isClosedFriday" [(ngModel)]="openTiming[4].ClosedToday" [checked]=true disabled>Closed
+              </div>
+              <div class="col col-lg-3 mt-1">
+                <button type="button" class="btn btn-sm btn-link pull-right" (click)="addFridayDurations()" disabled>
+                  <i class="icon-plus"></i>
+                </button>
+              </div>
+            </div>
+
+            <tbody>
+              <tr *ngFor="let fridayDuration of openTiming[4].OperationHourList; let i = index">
+                <td>
+                  <input class="form-control" type="text" id="newFridayDurationOpenTime" [(ngModel)]="fridayDuration.OpenTime" #openTime="ngModel"
+                    name="{{'fridayOpenTime'+i}}" disabled/>
+                </td>
+                <td>
+                  <input class="form-control" type="text" id="newFridayDurationEndTime" [(ngModel)]="fridayDuration.CloseTime" #endTime="ngModel"
+                    name="{{'fridayEndTime'+i}}" disabled/>
+                </td>
+                <td>
+                  <button class="btn btn-default" type="button" (click)="deleteFridayDurations(i)" disabled>Delete</button>
+                </td>
+              </tr>
+            </tbody>
+
+            <div class="row">
+              <div class="col col-lg-4 mt-2 ml-3">
+                <label class="control-label">
+                  <strong>SATURDAY:</strong>
+                </label>
+              </div>
+              <div class="col col-lg-3 mt-2">
+                <input type="checkbox" name="isClosedSaturday" [(ngModel)]="openTiming[5].ClosedToday" [checked]=true disabled>Closed
+              </div>
+              <div class="col col-lg-3 mt-1">
+                <button type="button" class="btn btn-sm btn-link pull-right" (click)="addSaturdayDurations()" disabled>
+                  <i class="icon-plus"></i>
+                </button>
+              </div>
+            </div>
+
+            <tbody>
+              <tr *ngFor="let saturdayDuration of openTiming[5].OperationHourList; let i = index">
+                <td>
+                  <input class="form-control" type="text" id="newSaturdayDurationOpenTime" [(ngModel)]="saturdayDuration.OpenTime" #openTime="ngModel"
+                    name="{{'saturdayOpenTime'+i}}" disabled/>
+                </td>
+                <td>
+                  <input class="form-control" type="text" id="newSaturdayDurationEndTime" [(ngModel)]="saturdayDuration.CloseTime" #endTime="ngModel"
+                    name="{{'saturdayEndTime'+i}}" disabled/>
+                </td>
+                <td>
+                  <button class="btn btn-default" type="button" (click)="deleteSaturdayDurations(i)" disabled>Delete</button>
+                </td>
+              </tr>
+            </tbody>
+
+            <div class="row">
+              <div class="col col-lg-4 mt-2 ml-3">
+                <label class="control-label">
+                  <strong>SUNDAY:</strong>
+                </label>
+              </div>
+              <div class="col col-lg-3 mt-2">
+                <input type="checkbox" name="isClosedSunday" [(ngModel)]="openTiming[6].ClosedToday" [checked]=true disabled>Closed
+              </div>
+              <div class="col col-lg-3 mt-1">
+                <button type="button" class="btn btn-sm btn-link pull-right" (click)="addSundayDurations()" disabled>
+                  <i class="icon-plus"></i>
+                </button>
+              </div>
+            </div>
+
+            <tbody>
+              <tr *ngFor="let sundayDuration of openTiming[6].OperationHourList; let i = index">
+                <td>
+                  <input class="form-control" type="text" id="newSundayDurationOpenTime" [(ngModel)]="sundayDuration.OpenTime" #openTime="ngModel"
+                    name="{{'sundayOpenTime'+i}}" disabled/>
+                </td>
+                <td>
+                  <input class="form-control" type="text" id="newSundayDurationEndTime" [(ngModel)]="sundayDuration.CloseTime" #endTime="ngModel"
+                    name="{{'sundayEndTime'+i}}" disabled/>
+                </td>
+                <td>
+                  <button class="btn btn-default" type="button" (click)="deleteSundayDurations(i)" disabled>Delete</button>
+                </td>
+              </tr>
+            </tbody>
+
+            <div class="row">
+              <div class="col col-lg-4 mt-2 ml-3">
+                <label class="control-label">
+                  <strong>PUBLIC HOLIDAY:</strong>
+                </label>
+              </div>
+              <div class="col col-lg-3 mt-2">
+                <input type="checkbox" name="isClosedPublicHoliday" [(ngModel)]="openTiming[7].ClosedToday" [checked]=true disabled>Closed
+              </div>
+              <div class="col col-lg-3 mt-1">
+                <button type="button" class="btn btn-sm btn-link pull-right" (click)="addPublicHolidayDurations()" disabled>
+                  <i class="icon-plus"></i>
+                </button>
+              </div>
+            </div>
+
+            <tbody>
+              <tr *ngFor="let publicHolidayDuration of openTiming[7].OperationHourList; let i = index">
+                <td>
+                  <input class="form-control" type="text" id="newPublicHolidayDurationOpenTime" [(ngModel)]="publicHolidayDuration.OpenTime"
+                    #openTime="ngModel" name="{{'publicHolidayOpenTime'+i}}" disabled/>
+                </td>
+                <td>
+                  <input class="form-control" type="text" id="newPublicHolidayDurationEndTime" [(ngModel)]="publicHolidayDuration.CloseTime"
+                    #endTime="ngModel" name="{{'publicHolidayEndTime'+i}}" disabled/>
+                </td>
+                <td>
+                  <button class="btn btn-default" type="button" (click)="deletePublicHolidayDurations(i)" disabled>Delete</button>
+                </td>
+              </tr>
+            </tbody>
+
+          </table>
+
+        </div>
+      </div>
+
+      <!-- Submit Modal -->
+      <div class="modal fade" id="submitModal" role="dialog">
+        <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Are you sure submit this form?</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+              <strong style="color: rgb(5, 5, 5);">You are going to submit this form...</strong>
+            </div>
+            <div class="modal-footer">
+              <!-- <button *ngIf="status!=='approved'" type="button" class="btn btn-default" data-dismiss="modal" (click)="saveDraft(false)">Yes</button> -->
+              <button *ngIf="status!=='approved'" type="button" class="btn btn-default" data-dismiss="modal" (click)="onSubmit()">Yes</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="row">
+    <div class="col-5"></div>
+    <div class="col-1">
+      <button type="button" class="btn btn-outline-info" (click)="saveDraft(true)">Save Draft</button>
+    </div>
+    <div class="col-1">
+      <button class="btn btn-outline-info" type="submit" data-toggle="modal" data-target="#submitModal">Submit</button>
+    </div>
+    <div class="col-1">
+      <button type="reset" value="Reset" class="btn btn-outline-info">Reset</button>
+    </div>
+  </div> -->
+</form>

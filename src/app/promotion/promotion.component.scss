@@ -1,0 +1,47 @@
+@import "../../assets/fonts/font-awesome-4.7.0/css/font-awesome.css";
+
+
+.search-container button {
+  float: right;
+  padding: 6px 10px;
+  // margin-top: 8px;
+  // margin-right: 20px;
+  padding-left: -20px;
+  background: rgb(255, 255, 255);
+  font-size: 15px;
+  border: none;
+  cursor: pointer;
+}
+
+.icon-list a {
+  display: block;
+  padding-left: 40px;
+  height: 32px;
+  line-height: 32px;
+  margin-bottom: 5px;
+  .icon, .fa,
+  [class^="icon-"],
+  [class*=" icon-"] {
+    position: absolute;
+    top: 0;
+    left: 10px;
+    min-width: 30px;
+    text-align: center;
+    line-height: 32px;
+  }
+  &:hover .fa,
+  &:hover .icon,
+  &:hover [class^="icon-"],
+  &:hover [class*=" icon-"] {
+    top: 5px;
+    font-size: 1.5em;
+  }
+}
+.between{
+  display: flex;
+  justify-content:space-between;
+}
+
+#createnewpromotion{
+  color: azure;
+}

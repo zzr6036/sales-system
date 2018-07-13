@@ -1,0 +1,32 @@
+export class Createuser {
+    Id: number;
+    UserName: string;
+    Password: string;
+    AccountType: Array<any> = [];
+    Email: string;
+    Firstname: string;
+    Lastname: string;
+    NRIC: string;
+    Mobile: string;
+    BankName: string;
+    BankAccountName: string;
+    BankAccountNumber: string;
+    BankStatementEmail:string;
+    RestaurantName: string;
+    BusinessLegalName: string;
+    ACRA: string;
+    RegisteredAddress: string;
+    OutletAddress: string;
+    NoOfOutlet: number;
+    LegalEntityType: Array<any> = [];
+    NricImage: string;
+    NeaLicenseImage: string;
+    TobaccoAlcoholLicense: string;
+    OutletPhoto: string;
+    Subscription: Array<any> = [];
+    HasGST: boolean;
+    HasCreditCard: boolean;
+    ServChargeRate: boolean;
+    Status: string;
+    isDraft: boolean;
+}

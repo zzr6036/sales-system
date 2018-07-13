@@ -1,0 +1,30 @@
+export class FormesView {
+    OutletPhoto: String;
+    UserName: String;
+    Password: String;
+    Email: String;
+    FirstName: String;
+    LastName: String;
+    NRIC: String;
+    Mobile: String;
+    AccountType: String;
+    Subscription: String;
+    BankName: String;
+    BankAccountName: String;
+    BankAccountNumber: String;
+    BankStatementEmail: String;
+    NricImage: String;
+    NeaLicenseImage: String;
+    TobaccoAlcoholLicense: String;
+    RestaurantName: String;
+    BusinessLegalName: String;
+    ACRA: String;
+    RegisteredAddress: String;
+    OutletAddress: String;
+    ServChargeRate: String;
+    NoOfOutlet: Number;
+    LegalEntityType: String;
+    HasGST: Boolean;
+    HasCreditCard: Boolean;
+    OpenTiming: any;
+}

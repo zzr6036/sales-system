@@ -1,0 +1,193 @@
+<h3> Manage Promotion Code
+  <!-- <a class="btn btn-primary" style="font-size: 1rem;float: right;" [routerLink]="['/promotion/promotion-code']">Create Promotion Code</a> -->
+  <a class="btn btn-primary" style="font-size: 1rem;float: right;" id="createnewpromotion" (click)="createNewPromotion()">Create Promotion Code</a>
+</h3>
+<div class="row">
+  <!-- promotion code list -->
+  <div class="col col-lg-12">
+    <div class="card card-body">
+      <div class="no-more-tables">
+        <div class="row">
+          <div class="col col-lg-3 mt-2">
+            <h4>Promotion Code List</h4>
+          </div>
+          <div class="col col-lg-6">
+            <!-- Search Engine -->
+            <div class="input-group mb-3">
+              <div class="input-group-addon">
+                <img src="assets/images/search.png" height="20px" width="20px">
+              </div>
+              <input type="text" class="form-control" placeholder="Promotion Code" aria-label="Code" aria-describedby="basic-addon2" name="searchString"
+                [(ngModel)]="term" style="width: 60%">
+              <!-- <div class="input-group-append">
+                <button class="btn btn-outline-dark" type="button" (click)="searchPromCode()">Search</button>
+              </div> -->
+            </div>
+          </div>
+        </div>
+        <br>
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>Index</th>
+              <th style="width:10%">Title</th>
+              <th [class.active]="order === 'info.Code'" (click)="setOrder('info.Code')"
+              class="mdl-data-table__cell--non-numeric" style="cursor: pointer;">Code
+                  <span [hidden]="reverse">▼</span>
+                  <span [hidden]="!reverse">▲</span>
+              </th>
+              <th style="width: 15%;">Promotion info</th>
+              <th>Date</th>
+              <th>Qty</th>
+              <th style="width: 15%;">Descirption</th>
+              <!-- <th>Status</th> -->
+              <th>Action</th>
+              <th>View</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- <tr *ngFor="let promotionCode of promotionCodes | filter: term"> -->
+            <tr *ngFor="let promotionCode of promotionCodes | filter: term | orderBy: order: reverse: 'case-insensitive'; let i=index;">
+              <!-- <td>{{promotionCode.Id}}</td> -->
+              <td>{{i+1}}</td>
+              <td data-title="Title">{{promotionCode.Title}}</td>
+              <td>{{promotionCode.Code}}</td>
+              <td>
+                <div class="between">
+                  <span>Max Discount</span>
+                  <span contenteditable>{{promotionCode.MaxDiscount}}</span>
+                </div>
+                <div class="between">
+                  <span>Min Spend</span>
+                  <span contenteditable>{{promotionCode.MinUsed}}</span>
+                </div>
+                <td>
+                  <div class="between">
+                    <span>From</span>
+                    <span>{{promotionCode.StartTime | amLocal | amDateFormat: 'MM-DD-YYYY'}}</span>
+                  </div>
+                  <div class="between">
+                    <span>To</span>
+                    <span>{{promotionCode.EndTime | amLocal | amDateFormat: 'MM-DD-YYYY'}}</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="between">
+                    <span>{{promotionCode.Qty}}</span>
+                  </div>
+                  <!-- <div>Balance:2</div> -->
+                </td>
+                <td>{{promotionCode.Description}}</td>
+                <!-- <td>{{promotionCode.Status}}</td> -->
+                <td>
+                  <div class="dropdown">
+                    <button class="btn btn-outline-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                      aria-expanded="false">
+                      Action
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <span class="dropdown-item" (click)="editPromCode(promotionCode)">Edit</span>
+                      <!-- <span class="dropdown-item"><a [routerLink]="['promotion/promotion-code']">Edit</a></span> -->
+                      <!-- <span class="dropdown-item" (click)="deletePromCode()">Delete</span> -->
+                      <div class="dropdown-divider"></div>
+                      <span class="dropdown-item" (click)="assignPromotion(promotionCode)">Assign</span>
+                      <!-- <span class="dropdown-item" data-toggle="modal" data-target="#exampleModal">
+                        Assign Code
+                      </span> -->
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <button class="btn btn-outline-info" type="button" (click)="viewDetail(promotionCode)">ViewDetail</button>
+                </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Assign Promotion Code to user</h5>
+
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <h6>promotion code: AGND</h6>
+
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Mobile phone..." aria-label="Phone Or User ID" aria-describedby="basic-addon2"
+              [(ngModel)]="modeluser">
+            <div class="input-group-append">
+              <button class="btn btn-outline-dark" type="button" (click)="searchUser()">Search</button>
+            </div>
+          </div>
+          <table *ngIf="users[0].Id" class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>Select</th>
+                <th>Id</th>
+                <th>First name</th>
+                <th>Mobile Phone</th>
+                <th>Email</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of users" (click)="checkbox(user.Id)">
+              <tr *ngFor="let user of users" (click)="checkbox(user.Id)">
+                <td>
+                  <label class="custom-control custom-checkbox mb-2">
+                    <input class="custom-control-input" type="checkbox" [(ngModel)]="selectedUser">
+                    <span class="custom-control-indicator"></span>
+                  </label>
+                </td>
+                <td>{{user.Id}}</td>
+                <td>{{user.FirstName}}</td>
+                <td>{{user.MobileNumber}}</td>
+                <td>{{user.Email}}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="form-group">
+            <div class="row">
+              <div class="col col-lg-4 mt-2">
+                <label for="code">
+                  <strong>Promotion Code:</strong>
+                </label>
+              </div>
+              <div class="col col-lg-5">
+                <input type="text" name="Code" class="form-control" id="code" [(ngModel)]="codeAssign">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="row">
+              <div class="col col-lg-4 mt-2">
+                <label for="userId">
+                  <strong>User Id: </strong>
+                </label>
+              </div>
+              <div class="col col-lg-5">
+                <input type="text" name="userId" class="form-control" id="userId" [(ngModel)]="UserId">
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" (click)="assignCode()">Assign</button>
+        </div>
+      </div>
+    </div>
+  </div> -->
+  <div class="notification is-success" *ngIf="promotionCodes.length === 0">No Promotion Code for using!</div>
+</div>
