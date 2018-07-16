@@ -51,6 +51,7 @@ export class AssignPromotionComponent implements OnInit {
 
   //Assign Promotion Code
   public checkPromoCode: String;
+  public checkPromoCodeId: Number;
   public UserId: Number;
   assignUserPromoCode: any;
   public promoCodeQty: number;
@@ -71,6 +72,7 @@ export class AssignPromotionComponent implements OnInit {
     this.promotionDetail.IsPercent = assignPromotionCodes["IsPercent"];
     this.promotionDetail.IsJoint = assignPromotionCodes["IsJoint"];
     this.promotionDetail.IsSpecial = assignPromotionCodes["IsSpecial"];
+    this.promotionDetail.AssignOnly = assignPromotionCodes["AssignOnly"];
     this.promotionDetail.Qty = assignPromotionCodes["Qty"];
     this.promotionDetail.MerchantId = assignPromotionCodes["MerchantId"];
     this.promotionDetail.Amount = assignPromotionCodes["Amount"];
@@ -110,34 +112,39 @@ export class AssignPromotionComponent implements OnInit {
     //Check Promotion Code is Valid
     this.checkPromoCode = JSON.parse(this.promotionCodes).Code;
     let assignPromCode = this.checkPromoCode;
-    let assignPromUrl = global.host + 'promocode/' + '?promocode=' + assignPromCode;
+    let assignPromCodeId = this.checkPromoCodeId;
+    let tokenNo = localStorage.getItem("Token");
+    let assignPromUrl = global.host + "promocodes" + "?token=" +tokenNo;
     this.http.get(assignPromUrl, {}).map(res => res.json()).subscribe(data =>{
-      // console.log(data);
-      let UserId = this.UserId;
-      this.Special = data['IsSpecial'];
-      this.promoCodeQty = data['Qty'];
-      this.assignUserPromoCode = {
-        "Id": data["Id"],
-        "Code": data["Code"],
-        "StartTime": data["StartTime"],
-        "EndTime": data["EndTime"],
-        "Qty": data["Qty"],
-        "MerchantId":data["MerchantId"],
-        "IsPercent": data["IsPercent"],
-        "IsJoint": data["IsJoint"],
-        "IsSpecial": data["IsSpecial"],
-        "_maxRedempt": 0,
-        "Amount": data["Amount"],
-        "MinUsed": data["MinUsed"],
-        "MaxDiscount": data["MaxDiscount"],
-        "Title": data["Title"],
-        "Description": data["Description"],
-        "Status": data["Status"],
-        "CreatedByUserId": data["CreatedByUsedId"],
-        "DeleteByUserId": data["DeleteByUseId"],
-        "UserId": this.UserId,
+      for(var i=0; i<data.length; i++){
+        if(assignPromCodeId = data[i]["Id"]){
+          let UserId = this.UserId;
+          this.Special = data[i]['IsSpecial'];
+          this.promoCodeQty = data[i]['Qty'];
+          this.assignUserPromoCode = {
+            "Id": data[i]["Id"],
+            "Code": data[i]["Code"],
+            "StartTime": data[i]["StartTime"],
+            "EndTime": data[i]["EndTime"],
+            "Qty": data[i]["Qty"],
+            "MerchantId":data[i]["MerchantId"],
+            "IsPercent": data[i]["IsPercent"],
+            "IsJoint": data[i]["IsJoint"],
+            "IsSpecial": data[i]["IsSpecial"],
+            "AssignOnly": data[i]["AssignOnly"],
+            "_maxRedempt": 0,
+            "Amount": data[i]["Amount"],
+            "MinUsed": data[i]["MinUsed"],
+            "MaxDiscount": data[i]["MaxDiscount"],
+            "Title": data[i]["Title"],
+            "Description": data[i]["Description"],
+            "Status": data[i]["Status"],
+            "CreatedByUserId": data[i]["CreatedByUsedId"],
+            "DeleteByUserId": data[i]["DeleteByUseId"],
+            "UserId": this.UserId,
+          }
+        }
       }
-
       let tokenNo = localStorage.getItem("Token");
       let assignPromoCodeUrl = global.host + 'promocodes/' + '?token=' + tokenNo;
 
@@ -210,6 +217,7 @@ export class AssignPromotionComponent implements OnInit {
       "IsPercent": this.promotionDetail.IsPercent,
       "IsJoint": this.promotionDetail.IsJoint,
       "IsSpecial": this.promotionDetail.IsSpecial,
+      "AssignOnly": this.promotionDetail.AssignOnly,
       "MaxRedemptPerUser":this.promotionDetail.MaxRedemptPerUser,
       "Amount": this.promotionDetail.Amount,
       "MinUsed":  this.promotionDetail.MinUsed,

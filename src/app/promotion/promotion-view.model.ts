@@ -8,6 +8,7 @@ export class PromotionView {
     IsPercent: Boolean;
     IsJoint: Boolean;
     IsSpecial: Boolean;
+    AssignOnly: Boolean;
     Qty: Number;
     MerchantId: Number;
     Amount: Number;

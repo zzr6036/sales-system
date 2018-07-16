@@ -49,6 +49,7 @@ export class PromotionEditComponent implements OnInit {
     this.promotionDetail.IsPercent = assignPromotionCodes["IsPercent"];
     this.promotionDetail.IsJoint = assignPromotionCodes["IsJoint"];
     this.promotionDetail.IsSpecial = assignPromotionCodes["IsSpecial"];
+    this.promotionDetail.AssignOnly = assignPromotionCodes["AssignOnly"];
     this.promotionDetail.Qty = assignPromotionCodes["Qty"];
     this.promotionDetail.MerchantId = assignPromotionCodes["MerchantId"];
     this.promotionDetail.Amount = assignPromotionCodes["Amount"];
@@ -85,6 +86,7 @@ export class PromotionEditComponent implements OnInit {
       "IsPercent": this.promotionDetail.IsPercent,
       "IsJoint": this.promotionDetail.IsJoint,
       "IsSpecial": this.promotionDetail.IsSpecial,
+      "AssginOnly": this.promotionDetail.AssignOnly,
       "MaxRedemptPerUser":this.promotionDetail.MaxRedemptPerUser,
       "Amount": this.promotionDetail.Amount,
       "MinUsed":  this.promotionDetail.MinUsed,
@@ -121,6 +123,7 @@ export class PromotionEditComponent implements OnInit {
       "IsPercent": this.promotionDetail.IsPercent,
       "IsJoint": this.promotionDetail.IsJoint,
       "IsSpecial": this.promotionDetail.IsSpecial,
+      "AssignOnly": this.promotionDetail.AssignOnly,
       "MaxRedemptPerUser":this.promotionDetail.MaxRedemptPerUser,
       "Amount": this.promotionDetail.Amount,
       "MinUsed":  this.promotionDetail.MinUsed,
