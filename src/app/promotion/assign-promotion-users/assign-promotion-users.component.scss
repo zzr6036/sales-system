@@ -1,0 +1,38 @@
+.card {
+    margin: 0 auto; /* Added */
+    float: none; /* Added */
+    margin-bottom: 10px; /* Added */
+    width: 80%;
+    // width: 30%;
+}
+
+#startDate{
+    height: 90%;
+}
+#endDate{
+    height: 90%;
+}
+#userSearchSelection{
+    width: 20%;
+}
+#table{
+    height: 2000px;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+// #users-table{
+//     position: fixed;
+//     width: 61%;
+//     // top: 0px;
+//     // display: none;
+//     background-color: white;
+// }
+
+#BalanceRangeButton{
+    height: 93%;
+    // size: 20px;
+}
+
+#submit{
+    float: right;
+}

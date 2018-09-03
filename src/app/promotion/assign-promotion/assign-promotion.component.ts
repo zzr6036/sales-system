@@ -147,7 +147,6 @@ export class AssignPromotionComponent implements OnInit {
       }
       let tokenNo = localStorage.getItem("Token");
       let assignPromoCodeUrl = global.host + 'promocodes/' + '?token=' + tokenNo;
-
       //Assign Promo Code
       if(this.Special == true){
         Swal({
@@ -163,6 +162,7 @@ export class AssignPromotionComponent implements OnInit {
         //Check promo code balance
         if(this.promoCodeQty > 0){
           this.http.post(assignPromoCodeUrl, this.assignUserPromoCode, {}).map(res => res.json()).subscribe(data => {
+            console.log(data);
             if(data["Message"] == undefined){
               // window.alert("Assign Successfully")
               Swal({

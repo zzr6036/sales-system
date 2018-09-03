@@ -91,6 +91,7 @@ export class SigninComponent implements OnInit {
 
           let tokenNo = data["Token"];
           let roleCheckUrl = global.host + 'roles/' + '?token=' + tokenNo;
+          // console.log(roleCheckUrl);
           this.roleId = JSON.parse(data["UserInfo"]).RoleId;
           this.http.get(roleCheckUrl, {}).map(res => res.json()).subscribe(data => {
             //Check roles

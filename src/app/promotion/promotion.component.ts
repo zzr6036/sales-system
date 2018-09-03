@@ -13,6 +13,7 @@ import { PromotionService } from './promotion.service';
 import { PromotionView } from './promotion-view.model';
 import { PromotionEditComponent } from './promotion-edit/promotion-edit.component';
 import { AssignPromotionComponent } from './assign-promotion/assign-promotion.component';
+import { AssignPromotionUsersComponent } from './assign-promotion-users/assign-promotion-users.component';
 
 
 @Component({
@@ -165,6 +166,14 @@ export class PromotionComponent implements OnInit {
       }).then(()=>{
         this.router.navigate(['/promotion/']);
       })
+    }
+  }
+
+  assignPromotionToAll(promoCode){
+    localStorage.setItem("assignPromoCodeAll", JSON.stringify(promoCode));
+    let roleName = localStorage.getItem("RoleName");
+    if(roleName === 'Sales'){
+      this.router.navigate(['promotion/assign-promotion-users/' + promoCode.Id]);
     }
   }
 

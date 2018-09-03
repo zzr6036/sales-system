@@ -44,6 +44,7 @@ export class CreateuserEditComponent implements OnInit {
   acra: string;
   registeredAddress: string;
   numberOfOutlet: number;
+  qr: number;
   outletAddress: Array<any> = [{Name:"", Address:""}];
   newOutletAddress: any={};
   
@@ -55,6 +56,7 @@ export class CreateuserEditComponent implements OnInit {
   outletPhoto: string;
   nricFrontImage:string;
   nricBackImage: string;
+  acraBizFile: string;
 
   hasGST: boolean = false;
   hasCreditCard: boolean = false;
@@ -91,6 +93,7 @@ export class CreateuserEditComponent implements OnInit {
   isClosedSaturday: boolean = false;
   isClosedSunday: boolean = false;
   isClosedPublicHoliday: boolean = false;
+  isClosedEveOfPH: boolean = false;
 
   // public mondayDurations: Array<any> = [];
   // public newMondayDuration: any = {};
@@ -118,6 +121,9 @@ export class CreateuserEditComponent implements OnInit {
   public publicHolidayDurations = [{OpenTime:"", CloseTime:""}];;
   public newPublicHolidayDuration: any = {};
 
+  public eveOfPHs = [{OpenTime:"08:00", CloseTime:"22:00"}];
+  public newEveOfPH: any = {};
+
   openTiming = [
     {Name: "Monday", ShortName: "Mon", OperationHourList: this.mondayDurations, ClosedToday: this.isClosedMonday},
     {Name: "Tuesday", ShortName: "Tue", OperationHourList: this.tuesdayDurations, ClosedToday: this.isClosedTuesday},
@@ -126,7 +132,8 @@ export class CreateuserEditComponent implements OnInit {
     {Name: "Friday", ShortName: "Fri", OperationHourList: this.fridayDurations, ClosedToday: this.isClosedFriday},
     {Name: "Saturday", ShortName: "Sat", OperationHourList: this.saturdayDurations, ClosedToday: this.isClosedSaturday},
     {Name: "Sunday", ShortName: "Sun", OperationHourList: this.sundayDurations, ClosedToday: this.isClosedSunday},
-    {Name: "Public Holiday", ShortName: "PH", OperationHourList: this.publicHolidayDurations, ClosedToday: this.isClosedPublicHoliday}
+    {Name: "Public Holiday", ShortName: "PH", OperationHourList: this.publicHolidayDurations, ClosedToday: this.isClosedPublicHoliday},
+    {Name: "Eve Of Public Holiday", ShortName: "EveOfP.H", OperationHourList: this.eveOfPHs, ClosedToday: this.isClosedEveOfPH}
   ];
 
   public myForm: FormGroup;
@@ -165,10 +172,12 @@ export class CreateuserEditComponent implements OnInit {
      this.nricBackImage = assignMerchantDetails["NricBackImage"];
      this.neaLicenseImage = assignMerchantDetails["NeaLicenseImage"];
      this.tobaccoAlcoholLicense = assignMerchantDetails["TobaccoAlcoholLicense"];
+     this.acraBizFile = assignMerchantDetails["ACRABizFile"];
      this.restaurantName = assignMerchantDetails["RestaurantName"];
      this.businessLegalName = assignMerchantDetails["BusinessLegalName"];
      this.acra = assignMerchantDetails["ACRA"];
      this.registeredAddress = assignMerchantDetails["RegisteredAddress"];
+     this.qr = assignMerchantDetails["QR"];
      this.outletAddress = JSON.parse(assignMerchantDetails["OutletAddress"]);
      this.servChargeRate = assignMerchantDetails["ServChargeRate"];
      this.numberOfOutlet = assignMerchantDetails["NoOfOutlet"];
@@ -192,18 +201,13 @@ export class CreateuserEditComponent implements OnInit {
   }
 
   onItemSelect(item: any) {
-    // console.log(item);
-    // console.log(this.selectedSubscriptionsItems);
   }
   OnItemDeSelect(item: any) {
-    // console.log(item);
-    // console.log(this.selectedSubscriptionsItems);
   }
   onSelectAll(items: any) {
     // console.log(items);
   }
   onDeSelectAll(items: any) {
-    // console.log(items);
   }
 
   addOutletAddress(){
@@ -284,6 +288,13 @@ export class CreateuserEditComponent implements OnInit {
   deletePublicHolidayDurations(index) {
     this.openTiming[7].OperationHourList.splice(index, 1);
   }
+  addEveOfPH() {
+    this.openTiming[8].OperationHourList.push(this.newEveOfPH);
+    this.newEveOfPH = {};
+  }
+  deleteEveOfPH(index) {
+    this.openTiming[8].OperationHourList.splice(index, 1);
+  }
 
   // Convert outlet photo to base64
   _outletPhotohandleReaderLoaded(e) {
@@ -357,6 +368,30 @@ export class CreateuserEditComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
+  // Convert acraBizFile image to base64
+  _acraBizFilehandleReaderLoaded(e) {
+    var reader = e.target;
+    this.acraBizFile = reader.result;
+    this.loaded = true;
+  }
+  // Convert acraBizFile Image to Base64 format
+  changeListenerAcraBizFile(e) {
+    var file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
+    if (file == undefined) {
+      this.acraBizFile = undefined;
+      return;
+    }
+    var pattern = /image-*/;
+    var reader = new FileReader();
+    if (!file.type.match(pattern)) {
+      alert("invalid format");
+      return;
+    }
+    this.loaded = false;
+    reader.onload = this. _acraBizFilehandleReaderLoaded.bind(this);
+    reader.readAsDataURL(file);
+  }
+
   // Convert NeaLicense image to base64
   _neaHandleReaderLoaded(e) {
     var reader = e.target;
@@ -417,11 +452,14 @@ export class CreateuserEditComponent implements OnInit {
   removeTob() {
     this.tobaccoAlcoholLicense = "";
   }
+  removeAcra(){
+    this.acraBizFile = "";
+  }
 
   // Save and Submit
   saveDraft(inIsDraft) {
     // Input Validation for save draft
-    if (this.mobile !== '' && this.username !== '') {
+    if (this.mobile !== undefined && this.username !== undefined) {
       this.appInfo = {
         // "Id": (this.appInfo == null)?0:this.appInfo['Id'],
         Id: this.id,
@@ -432,7 +470,7 @@ export class CreateuserEditComponent implements OnInit {
         Firstname: this.firstname,
         Lastname: this.lastname,
         NRIC: this.icNumber,
-        Mobile: this.mobile,
+        Mobile: '+65-'+this.mobile,
         BankName: this.bankName,
         BankAccountName: this.bankAccountName,
         BankAccountNumber: this.bankAccountNumber,
@@ -442,6 +480,7 @@ export class CreateuserEditComponent implements OnInit {
         ACRA: this.acra,
         RegisteredAddress: this.registeredAddress,
         OutletAddress: JSON.stringify(this.outletAddress),
+        QR: this.qr,
         NoOfOutlet: this.numberOfOutlet,
         LegalEntityType: this.legalEntitySelection,
         OpenTiming: JSON.stringify(this.openTiming),
@@ -450,6 +489,7 @@ export class CreateuserEditComponent implements OnInit {
         NricBackImage: this.nricBackImage,
         NeaLicenseImage: this.neaLicenseImage,
         TobaccoAlcoholLicense: this.tobaccoAlcoholLicense,
+        ACRABizFile: this.acraBizFile,
         OutletPhoto: this.outletPhoto,
         Subscription: JSON.stringify(this.selectedSubscriptionsItems),
         HasGST: this.hasGST,
@@ -496,11 +536,11 @@ export class CreateuserEditComponent implements OnInit {
 
   onSubmit(){
     // Input Validation for save draft
-    if (this.username !== '' && this.password !== '' && this.email !== '' && this.firstname !== '' 
-     && this.lastname !== '' && this.mobile !== '' && this.icNumber !== '' && this.accountTypeSelection !== ''
-     && this.bankName !== '' && this.bankAccountName !== '' && this.bankAccountNumber !== '' && this.nricFrontImage !== '' 
-     && this.nricBackImage !== '' && this.businessLegalName !== '' && this.acra !== '' && this.registeredAddress !== '' 
-     && this.numberOfOutlet !== undefined && this.restaurantName !== '' && this.legalEntitySelection !== undefined) {
+    if (this.username !== '' && this.mobile !== undefined && this.password !== '' 
+    && this.email !== '' && this.firstname !== '' && this.lastname !== '' && this.mobile !== '' && this.icNumber !== '' 
+    && this.legalEntitySelection !== undefined && this.bankName !== '' && this.bankAccountName !== '' 
+    && this.bankAccountNumber !== '' && this.nricFrontImage != '' && this.nricBackImage != '' && this.businessLegalName !== '' 
+    && this.acra !== '' && this.registeredAddress !== '' && this.numberOfOutlet !== undefined && this.restaurantName !== '') {
       this.appInfo = {
         // "Id": (this.appInfo == null)?0:this.appInfo['Id'],
         Id: this.id,
@@ -511,7 +551,7 @@ export class CreateuserEditComponent implements OnInit {
         Firstname: this.firstname,
         Lastname: this.lastname,
         NRIC: this.icNumber,
-        Mobile: this.mobile,
+        Mobile: '+65-'+this.mobile,
         BankName: this.bankName,
         BankAccountName: this.bankAccountName,
         BankAccountNumber: this.bankAccountNumber,
@@ -521,6 +561,7 @@ export class CreateuserEditComponent implements OnInit {
         ACRA: this.acra,
         RegisteredAddress: this.registeredAddress,
         OutletAddress: JSON.stringify(this.outletAddress),
+        QR: this.qr,
         NoOfOutlet: this.numberOfOutlet,
         LegalEntityType: this.legalEntitySelection,
         OpenTiming: JSON.stringify(this.openTiming),
@@ -529,6 +570,7 @@ export class CreateuserEditComponent implements OnInit {
         NricBackImage: this.nricBackImage,
         NeaLicenseImage: this.neaLicenseImage,
         TobaccoAlcoholLicense: this.tobaccoAlcoholLicense,
+        ACRABizFile: this.acraBizFile,
         OutletPhoto: this.outletPhoto,
         Subscription: JSON.stringify(this.selectedSubscriptionsItems),
         HasGST: this.hasGST,

@@ -5,7 +5,7 @@
   </script>
   <h3> Manage Merchant Information
     <!-- <a class="btn btn-primary" style="font-size: 1rem;float: right;" id="createnewuser" [routerLink]="['/formes/createuser']">Create New User!</a> -->
-    <a class="btn btn-primary" style="font-size: 1rem;float: right;" id="createnewuser" (click)="createNewUser()">Create New User!</a>
+    <a class="btn btn-primary" style="font-size: 1rem;float: right;" id="createnewuser" (click)="createNewUser()">Create New User</a>
   </h3>
   <div class="card">
     <div class="card-body">
@@ -14,7 +14,7 @@
         <font color="blue"><strong>Search by:</strong></font>
         <div class="row">
           <div class="col col-md-3" >
-            <select class="from-control amber-border" id="searchSelction" [(ngModel)]="itemSelected" name="itemSelected" (ngModelChange)="onSelect()" style="width: 80%; height: 35px">
+            <select class="form-control amber-border" id="searchSelection" [(ngModel)]="itemSelected" name="itemSelected" (ngModelChange)="onSelect()" style="width: 80%; height: 35px">
               <option *ngFor="let selection of selections">{{selection}}</option>
             </select>
           </div>
@@ -52,6 +52,9 @@
               <th class="numeric">
                 Created Date
               </th>
+              <th>
+                Salesman
+              </th>
               <th class="numeric">
                 Status
               </th>
@@ -74,6 +77,9 @@
               </td>
               <td data-title="Date" class="numeric">
                 {{account.LastUpdated | amLocal | amDateFormat: 'YYYY-MM-DD'}}
+              </td>
+              <td>
+                {{account.SaleInCharge.FirstName}}
               </td>
               <td data-title="Status" class="numeric">
                 <button type="button" class="btn btn-link" (click)=showDetail(account)>{{account.Status}}</button>

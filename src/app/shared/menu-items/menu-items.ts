@@ -27,6 +27,10 @@ const MENUITEMS = [
   //   type: 'link',
   //   icon: 'basic-accelerator'
   // },
+  //   name: 'HOME',
+  //   type: 'link',
+  //   icon: 'basic-accelerator'
+  // },
   // {
   //   state: 'email',
   //   name: 'EMAIL',
@@ -51,6 +55,22 @@ const MENUITEMS = [
   //   type: 'link',
   //   icon: 'basic-webpage-multiple'
   // }
+  // {
+  //   state:'specialpromotion',
+  //   name: 'Special Promotion',
+  //   type: 'link',
+  //   icon: 'basic-accelerator'
+  // },
+  // {
+  //   state: 'point',
+  // {
+  //   state:'specialpromotion',
+  //   name: 'Special Promotion',
+  //   type: 'link',
+  //   icon: 'basic-accelerator'
+  // },
+  // {
+  //   state: 'point',
   // {
   //   state:'specialpromotion',
   //   name: 'Special Promotion',

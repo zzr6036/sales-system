@@ -2,8 +2,7 @@ import { Component, OnInit, Pipe, PipeTransform, Injectable } from "@angular/cor
 import { HttpModule, Http, Response } from "@angular/http";
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { global } from "../global";
-import { ActivatedRoute } from "@angular/router";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Observable } from "rxjs/Observable";
 import * as _ from "underscore";
 import { PaginationService } from "../services/index";
@@ -66,7 +65,6 @@ export class FormesComponent implements OnInit {
     // if (roleName === "Sales" || roleName === "TeamLeader" || roleName === "TeamMember") {
       let tokenNo = localStorage.getItem("Token");
       let getResUrl = global.host + "merchantinfoes/?token=" + tokenNo;
-      // console.log(getResUrl);
 
       if (tokenNo === "") {
         window.alert("Internet Error");
@@ -79,7 +77,6 @@ export class FormesComponent implements OnInit {
               } else {
                 this.accounts = data;
               }
-              // console.log(data)
             },
             error => {
               console.log(error);
@@ -290,9 +287,9 @@ export class FormesComponent implements OnInit {
     // this.router.navigate (['/formes/createuser', {'selectedAccount':JSON.stringify(acc)}]);
     localStorage.setItem("EditingUser", JSON.stringify(account));
     let Status = account.Status;
-    if (Status === "approved" || Status === "pending" || Status === "Pending" || Status === "rejected") {
+    if (Status === "approved" || Status === "pending" || Status === "Pending") {
       this.router.navigate(["formes/createuser-view/" + account.Id]);
-    } else if (Status === "draft" || Status === "Draft") {
+    } else if (Status === "draft" || Status === "Draft" || Status === "rejected" || Status === "Rejected") {
       let roleName = localStorage.getItem("RoleName");
       if(roleName === "Sales" || roleName === "TeamLeader" || roleName === "TeamMember"){
         this.router.navigate(["formes/createuser-edit/" + account.Id]);

@@ -18,6 +18,5 @@ export class PromotionView {
     Title: String;
     Description: String;
     Description2: String;
-    // Status: String;
     Status: String;
 }

@@ -1,0 +1,11 @@
+.buttonContainer{
+    display:flex;
+    .buttonGroup{
+      margin: auto auto auto auto;
+      .xinBtn{
+        width:100px;
+        height:32px;
+        margin: 0px 3px 0px 3px;
+      }
+    }
+  }

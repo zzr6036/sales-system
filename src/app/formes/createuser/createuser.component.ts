@@ -45,6 +45,7 @@ export class CreateuserComponent implements OnInit {
   acra: string;
   registeredAddress: string;
   numberOfOutlet: number;
+  qr: number;
   outletAddress: Array<any> = [{Name:"", Address:""}];
   newOutletAddress: any={};
   
@@ -56,6 +57,8 @@ export class CreateuserComponent implements OnInit {
   outletPhoto: string;
   nricFrontImage:string;
   nricBackImage: string;
+  acraBizFile: string;
+  // otherDocuments: Array<any> = [{Document:""}];
 
   hasGST: boolean = false;
   hasCreditCard: boolean = false;
@@ -92,6 +95,7 @@ export class CreateuserComponent implements OnInit {
   isClosedSaturday: boolean = false;
   isClosedSunday: boolean = false;
   isClosedPublicHoliday: boolean = false;
+  isClosedEveOfPH: boolean = false;
 
   // public mondayDurations: Array<any> = [];
   // public newMondayDuration: any = {};
@@ -116,8 +120,11 @@ export class CreateuserComponent implements OnInit {
   public sundayDurations = [{OpenTime:"08:00", CloseTime:"22:00"}];
   public newSundayDuration: any = {};
 
-  public publicHolidayDurations = [{OpenTime:"08:00", CloseTime:"22:00"}];;
+  public publicHolidayDurations = [{OpenTime:"08:00", CloseTime:"22:00"}];
   public newPublicHolidayDuration: any = {};
+
+  public eveOfPHs = [{OpenTime:"08:00", CloseTime:"22:00"}];
+  public newEveOfPH: any = {};
 
   openTiming = [
     {Name: "Monday", ShortName: "Mon", OperationHourList: this.mondayDurations, ClosedToday: this.isClosedMonday},
@@ -127,7 +134,8 @@ export class CreateuserComponent implements OnInit {
     {Name: "Friday", ShortName: "Fri", OperationHourList: this.fridayDurations, ClosedToday: this.isClosedFriday},
     {Name: "Saturday", ShortName: "Sat", OperationHourList: this.saturdayDurations, ClosedToday: this.isClosedSaturday},
     {Name: "Sunday", ShortName: "Sun", OperationHourList: this.sundayDurations, ClosedToday: this.isClosedSunday},
-    {Name: "Public Holiday", ShortName: "PH", OperationHourList: this.publicHolidayDurations, ClosedToday: this.isClosedPublicHoliday}
+    {Name: "Public Holiday", ShortName: "PH", OperationHourList: this.publicHolidayDurations, ClosedToday: this.isClosedPublicHoliday},
+    {Name: "Eve Of Public Holiday", ShortName: "EveOfP.H", OperationHourList: this.eveOfPHs, ClosedToday: this.isClosedEveOfPH}
   ];
 
   public myForm: FormGroup;
@@ -250,6 +258,15 @@ export class CreateuserComponent implements OnInit {
     this.publicHolidayDurations.splice(index, 1);
   }
 
+  addEveOfPH() {
+    this.openTiming[8].OperationHourList.push(this.newEveOfPH);
+    this.newEveOfPH = {};
+  }
+
+  deleteEveOfPH(index) {
+    this.openTiming[8].OperationHourList.splice(index, 1);
+  }
+
   // Convert outlet photo to base64
   _outletPhotohandleReaderLoaded(e) {
     var reader = e.target;
@@ -322,6 +339,30 @@ export class CreateuserComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
+  // Convert acraBizFile image to base64
+  _acraBizFilehandleReaderLoaded(e) {
+    var reader = e.target;
+    this.acraBizFile = reader.result;
+    this.loaded = true;
+  }
+  // Convert acraBizFile Image to Base64 format
+  changeListenerAcraBizFile(e) {
+    var file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
+    if (file == undefined) {
+      this.acraBizFile = undefined;
+      return;
+    }
+    var pattern = /image-*/;
+    var reader = new FileReader();
+    if (!file.type.match(pattern)) {
+      alert("invalid format");
+      return;
+    }
+    this.loaded = false;
+    reader.onload = this. _acraBizFilehandleReaderLoaded.bind(this);
+    reader.readAsDataURL(file);
+  }
+
   // Convert NeaLicense image to base64
   _neaHandleReaderLoaded(e) {
     var reader = e.target;
@@ -382,6 +423,9 @@ export class CreateuserComponent implements OnInit {
   removeTob() {
     this.tobaccoAlcoholLicense = "";
   }
+  removeAcra(){
+    this.acraBizFile = "";
+  }
 
   // Save and Submit
   saveDraft(inIsDraft) {
@@ -398,7 +442,7 @@ export class CreateuserComponent implements OnInit {
         Firstname: this.firstname,
         Lastname: this.lastname,
         NRIC: this.icNumber,
-        Mobile: this.mobile,
+        Mobile: "+65-"+this.mobile,
         BankName: this.bankName,
         BankAccountName: this.bankAccountName,
         BankAccountNumber: this.bankAccountNumber,
@@ -409,6 +453,7 @@ export class CreateuserComponent implements OnInit {
         RegisteredAddress: this.registeredAddress,
         OutletAddress: JSON.stringify(this.outletAddress),
         NoOfOutlet: this.numberOfOutlet,
+        QR: this.qr,
         LegalEntityType: this.legalEntitySelection,
         OpenTiming: JSON.stringify(this.openTiming),
         //image to base64
@@ -416,6 +461,7 @@ export class CreateuserComponent implements OnInit {
         NricBackImage: this.nricBackImage,
         NeaLicenseImage: this.neaLicenseImage,
         TobaccoAlcoholLicense: this.tobaccoAlcoholLicense,
+        ACRABizFile: this.acraBizFile,
         OutletPhoto: this.outletPhoto,
         Subscription: JSON.stringify(this.selectedSubscriptionsItems),
         HasGST: this.hasGST,
@@ -437,7 +483,7 @@ export class CreateuserComponent implements OnInit {
           }
           let httpCall = isExistingUser ? this.http.post(getResUrl, this.appInfo, {}): this.http.post(getResUrl, this.appInfo, {});
           httpCall.map(res => res.json()).subscribe(data => {
-              // console.log(data);
+              console.log(data);
               if (data["Message"] == undefined) {
                 // console.log(data["Message"]);
                 if (this.appInfo["Status"] === "Pending") {
@@ -461,11 +507,11 @@ export class CreateuserComponent implements OnInit {
 
   onSubmit(){
     // Input Validation for save draft
-    if (this.username !== '' && this.password !== '' && this.email !== '' && this.firstname !== '' 
-    && this.lastname !== '' && this.mobile !== '' && this.icNumber !== '' && this.accountTypeSelection !== ''
-    && this.bankName !== '' && this.bankAccountName !== '' && this.bankAccountNumber !== '' && this.nricFrontImage !== '' 
-    && this.nricBackImage !== '' && this.businessLegalName !== '' && this.acra !== '' && this.registeredAddress !== '' 
-    && this.numberOfOutlet !== undefined && this.restaurantName !== '' && this.legalEntitySelection !== undefined) {
+    if (this.username !== undefined && this.mobile !== undefined  && this.password !== undefined 
+    && this.email !== undefined && this.firstname !== undefined && this.lastname !== undefined && this.mobile !== undefined && this.icNumber !== undefined 
+    && this.legalEntitySelection !== undefined && this.bankName !== undefined && this.bankAccountName !== undefined 
+    && this.bankAccountNumber !== undefined && this.nricFrontImage != undefined && this.nricBackImage != undefined && this.businessLegalName !== undefined 
+    && this.acra !== undefined && this.registeredAddress !== undefined && this.numberOfOutlet !== undefined && this.restaurantName !== undefined) {
       this.appInfo = {
         // "Id": (this.appInfo == null)?0:this.appInfo['Id'],
         Id: this.id,
@@ -476,7 +522,7 @@ export class CreateuserComponent implements OnInit {
         Firstname: this.firstname,
         Lastname: this.lastname,
         NRIC: this.icNumber,
-        Mobile: this.mobile,
+        Mobile: '+65-'+this.mobile,
         BankName: this.bankName,
         BankAccountName: this.bankAccountName,
         BankAccountNumber: this.bankAccountNumber,
@@ -487,6 +533,7 @@ export class CreateuserComponent implements OnInit {
         RegisteredAddress: this.registeredAddress,
         OutletAddress: JSON.stringify(this.outletAddress),
         NoOfOutlet: this.numberOfOutlet,
+        QR: this.qr,
         LegalEntityType: this.legalEntitySelection,
         OpenTiming: JSON.stringify(this.openTiming),
         //image to base64
@@ -494,6 +541,7 @@ export class CreateuserComponent implements OnInit {
         NricBackImage: this.nricBackImage,
         NeaLicenseImage: this.neaLicenseImage,
         TobaccoAlcoholLicense: this.tobaccoAlcoholLicense,
+        ACRABizFile: this.acraBizFile,
         OutletPhoto: this.outletPhoto,
         Subscription: JSON.stringify(this.selectedSubscriptionsItems),
         HasGST: this.hasGST,

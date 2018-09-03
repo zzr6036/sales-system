@@ -1,0 +1,114 @@
+<div class="card w-80">
+  <div class="card-body">
+    <h6 class="card-title">Promotion Code Details</h6>
+    <div class="row">
+      <div class="col col-lg-2">
+        Code
+      </div>
+      <div class="col col-lg-2">
+        Title
+      </div>
+      <div class="col col-lg-2">
+        Min Spend
+      </div>
+      <div class="col col-lg-2">
+        From
+      </div>
+      <div class="col col-lg-2">
+        To
+      </div>
+      <div class="col col-lg-1">
+        Qty
+      </div>
+    </div>
+    <div class="row">
+      <div class="col col-lg-2">
+        <input type="text" name="code" class="form-control" id="code" [(ngModel)]="promotionDetail.Code" disabled>
+      </div>
+      <div class="col col-lg-2">
+        <input type="text" name="title" class="form-control" id="title" [(ngModel)]="promotionDetail.Title" disabled>
+      </div>
+      <div class="col col-lg-2">
+        <input type="text" name="minSpend" class="form-control" id="minSpend" [(ngModel)]="promotionDetail.MinUsed" disabled>
+      </div>
+      <div class="col col-lg-2">
+        <input type="datetime-local" name="startDate" class="form-control" id="startDate" [(ngModel)]="promotionDetail.StartTime"
+          disabled>
+      </div>
+      <div class="col col-lg-2">
+        <input type="datetime-local" name="endDate" class="form-control" id="endDate" [(ngModel)]="promotionDetail.EndTime" disabled>
+      </div>
+      <div class="col col-lg-2">
+        <input type="number" name="qty" class="form-control" id="qty" [(ngModel)]="promotionDetail.Qty" disabled>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card w-80">
+  <div class="card-body">
+    <!-- <font color="blue"><strong>Search by Balance:</strong></font>
+    <select class="form-control amber-border" id="userSearchSelection" name="userSearchSelection"></select> -->
+    <div class="row">
+      <div class="col col-lg-3 mt-2">
+        <font color="blue">
+          <strong>Balance Range:</strong>
+        </font>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col col-lg-2">
+        <input type="number" class="form-control" name="rangeMin" id="rangeMin" [(ngModel)]="minValue" oninput="this.value = Math.abs(this.value)">
+      </div>
+      <strong>~</strong>
+      <div class="col col-lg-2">
+        <input type="number" class="form-control" name="rangeMax" id="rangeMax" [(ngModel)]="maxValue" oninput="this.value = Math.abs(this.value)">
+      </div>
+      <div class="col col-lg-2">
+        <button type="button" class="btn btn-info btn-lg" id="BalanceRangeButton" (click)="BalanceRange()">Go</button>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col col-lg-3">
+        <h6 class="card-title">Please select following: </h6>
+      </div>
+      <!-- <div class="col col-lg-2">
+        <strong>Select All</strong>
+        <input type="checkbox" name="SelectAll" [checked]="isAllChecked" (change)="selectAll($event)" [(ngModel)]="selectdAll">
+      </div> -->
+    </div>
+
+    <table class="table table-bordered table-striped" id="users-table">
+      <thead>
+        <tr>
+          <th style="width: 2%;">ID</th>
+          <th style="width: 5%;">Name</th>
+          <!-- <th style="width: 6%">DOB</th> -->
+          <th style="width: 5%;">MobileNo.</th>
+          <th style="width: 5%;">Email</th>
+          <th style="width: 5%;">Balance</th>
+          <th style="width: 8%;">
+            <input type="checkbox" name="selectAll" [(ngModel)]="selectedAll" (change)="checkAll()">
+            Select/Deselect All
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let userInfo of userInfoes; let i=index">
+          <th>{{userInfo.Id}}</th>
+          <th>{{userInfo.FirstName}}</th>
+          <!-- <th>{{userInfo.Dob}}</th> -->
+          <th>{{userInfo.MobileNumber}}</th>
+          <th>{{userInfo.Email}}</th>
+          <th>{{userInfo.XinDollar}}</th>
+          <th><input type="checkbox" name="selectUser" [(ngModel)]="selectedUsers[i]"></th>
+          <!-- <th><input type="checkbox" name="selectUser" [(ngModel)]="selectedUsers" (change)="select(user)" (click)="toggleSelection(user)"></th> -->
+          <!-- <th><input type="checkbox" [(ngModel)]="userInfo.Selection" (change)="checkIfAllSelected();"></th> -->
+        </tr>
+      </tbody>
+    </table>
+    <!-- {{selectedUsers | json}} -->
+    <button type="button" id="submit" name="submit" class="btn btn-info" (click)="submit()"><strong>Submit</strong></button>
+  </div>
+</div>
