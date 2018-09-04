@@ -12,6 +12,7 @@ import { SearchPipe } from "./../search.pipe";
 import Swal from 'sweetalert2';
 import { Ng2FilterPipeModule } from 'ng2-filter-pipe'; 
 import { id } from "@swimlane/ngx-charts/release/utils";
+import { ExcelService } from '../services/excel.service';
 
 @Component({
   selector: "app-formes",
@@ -50,12 +51,16 @@ export class FormesComponent implements OnInit {
     public http: Http,
     private router: Router,
     private paginationService: PaginationService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private excelService: ExcelService,
   ) {
     this.route.params.subscribe(params => {
       // console.log(params);
     });
   }
+  exportAsXLSX():void {
+    this.excelService.exportAsExcelFile(this.accounts, 'onBoarding');
+ }
 
   momentFormat() {}
 

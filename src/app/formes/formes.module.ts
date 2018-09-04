@@ -23,6 +23,7 @@ import { FilterPipe } from './../filter.pipe';
 import { SearchPipe } from './../search.pipe';
 import { CreateuserEditComponent } from './createuser-edit/createuser-edit.component';
 import { CreateuserViewComponent } from './createuser-view/createuser-view.component';
+import { ExcelService } from '../services/excel.service';
 
 @NgModule({
   imports: [CommonModule, 
@@ -39,7 +40,8 @@ import { CreateuserViewComponent } from './createuser-view/createuser-view.compo
             AlertsModule.forRoot()],
   declarations: [FormesComponent, CreateuserComponent, SavedraftComponent, CreateuserEditComponent, CreateuserViewComponent, SearchPipe],
   // exports: [FilterPipe]
-  exports: [SearchPipe]
+  exports: [SearchPipe],
+  providers: [ExcelService]
 })
 
 export class FormesModule {}

@@ -73,10 +73,6 @@
       <div class="col col-lg-3">
         <h6 class="card-title">Please select following: </h6>
       </div>
-      <!-- <div class="col col-lg-2">
-        <strong>Select All</strong>
-        <input type="checkbox" name="SelectAll" [checked]="isAllChecked" (change)="selectAll($event)" [(ngModel)]="selectdAll">
-      </div> -->
     </div>
 
     <table class="table table-bordered table-striped" id="users-table">
@@ -84,7 +80,6 @@
         <tr>
           <th style="width: 2%;">ID</th>
           <th style="width: 5%;">Name</th>
-          <!-- <th style="width: 6%">DOB</th> -->
           <th style="width: 5%;">MobileNo.</th>
           <th style="width: 5%;">Email</th>
           <th style="width: 5%;">Balance</th>
@@ -98,13 +93,10 @@
         <tr *ngFor="let userInfo of userInfoes; let i=index">
           <th>{{userInfo.Id}}</th>
           <th>{{userInfo.FirstName}}</th>
-          <!-- <th>{{userInfo.Dob}}</th> -->
           <th>{{userInfo.MobileNumber}}</th>
           <th>{{userInfo.Email}}</th>
           <th>{{userInfo.XinDollar}}</th>
           <th><input type="checkbox" name="selectUser" [(ngModel)]="selectedUsers[i]"></th>
-          <!-- <th><input type="checkbox" name="selectUser" [(ngModel)]="selectedUsers" (change)="select(user)" (click)="toggleSelection(user)"></th> -->
-          <!-- <th><input type="checkbox" [(ngModel)]="userInfo.Selection" (change)="checkIfAllSelected();"></th> -->
         </tr>
       </tbody>
     </table>

@@ -19,25 +19,16 @@ export class AssignPromotionUsersComponent implements OnInit {
   promotionCodes: any;
   userInfoes: Array<any> = [];
   assignUsersPromoCode: any;
-
-  // UserInfoes Sample
-  // userInfoes =[{Id: 1, Name: "Peter", MobileNo: "+65-98657865", Email: "peter123@gmail.com", Balance: 22.15, Selection: false},
-  //              {Id: 2, Name: "Amy", MobileNo: "+65-98657335", Email: "amy@gmail.com", Balance: 3.25, Selection: false}]
   minValue: Number;
   maxValue: Number;
-  balanceArray: Array<any> = [];
-  balanceArrayList: Array<any> = [];
 
   // User Selection
-  Selection: String;
-  checkboxSelectedUsers: Array<any> = [];
   selectedUsers = [];
   selectedUsersObj = [];
   selectedAll = false;
 
-
   // Filter by balance
-  userObject = {}
+  userObject = {};
   userList: Array<any> = [];
 
   constructor( public http: Http, private router: Router, private route: ActivatedRoute) { }
@@ -83,6 +74,23 @@ export class AssignPromotionUsersComponent implements OnInit {
     this.selectedUsers = new Array<boolean>(this.userInfoes.length).fill(false); 
   }
 
+  BalanceRange(){
+    let tokenNo = localStorage.getItem("Token")
+    let userListUrl = global.host + 'search/' + 'user/' + '?keyword=' + '&token=' + tokenNo;
+    for(var i=0; i<this.userInfoes.length; i++){
+      if(this.minValue < this.userInfoes[i]["XinDollar"] && this.maxValue > this.userInfoes[i]["XinDollar"]){
+        let seq = i;
+        this.http.get(userListUrl, {}).map(res => res.json()).subscribe(data => {
+          this.userObject = data[seq];
+          this.userList.push(this.userObject);
+          this.userObject = {};
+          // this.userInfoes = this.userList;
+        })
+      }  
+    }
+    this.userInfoes = this.userList;
+  }
+
   checkAll(){
     if(this.selectedAll){
       this.selectedUsers = new Array<boolean>(this.userInfoes.length).fill(true); 
@@ -94,37 +102,18 @@ export class AssignPromotionUsersComponent implements OnInit {
     }
   }
 
-  BalanceRange(){
-    let tokenNo = localStorage.getItem("Token")
-    let userListUrl = global.host + 'search/' + 'user/' + '?keyword=' + '&token=' + tokenNo;
-    for(var i=0; i<this.userInfoes.length; i++){
-      if(this.minValue < this.userInfoes[i]["XinDollar"] && this.maxValue > this.userInfoes[i]["XinDollar"]){
-        this.userObject = this.userInfoes[i];
-        this.userList.push(this.userObject);
-        console.log(this.userList);
-        this.userObject = {};
-        this.userInfoes = this.userList;
-        // let seq = i;
-        // this.http.get(userListUrl, {}).map(res => res.json()).subscribe(data => {
-        //   this.userObject = data[seq];
-        //   this.userList.push(this.userObject);
-        //   this.userObject = {};
-        //   this.userInfoes = this.userList;
-        // })
-      }
-    }
-  }
-
   submit(){
-    let i = 0;
-    for(let isSelected of this.selectedUsers){
-      if(isSelected){
-        this.selectedUsersObj.push(this.userInfoes[i]);
-      }
-      ++i;
+    //Push all selected user into assign queue
+    if(!this.selectedAll){    
+      let i = 0;
+      for(let isSelected of this.selectedUsers){
+        if(isSelected){
+          this.selectedUsersObj.push(this.userInfoes[i]);
+        }
+        ++i;
+      } 
     }
-    console.log(this.selectedUsersObj.length)
-    // Assign Promotion Code to selected user
+     // Assign Promotion Code to selected user
     let tokenNo = localStorage.getItem("Token");
     let assignPromoCodeUrl = global.host + 'promocodes/' + '?token=' + tokenNo;
     for(var n=0; n<this.selectedUsersObj.length; n++){
@@ -149,32 +138,48 @@ export class AssignPromotionUsersComponent implements OnInit {
         Status: this.promotionDetail.Status,
         UserId: this.selectedUsersObj[n]["Id"],
       }
-      // console.log(this.assignUsersPromoCode.UserId);
-    }
-    
-    if(this.promotionDetail.IsSpecial == true){
+      if(this.promotionDetail.IsSpecial == true){
         Swal({
           position: 'center',
           type: 'info',
           title: 'The Special Promotion Code is not allowed to assign customer',
           showConfirmButton: true,
-        }).then(()=>{
-          this.router.navigate(['/promotion/']);
+        }).then(() => {
+          this.router.navigate(['/promotion']);
         })
       }
-    // else{
-    //   if(this.promotionDetail.Qty > 0){
-    //     console.log("1");
-    //     for(var m=0; m<this.selectedUsersObj.length; i++){
-    //       this.http.post(assignPromoCodeUrl, this.assignUsersPromoCode, {}).map(res => res.json()).subscribe(data => {
-    //         // console.log(data);
-    //         if(data["Message"] == undefined){
-    //           console.log("Hello")
-    //         }
-    //       })
-    //     }
-    //   }
-    // }
+      else{
+        if(this.promotionDetail.Qty > this.selectedUsersObj.length){
+          this.http.post(assignPromoCodeUrl, this.assignUsersPromoCode, {}).map(res => res.json()).subscribe(data => {
+            if(data["Message"] == undefined){
+              Swal({
+                position: 'center',
+                type: 'success',
+                title: 'Assign Successfully',
+                showConfirmButton: false,
+                timer: 3000,
+              }).then(() => {
+                this.router.navigate(['/promotion/']);
+              })
+            }
+            else{
+              console.log(data["Message"]);
+            }
+      }, error => {
+        console.log(error);
+      })
+        }
+        else {
+          Swal({
+            position:'center',
+            type:'warning',
+            title: '-----Unable Assign to User-----(The quantity of current promotion code is insufficient)',
+            showConfirmButton: true,
+          })
+        }
+      }
+     
+    }
     console.log(this.selectedUsersObj)
   }
 }
