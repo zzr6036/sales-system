@@ -84,11 +84,14 @@ export class AssignPromotionUsersComponent implements OnInit {
           this.userObject = data[seq];
           this.userList.push(this.userObject);
           this.userObject = {};
-          // this.userInfoes = this.userList;
         })
       }  
     }
     this.userInfoes = this.userList;
+
+    if(this.minValue == null || this.maxValue == null){
+      this.ngOnInit();
+    }
   }
 
   checkAll(){

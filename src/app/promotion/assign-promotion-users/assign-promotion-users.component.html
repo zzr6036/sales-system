@@ -58,11 +58,11 @@
     </div>
     <div class="row">
       <div class="col col-lg-2">
-        <input type="number" class="form-control" name="rangeMin" id="rangeMin" [(ngModel)]="minValue" oninput="this.value = Math.abs(this.value)">
+        <input type="number" class="form-control" name="rangeMin" id="rangeMin" [(ngModel)]="minValue">
       </div>
       <strong>~</strong>
       <div class="col col-lg-2">
-        <input type="number" class="form-control" name="rangeMax" id="rangeMax" [(ngModel)]="maxValue" oninput="this.value = Math.abs(this.value)">
+        <input type="number" class="form-control" name="rangeMax" id="rangeMax" [(ngModel)]="maxValue">
       </div>
       <div class="col col-lg-2">
         <button type="button" class="btn btn-info btn-lg" id="BalanceRangeButton" (click)="BalanceRange()">Go</button>
