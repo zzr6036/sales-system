@@ -43,11 +43,8 @@ export class PromotionService {
     let tokenNo = localStorage.getItem("Token");
     let addUrl = global.host + "addcode" + "?token=" + tokenNo;
     // const addUrl = `http://xindotsbackend.azurewebsites.net/_xin/api/addcode/?token=${localStorage.getItem("Token")}`;
-    this.http
-      .post(addUrl, promInfo, {})
-      .map(res => res.json())
-      .subscribe(
-        data => {
+    this.http.post(addUrl, promInfo, {}).map(res => res.json()).subscribe(data => {
+      // console.log(data)
           if (data["Message"] == undefined) {
             Swal({
               position: "center",
@@ -152,11 +149,7 @@ export class PromotionService {
     let tokenNo = localStorage.getItem("Token");
     let assignUrl = global.host + "promocodes" + "?token=" + tokenNo;
     // const assignUrl = `http://xindotsbackend.azurewebsites.net/_xin/api/promocodes/?token=${localStorage.getItem("Token")}`;
-    this.http
-      .post(assignUrl, promCodeInfo, {})
-      .map(res => res.json())
-      .subscribe(
-        data => {
+    this.http.post(assignUrl, promCodeInfo, {}).map(res => res.json()).subscribe(data => {
           // console.log(data);
           // console.log(assignUrl)
           if (data["Message"] == undefined) {

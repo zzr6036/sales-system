@@ -44,6 +44,7 @@ export class CreateuserViewComponent implements OnInit {
   registeredAddress: string;
   numberOfOutlet: number;
   qr: number;
+  country: string;
   outletAddress: Array<any> = [{Name:"", Address:""}];
   newOutletAddress: any = {};
   note: any = {};
@@ -61,6 +62,7 @@ export class CreateuserViewComponent implements OnInit {
   hasGST: boolean = false;
   hasCreditCard: boolean = false;
   servChargeRate: number;
+  postalcode: string;
 
   isDraft: boolean;
   loaded = false;
@@ -171,7 +173,9 @@ export class CreateuserViewComponent implements OnInit {
      this.acra = assignMerchantDetails["ACRA"];
      this.registeredAddress = assignMerchantDetails["RegisteredAddress"];
      this.outletAddress = JSON.parse(assignMerchantDetails["OutletAddress"]);
-     this.qr = assignMerchantDetails["QR"]
+     this.qr = assignMerchantDetails["QR"];
+     this.country = assignMerchantDetails["Country"];
+     this.postalcode = assignMerchantDetails["PostalCode"];
      this.servChargeRate = assignMerchantDetails["ServChargeRate"];
      this.numberOfOutlet = assignMerchantDetails["NoOfOutlet"];
      this.legalEntitySelection = assignMerchantDetails["LegalEntityType"];
@@ -487,6 +491,8 @@ export class CreateuserViewComponent implements OnInit {
         HasGST: this.hasGST,
         HasCreditCard: this.hasCreditCard,
         ServChargeRate: this.servChargeRate,
+        Country: this.country,
+        PostalCode: this.postalcode,
         Status: "draft",
       };
       let tokenNo = localStorage.getItem("Token");
@@ -528,7 +534,7 @@ export class CreateuserViewComponent implements OnInit {
 
   onSubmit(){
     // Input Validation for save draft
-    if (this.username !== '' && this.mobile !== undefined && this.password !== '' 
+    if (this.username !== '' && this.mobile !== undefined && this.password !== '' && this.country !== '' && this.postalcode !== ''
     && this.email !== '' && this.firstname !== '' && this.lastname !== '' && this.mobile !== '' && this.icNumber !== '' 
     && this.legalEntitySelection !== undefined && this.bankName !== '' && this.bankAccountName !== '' 
     && this.bankAccountNumber !== '' && this.nricFrontImage != '' && this.nricBackImage != '' && this.businessLegalName !== '' 
@@ -568,6 +574,8 @@ export class CreateuserViewComponent implements OnInit {
         HasGST: this.hasGST,
         HasCreditCard: this.hasCreditCard,
         ServChargeRate: this.servChargeRate,
+        Country: this.country,
+        PostalCode: this.postalcode,
         Status: "pending",
       };
       let tokenNo = localStorage.getItem("Token");

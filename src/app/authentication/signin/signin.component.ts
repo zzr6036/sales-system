@@ -49,8 +49,6 @@ export class SigninComponent implements OnInit {
     (username != null && token != null) ? this.router.navigate(["/formes"]) : this.router.navigate(["/authentication/signin"]);
   }
 
-  
-
   onSubmit() {
     let username = this.form.get("uname").value;
     let userpassword = this.form.get("password").value;

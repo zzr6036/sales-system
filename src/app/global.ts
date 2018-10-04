@@ -9,7 +9,6 @@ export const global = {
     // host3: 'http://192.168.1.12:3000/_xin/api/',
 }
 
-
 // export const global = {
 //     apiLink: "https://www.xindots.com/_xin/api/",
 //     // apiLink: 'https://xindotsuat.azurewebsites.net/_xin/api/',

@@ -261,22 +261,23 @@ export class FormesComponent implements OnInit {
   }
   
   createNewUser(){
-    let roleName = localStorage.getItem("RoleName");
-    if(roleName === "Sales" || roleName === "TeamLeader" || roleName === "TeamMember"){
-      this.router.navigate(['/formes/createuser'])
-    }
-    else{
-      Swal({
-        position: 'center',
-        type: 'warning',
-        title: 'You are not allowed to create new merchant account!',
-        showConfirmButton: true,
-        // timer: 2500
-      }).then(()=>{
-        this.router.navigate(['/formes/']);
-      })
-      // window.alert("You are not allowed to create new merchant account");
-    }
+    this.router.navigate(['/formes/createuser'])
+    // let roleName = localStorage.getItem("RoleName");
+    // if(roleName === "Sales" || roleName === "TeamLeader" || roleName === "TeamMember"){
+    //   this.router.navigate(['/formes/createuser'])
+    // }
+    // else{
+    //   Swal({
+    //     position: 'center',
+    //     type: 'warning',
+    //     title: 'You are not allowed to create new merchant account!',
+    //     showConfirmButton: true,
+    //     // timer: 2500
+    //   }).then(()=>{
+    //     this.router.navigate(['/formes/']);
+    //   })
+    //   // window.alert("You are not allowed to create new merchant account");
+    // }
     
   }
 

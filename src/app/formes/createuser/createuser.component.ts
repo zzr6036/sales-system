@@ -43,6 +43,8 @@ export class CreateuserComponent implements OnInit {
   restaurantName: string;
   businessLegalName: string;
   acra: string;
+  country: string;
+  postalcode: string;
   registeredAddress: string;
   numberOfOutlet: number;
   qr: number;
@@ -467,6 +469,8 @@ export class CreateuserComponent implements OnInit {
         HasGST: this.hasGST,
         HasCreditCard: this.hasCreditCard,
         ServChargeRate: this.servChargeRate,
+        Country: this.country,
+        PostalCode: this.postalcode,
         Status: "draft",
       };
       let tokenNo = localStorage.getItem("Token");
@@ -507,12 +511,12 @@ export class CreateuserComponent implements OnInit {
 
   onSubmit(){
     // Input Validation for save draft
-    if (this.username !== undefined && this.mobile !== undefined  && this.password !== undefined 
+    if (this.username !== undefined && this.mobile !== undefined  && this.password !== undefined && this.country !== undefined && this.postalcode !== undefined
     && this.email !== undefined && this.firstname !== undefined && this.lastname !== undefined && this.mobile !== undefined && this.icNumber !== undefined 
     && this.legalEntitySelection !== undefined && this.bankName !== undefined && this.bankAccountName !== undefined 
     && this.bankAccountNumber !== undefined && this.nricFrontImage != undefined && this.nricBackImage != undefined && this.businessLegalName !== undefined 
     && this.acra !== undefined && this.registeredAddress !== undefined && this.numberOfOutlet !== undefined && this.restaurantName !== undefined && 
-    this.username !== '' && this.mobile !== ''  && this.password !== ''
+    this.username !== '' && this.mobile !== ''  && this.password !== '' && this.country !== '' && this.postalcode !== ''
     && this.email !== '' && this.firstname !== '' && this.lastname !== '' && this.mobile !== '' && this.icNumber !== '' && this.legalEntitySelection !== '' 
     && this.bankName !== '' && this.bankAccountName !== '' && this.bankAccountNumber !== '' && this.nricFrontImage != '' && this.nricBackImage != '' 
     && this.businessLegalName !== '' && this.acra !== '' && this.registeredAddress !== '' && this.numberOfOutlet !== null && this.restaurantName !== '') {
@@ -551,6 +555,8 @@ export class CreateuserComponent implements OnInit {
         HasGST: this.hasGST,
         HasCreditCard: this.hasCreditCard,
         ServChargeRate: this.servChargeRate,
+        Country: this.country,
+        PostalCode: this.postalcode,
         Status: "pending",
       };
       let tokenNo = localStorage.getItem("Token");

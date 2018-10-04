@@ -72,17 +72,17 @@
             </font>Mobile Number
             <font color="red"> (Compulsory for save draft)</font>
           </label>
-          <!-- <input type="text" class="form-control" name="mobile" id="inputMobileNumber" (keyup)="autosave()" 
+          <input type="text" class="form-control" name="mobile" id="inputMobileNumber" (keyup)="autosave()" 
           pattern="[\+][5-6]{2}[\-]\d{8}" placeholder="+65-xxxxxxxx" [(ngModel)]="mobile" #mobile1="ngModel" disabled>
-          <div [hidden]="mobile1.valid || mobile1.pristine" class="alert alert-danger">Mobile Number should be in +65-xxxxxxxx format</div> -->
-          <div class="row">
+          <div [hidden]="mobile1.valid || mobile1.pristine" class="alert alert-danger">Mobile Number should be in +65-xxxxxxxx format</div>
+          <!-- <div class="row">
             <div class="col col-lg-2">
               <input type="text" class="form-control" name="countryCode" value="+65-" disabled>
             </div>
             <div class="col col-lg-10">
               <input type="text" class="form-control" name="mobile" id="inputMobileNumber" [(ngModel)]="mobile" #mobile1="ngModel">
             </div>
-          </div>
+          </div> -->
         </div>
 
         <div class="form-group">
@@ -291,6 +291,23 @@
             </font>ACRA Number</label>
           <input type="text" class="form-control" name="acra" id="acra" (keyup)="autosave()" [(ngModel)]="acra" #acra1="ngModel" disabled>
         </div>
+
+        <div class="form-group">
+          <label for="Country">
+            <font color="red">
+              <strong>* </strong>
+            </font>Country</label>
+          <input type="text" class="form-control" name="country" id="country" (keyup)="autosave()" [(ngModel)]="country" #country1="ngModel">
+        </div>
+
+        <div class="form-group">
+            <label for="RegisteredAddress">
+              <font color="red">
+                <strong>* </strong>
+              </font>Postal Code</label>
+            <input type="text" class="form-control" name="postalcode" id="postalcode" (keyup)="autosave()" [(ngModel)]="postalcode" #postalcode1="ngModel" pattern="[0-9]{6}">
+            <div [hidden]="postalcode1.valid || postalcode1.pristine" class="alert alert-danger">eg.123456</div>
+          </div>
 
         <div class="form-group">
           <label for="RegisteredAddress">

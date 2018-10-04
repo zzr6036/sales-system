@@ -15,7 +15,6 @@ import { PromotionEditComponent } from './promotion-edit/promotion-edit.componen
 import { AssignPromotionComponent } from './assign-promotion/assign-promotion.component';
 import { AssignPromotionUsersComponent } from './assign-promotion-users/assign-promotion-users.component';
 
-
 @Component({
   selector: 'app-promotion',
   templateUrl: './promotion.component.html',
@@ -179,6 +178,7 @@ export class PromotionComponent implements OnInit {
 
   loadPromotionList(){
     this.promotionService.getPromotionList().subscribe(data =>{
+      // console.log(data)
       if(data["Message"]){
         console.log(data["Message"]);
       }

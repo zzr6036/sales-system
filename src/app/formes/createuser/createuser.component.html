@@ -322,6 +322,23 @@
         </div>
 
         <div class="form-group">
+          <label for="Country">
+            <font color="red">
+              <strong>* </strong>
+            </font>Country</label>
+          <input type="text" class="form-control" name="country" id="country" (keyup)="autosave()" [(ngModel)]="country" #country1="ngModel">
+        </div>
+
+        <div class="form-group">
+            <label for="RegisteredAddress">
+              <font color="red">
+                <strong>* </strong>
+              </font>Postal Code</label>
+            <input type="text" class="form-control" name="postalcode" id="postalcode" (keyup)="autosave()" [(ngModel)]="postalcode" #postalcode1="ngModel" pattern="[0-9]{6}">
+            <div [hidden]="postalcode1.valid || postalcode1.pristine" class="alert alert-danger">eg.123456</div>
+          </div>
+
+        <div class="form-group">
           <label for="RegisteredAddress">
             <font color="red">
               <strong>* </strong>

@@ -25,6 +25,8 @@ export class AssignPromotionComponent implements OnInit {
   Status: String;
   promotionCodes:any;
   statusSelections = ["active", "deleted", "expired"];
+  Message: String;
+  Subject: String;
 
    //Expired checking
    public EndTime: String;
@@ -142,6 +144,8 @@ export class AssignPromotionComponent implements OnInit {
             "CreatedByUserId": data[i]["CreatedByUsedId"],
             "DeleteByUserId": data[i]["DeleteByUseId"],
             "UserId": this.UserId,
+            "Message": this.Message,
+            "Subject": this.Subject
           }
         }
       }

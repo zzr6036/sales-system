@@ -45,6 +45,8 @@ export class CreateuserEditComponent implements OnInit {
   registeredAddress: string;
   numberOfOutlet: number;
   qr: number;
+  country: string;
+  postalcode: string;
   outletAddress: Array<any> = [{Name:"", Address:""}];
   newOutletAddress: any={};
   
@@ -178,6 +180,8 @@ export class CreateuserEditComponent implements OnInit {
      this.acra = assignMerchantDetails["ACRA"];
      this.registeredAddress = assignMerchantDetails["RegisteredAddress"];
      this.qr = assignMerchantDetails["QR"];
+     this.country = assignMerchantDetails["Country"];
+     this.postalcode = assignMerchantDetails["PostalCode"];
      this.outletAddress = JSON.parse(assignMerchantDetails["OutletAddress"]);
      this.servChargeRate = assignMerchantDetails["ServChargeRate"];
      this.numberOfOutlet = assignMerchantDetails["NoOfOutlet"];
@@ -470,7 +474,7 @@ export class CreateuserEditComponent implements OnInit {
         Firstname: this.firstname,
         Lastname: this.lastname,
         NRIC: this.icNumber,
-        Mobile: '+65-'+this.mobile,
+        Mobile: this.mobile,
         BankName: this.bankName,
         BankAccountName: this.bankAccountName,
         BankAccountNumber: this.bankAccountNumber,
@@ -495,6 +499,8 @@ export class CreateuserEditComponent implements OnInit {
         HasGST: this.hasGST,
         HasCreditCard: this.hasCreditCard,
         ServChargeRate: this.servChargeRate,
+        Country: this.country,
+        PostalCode: this.postalcode,
         Status: "draft",
       };
       let tokenNo = localStorage.getItem("Token");
@@ -536,12 +542,12 @@ export class CreateuserEditComponent implements OnInit {
 
   onSubmit(){
     // Input Validation for save draft
-    if (this.username !== undefined && this.mobile !== undefined  && this.password !== undefined 
+    if (this.username !== undefined && this.mobile !== undefined  && this.password !== undefined && this.country !== undefined && this.postalcode !== undefined
       && this.email !== undefined && this.firstname !== undefined && this.lastname !== undefined && this.mobile !== undefined && this.icNumber !== undefined 
       && this.legalEntitySelection !== undefined && this.bankName !== undefined && this.bankAccountName !== undefined 
       && this.bankAccountNumber !== undefined && this.nricFrontImage != undefined && this.nricBackImage != undefined && this.businessLegalName !== undefined 
       && this.acra !== undefined && this.registeredAddress !== undefined && this.numberOfOutlet !== undefined && this.restaurantName !== undefined && 
-      this.username !== '' && this.mobile !== ''  && this.password !== ''
+      this.username !== '' && this.mobile !== ''  && this.password !== '' && this.country !== '' && this.postalcode !== ''
       && this.email !== '' && this.firstname !== '' && this.lastname !== '' && this.mobile !== '' && this.icNumber !== '' && this.legalEntitySelection !== '' 
       && this.bankName !== '' && this.bankAccountName !== '' && this.bankAccountNumber !== '' && this.nricFrontImage != '' && this.nricBackImage != '' 
       && this.businessLegalName !== '' && this.acra !== '' && this.registeredAddress !== '' && this.numberOfOutlet !== null && this.restaurantName !== '') {
@@ -555,7 +561,7 @@ export class CreateuserEditComponent implements OnInit {
         Firstname: this.firstname,
         Lastname: this.lastname,
         NRIC: this.icNumber,
-        Mobile: '+65-'+this.mobile,
+        Mobile: this.mobile,
         BankName: this.bankName,
         BankAccountName: this.bankAccountName,
         BankAccountNumber: this.bankAccountNumber,
@@ -580,6 +586,8 @@ export class CreateuserEditComponent implements OnInit {
         HasGST: this.hasGST,
         HasCreditCard: this.hasCreditCard,
         ServChargeRate: this.servChargeRate,
+        Country: this.country,
+        PostalCode: this.postalcode,
         Status: "pending",
       };
       let tokenNo = localStorage.getItem("Token");

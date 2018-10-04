@@ -19,4 +19,6 @@ export class PromotionView {
     Description: String;
     Description2: String;
     Status: String;
+    CreatedByUserId: Number;
+    DeleteByUserId: Number;
 }

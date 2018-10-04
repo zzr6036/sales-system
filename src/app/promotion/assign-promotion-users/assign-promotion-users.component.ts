@@ -21,6 +21,8 @@ export class AssignPromotionUsersComponent implements OnInit {
   assignUsersPromoCode: any;
   minValue: Number;
   maxValue: Number;
+  Message: String;
+  Subject: string;
 
   // User Selection
   selectedUsers = [];
@@ -54,6 +56,8 @@ export class AssignPromotionUsersComponent implements OnInit {
     this.promotionDetail.Description = assignPromoCodeAll["Description"];
     this.promotionDetail.Description2 = assignPromoCodeAll["Description2"];
     this.promotionDetail.Status = assignPromoCodeAll["Status"];
+    this.promotionDetail.CreatedByUserId = assignPromoCodeAll["CreatedByUserId"];
+    this.promotionDetail.DeleteByUserId = assignPromoCodeAll["DeleteByUserId"];
 
     let tokenNo = localStorage.getItem("Token");
     let getUserUrl = global.host + 'search/' + 'user/' + '?keyword=' + '&token=' + tokenNo;
@@ -98,6 +102,7 @@ export class AssignPromotionUsersComponent implements OnInit {
     if(this.selectedAll){
       this.selectedUsers = new Array<boolean>(this.userInfoes.length).fill(true); 
       this.selectedUsersObj = this.userInfoes;
+      // console.log(this.selectedUsersObj)
     }
     else{
       this.selectedUsers = new Array<boolean>(this.userInfoes.length).fill(false); 
@@ -139,6 +144,10 @@ export class AssignPromotionUsersComponent implements OnInit {
         Description: this.promotionDetail.Description,
         Description2: this.promotionDetail.Description2,
         Status: this.promotionDetail.Status,
+        Message: this.Message,
+        Subject: this.Subject,
+        CreatedByUserId: this.promotionDetail.CreatedByUserId,
+        DeleteByUserId: this.promotionDetail.DeleteByUserId,
         UserId: this.selectedUsersObj[n]["Id"],
       }
       if(this.promotionDetail.IsSpecial == true){
@@ -154,16 +163,18 @@ export class AssignPromotionUsersComponent implements OnInit {
       else{
         if(this.promotionDetail.Qty > this.selectedUsersObj.length){
           this.http.post(assignPromoCodeUrl, this.assignUsersPromoCode, {}).map(res => res.json()).subscribe(data => {
+            // console.log(data)
             if(data["Message"] == undefined){
-              Swal({
-                position: 'center',
-                type: 'success',
-                title: 'Assign Successfully',
-                showConfirmButton: false,
-                timer: 3000,
-              }).then(() => {
-                this.router.navigate(['/promotion/']);
-              })
+              this.router.navigate(['/promotion/']);
+              // Swal({
+              //   position: 'center',
+              //   type: 'success',
+              //   title: 'Assign Successfully',
+              //   showConfirmButton: false,
+              //   timer: 1500,
+              // }).then(() => {
+              //   this.router.navigate(['/promotion/']);
+              // })
             }
             else{
               console.log(data["Message"]);
@@ -181,8 +192,7 @@ export class AssignPromotionUsersComponent implements OnInit {
           })
         }
       }
-     
     }
-    console.log(this.selectedUsersObj)
+    // console.log(this.selectedUsersObj)
   }
 }

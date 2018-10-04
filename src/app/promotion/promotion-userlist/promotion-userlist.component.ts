@@ -35,6 +35,7 @@ export class PromotionUserlistComponent implements OnInit {
       // console.log(data);
       for(var i=0; i<data.length; i++){
         if(data[i]["PromoId"] === promoCodeId){
+          // console.log(data[i])
           this.userPromotionUses.push(data[i]);
           // console.log(typeof(this.userPromotionUses));
         }
