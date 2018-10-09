@@ -38,6 +38,114 @@
         </div>
 
         <div class="form-group">
+          <label for="cuisines">
+            <font color="red">
+              <strong>* </strong>
+            </font>Cuisines Id</label>
+          <div class="row">
+            <div class="col col-lg-10">
+              <input type="text" class="form-control" name="cuisines" id="cuisines" [(ngModel)]="cuisines" #cuisines1="ngModel" disabled>
+            </div>
+            <div class="col col-lg-2">
+              <button type="button" class="btn btn-primary" id="cuisines" data-toggle="modal" data-target="#cuisinesModal" (click)="cuisinesCheck()" disabled>Search</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal fade" id="cuisinesModal" tabindex="-1" role="dialog" aria-labelledby="cuisinesModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="cuisinesModalLabel">Cuisines Type</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="no-more-table">
+                  <table class="table table-bordered table-striped mb-0">
+                    <thead>
+                      <tr>
+                        <th style="width: 20%">Id</th>
+                        <th style="width: 60%">Name</th>
+                        <th style="width: 20%">Selected</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let cuisinesType of cuisinesTypes; let i=index">
+                        <td>{{cuisinesType.Id}}</td>
+                        <td>{{cuisinesType.Name}}</td>
+                        <td>
+                          <input type="checkbox" name="cuisinesSelected" [(ngModel)]="cuisinesSelected[i]" [checked]=true>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="cuisineType()">Confirm</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="categories">
+            <font color="red">
+              <strong>* </strong>
+            </font>Category Id</label>
+          <div class="row">
+            <div class="col col-lg-10">
+              <input type="text" class="form-control" name="categories" id="categories" [(ngModel)]="categories" #categories1="ngModel" disabled>
+            </div>
+            <div class="col col-lg-2">
+              <button type="button" class="btn btn-primary" id="categories" data-toggle="modal" data-target="#categoriesModal" (click)="categoriesCheck()" disabled>Search</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal fade" id="categoriesModal" tabindex="-1" role="dialog" aria-labelledby="categoriesModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="categoriesModalLabel">Category Type</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="no-more-table">
+                  <table class="table table-bordered table-striped mb-0">
+                    <thead>
+                      <tr>
+                        <th style="width: 20%">Id</th>
+                        <th style="width: 60%">Name</th>
+                        <th style="width: 20%">Selected</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let categoriesType of categoriesTypes; let i=index">
+                        <td>{{categoriesType.Id}}</td>
+                        <td>{{categoriesType.Name}}</td>
+                        <td>
+                          <input type="checkbox" name="categoriesSelected" [(ngModel)]="categoriesSelected[i]" [checked]=true>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="categoryType()">Confirm</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
           <label for="exampleInputEmail">
             <font color="red">
               <strong>* </strong>
@@ -72,8 +180,8 @@
             </font>Mobile Number
             <font color="red"> (Compulsory for save draft)</font>
           </label>
-          <input type="text" class="form-control" name="mobile" id="inputMobileNumber" (keyup)="autosave()" 
-          pattern="[\+][5-6]{2}[\-]\d{8}" placeholder="+65-xxxxxxxx" [(ngModel)]="mobile" #mobile1="ngModel" disabled>
+          <input type="text" class="form-control" name="mobile" id="inputMobileNumber" (keyup)="autosave()" pattern="[\+][5-6]{2}[\-]\d{8}"
+            placeholder="+65-xxxxxxxx" [(ngModel)]="mobile" #mobile1="ngModel" disabled>
           <div [hidden]="mobile1.valid || mobile1.pristine" class="alert alert-danger">Mobile Number should be in +65-xxxxxxxx format</div>
           <!-- <div class="row">
             <div class="col col-lg-2">
@@ -301,13 +409,14 @@
         </div>
 
         <div class="form-group">
-            <label for="RegisteredAddress">
-              <font color="red">
-                <strong>* </strong>
-              </font>Postal Code</label>
-            <input type="text" class="form-control" name="postalcode" id="postalcode" (keyup)="autosave()" [(ngModel)]="postalcode" #postalcode1="ngModel" pattern="[0-9]{6}">
-            <div [hidden]="postalcode1.valid || postalcode1.pristine" class="alert alert-danger">eg.123456</div>
-          </div>
+          <label for="RegisteredAddress">
+            <font color="red">
+              <strong>* </strong>
+            </font>Postal Code</label>
+          <input type="text" class="form-control" name="postalcode" id="postalcode" (keyup)="autosave()" [(ngModel)]="postalcode" #postalcode1="ngModel"
+            pattern="[0-9]{6}">
+          <div [hidden]="postalcode1.valid || postalcode1.pristine" class="alert alert-danger">eg.123456</div>
+        </div>
 
         <div class="form-group">
           <label for="RegisteredAddress">

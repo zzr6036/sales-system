@@ -69,6 +69,13 @@ export class CreateuserViewComponent implements OnInit {
   autosaveTimer = null;
   status: string;
 
+  cuisines: Number;
+  cuisinesTypes: Array<any> = [];
+  cuisinesSelected = [];
+  categories: Number;
+  categoriesTypes: Array<any> = [];
+  categoriesSelected = [];
+
   dropdownSubscriptionsList = [];
   selectedSubscriptionsItems = [];
   dropdownSettings = {};
@@ -152,6 +159,8 @@ export class CreateuserViewComponent implements OnInit {
      this.id = assignMerchantDetails["Id"];
      this.username = assignMerchantDetails["UserName"];
      this.password = assignMerchantDetails["Password"];
+     this.cuisines = assignMerchantDetails["CuisineId"];
+     this.categories = assignMerchantDetails["CategoryId"];
      this.email = assignMerchantDetails["Email"];
      this.firstname = assignMerchantDetails["FirstName"];
      this.lastname = assignMerchantDetails["LastName"];
@@ -451,6 +460,65 @@ export class CreateuserViewComponent implements OnInit {
   removeAcra(){
     this.acraBizFile = "";
   }
+  cuisinesCheck(){
+    let tokenNo = localStorage.getItem("Token");
+    let getCuisinesUrl = global.host + "Cuisines" + "?token=" + tokenNo;
+    this.http.get(getCuisinesUrl, {}).map(res=>res.json()).subscribe(data => {
+      if(data['Message']){
+        console.log(data['Message'])
+      }
+      else{
+        this.cuisinesTypes = data
+        this.initSelectedCuisines()
+      }
+    },
+  error=>{
+    console.log(error)
+  })
+  }
+  initSelectedCuisines(){
+    this.cuisinesSelected = new Array<boolean>(this.cuisinesTypes.length).fill(false); 
+  }
+  cuisineType(){
+    let i=0;
+    for(let isSelected of this.cuisinesSelected){
+      if(isSelected){
+        this.cuisines = this.cuisinesTypes[i].Id
+      }
+      i++;
+    }
+    // console.log(this.cuisines)
+  }
+
+  categoriesCheck(){
+    let tokenNo = localStorage.getItem("Token");
+    let getCategoriesUrl = global.host + "Categories" + "?token=" + tokenNo;
+    this.http.get(getCategoriesUrl, {}).map(res=>res.json()).subscribe(data => {
+      if(data['Message']){
+        console.log(data['Message'])
+      }
+      else{
+        this.categoriesTypes = data
+        this.initSelectedCategories()
+      }
+    },
+  error=>{
+    console.log(error)
+  })
+  }
+  initSelectedCategories(){
+    this.categoriesSelected = new Array<boolean>(this.categoriesTypes.length).fill(false); 
+  }
+  categoryType(){
+    let i=0;
+    for(let isSelected of this.categoriesSelected){
+      if(isSelected){
+        this.categories = this.categoriesTypes[i].Id
+      }
+      i++;
+    }
+    // console.log(this.categories)
+  }
 
   // Save and Submit
   saveDraft(inIsDraft) {
@@ -461,6 +529,8 @@ export class CreateuserViewComponent implements OnInit {
         Id: this.id,
         UserName: this.username,
         Password: this.password,
+        CuisineId: this.cuisines,
+        CategoryId: this.categories,
         AccountType: this.accountTypeSelection,
         Email: this.email,
         Firstname: this.firstname,
@@ -536,7 +606,7 @@ export class CreateuserViewComponent implements OnInit {
     // Input Validation for save draft
     if (this.username !== '' && this.mobile !== undefined && this.password !== '' && this.country !== '' && this.postalcode !== ''
     && this.email !== '' && this.firstname !== '' && this.lastname !== '' && this.mobile !== '' && this.icNumber !== '' 
-    && this.legalEntitySelection !== undefined && this.bankName !== '' && this.bankAccountName !== '' 
+    && this.legalEntitySelection !== undefined && this.bankName !== '' && this.bankAccountName !== '' && this.cuisines !==undefined && this.categories != undefined
     && this.bankAccountNumber !== '' && this.nricFrontImage != '' && this.nricBackImage != '' && this.businessLegalName !== '' 
     && this.acra !== '' && this.registeredAddress !== '' && this.numberOfOutlet !== undefined && this.restaurantName !== '') {
       this.appInfo = {
@@ -544,6 +614,8 @@ export class CreateuserViewComponent implements OnInit {
         Id: this.id,
         UserName: this.username,
         Password: this.password,
+        CuisineId: this.cuisines,
+        CategoryId: this.categories,
         AccountType: this.accountTypeSelection,
         Email: this.email,
         Firstname: this.firstname,

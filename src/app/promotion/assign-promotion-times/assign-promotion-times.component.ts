@@ -10,11 +10,11 @@ import Swal from 'sweetalert2';
 import { assertPlatform } from '@angular/core/src/application_ref';
 
 @Component({
-  selector: 'app-assign-promotion-users',
-  templateUrl: './assign-promotion-users.component.html',
-  styleUrls: ['./assign-promotion-users.component.scss']
+  selector: 'app-assign-promotion-times',
+  templateUrl: './assign-promotion-times.component.html',
+  styleUrls: ['./assign-promotion-times.component.scss']
 })
-export class AssignPromotionUsersComponent implements OnInit {
+export class AssignPromotionTimesComponent implements OnInit {
   promotionDetail: PromotionView = new PromotionView();
   promotionCodes: any;
   userInfoes: Array<any> = [];
@@ -37,7 +37,7 @@ export class AssignPromotionUsersComponent implements OnInit {
   constructor( public http: Http, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.promotionCodes = window.localStorage.getItem("assignPromoCodeAll");
+    this.promotionCodes = window.localStorage.getItem("assignPromoCodeTimes");
     let assignPromoCodeAll = JSON.parse(this.promotionCodes);
     this.promotionDetail.Id = assignPromoCodeAll["Id"];
     this.promotionDetail.Code = assignPromoCodeAll["Code"];
@@ -125,7 +125,8 @@ export class AssignPromotionUsersComponent implements OnInit {
      // Assign Promotion Code to selected user
     let tokenNo = localStorage.getItem("Token");
     let assignPromoCodeUrl = global.host + 'promocodes/' + '?token=' + tokenNo;
-    for(var n=0; n<this.selectedUsersObj.length; n++){
+    for(var i=0; i<this.assignQty; i++){
+      for(var n=0; n<this.selectedUsersObj.length; n++){
       this.assignUsersPromoCode = {
         Id:  this.promotionDetail.Id,
         Code: this.promotionDetail.Code,
@@ -194,6 +195,8 @@ export class AssignPromotionUsersComponent implements OnInit {
         }
       }
     }
+    }
+    
     // console.log(this.selectedUsersObj)
   }
 }

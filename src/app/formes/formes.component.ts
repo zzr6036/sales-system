@@ -70,7 +70,7 @@ export class FormesComponent implements OnInit {
     // if (roleName === "Sales" || roleName === "TeamLeader" || roleName === "TeamMember") {
       let tokenNo = localStorage.getItem("Token");
       let getResUrl = global.host + "merchantinfoes/?token=" + tokenNo;
-
+      // console.log(getResUrl);
       if (tokenNo === "") {
         window.alert("Internet Error");
       } 

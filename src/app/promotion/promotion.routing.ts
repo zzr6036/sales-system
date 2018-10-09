@@ -6,6 +6,7 @@ import { PromotionEditComponent } from './promotion-edit/promotion-edit.componen
 import { PromotionUserlistComponent } from './promotion-userlist/promotion-userlist.component';
 import { AssignPromotionComponent } from './assign-promotion/assign-promotion.component';
 import { AssignPromotionUsersComponent } from './assign-promotion-users/assign-promotion-users.component'
+import { AssignPromotionTimesComponent } from './assign-promotion-times/assign-promotion-times.component'
 
 export const PromotionRoutes: Routes = [{
     path: '',
@@ -28,6 +29,9 @@ export const PromotionRoutes: Routes = [{
   },{
     path: 'assign-promotion-users/:Id',
     component: AssignPromotionUsersComponent,
+  },{
+    path: 'assign-promotion-times/:Id',
+    component: AssignPromotionTimesComponent,
   }
 ];
 

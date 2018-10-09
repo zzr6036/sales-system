@@ -176,6 +176,14 @@ export class PromotionComponent implements OnInit {
     }
   }
 
+  assignPromitonByTimes(promoCode){
+    localStorage.setItem("assignPromoCodeTimes", JSON.stringify(promoCode));
+    let roleName = localStorage.getItem("RoleName");
+    if(roleName === 'Sales'){
+      this.router.navigate(['promotion/assign-promotion-times/' + promoCode.Id])
+    }
+  }
+
   loadPromotionList(){
     this.promotionService.getPromotionList().subscribe(data =>{
       // console.log(data)

@@ -69,6 +69,13 @@ export class CreateuserEditComponent implements OnInit {
   autosaveTimer = null;
   status: string;
 
+  cuisines: Number;
+  cuisinesTypes: Array<any> = [];
+  cuisinesSelected = [];
+  categories: Number;
+  categoriesTypes: Array<any> = [];
+  categoriesSelected = [];
+
   dropdownSubscriptionsList = [];
   selectedSubscriptionsItems = [];
   dropdownSettings = {};
@@ -158,6 +165,8 @@ export class CreateuserEditComponent implements OnInit {
      this.outletPhoto = assignMerchantDetails["OutletPhoto"];
      this.id = assignMerchantDetails["Id"];
      this.username = assignMerchantDetails["UserName"];
+     this.cuisines = assignMerchantDetails["CuisineId"];
+     this.categories = assignMerchantDetails["CategoryId"];
      this.password = assignMerchantDetails["Password"];
      this.email = assignMerchantDetails["Email"];
      this.firstname = assignMerchantDetails["FirstName"];
@@ -460,6 +469,66 @@ export class CreateuserEditComponent implements OnInit {
     this.acraBizFile = "";
   }
 
+  cuisinesCheck(){
+    let tokenNo = localStorage.getItem("Token");
+    let getCuisinesUrl = global.host + "Cuisines" + "?token=" + tokenNo;
+    this.http.get(getCuisinesUrl, {}).map(res=>res.json()).subscribe(data => {
+      if(data['Message']){
+        console.log(data['Message'])
+      }
+      else{
+        this.cuisinesTypes = data
+        this.initSelectedCuisines()
+      }
+    },
+  error=>{
+    console.log(error)
+  })
+  }
+  initSelectedCuisines(){
+    this.cuisinesSelected = new Array<boolean>(this.cuisinesTypes.length).fill(false); 
+  }
+  cuisineType(){
+    let i=0;
+    for(let isSelected of this.cuisinesSelected){
+      if(isSelected){
+        this.cuisines = this.cuisinesTypes[i].Id
+      }
+      i++;
+    }
+    // console.log(this.cuisines)
+  }
+
+  categoriesCheck(){
+    let tokenNo = localStorage.getItem("Token");
+    let getCategoriesUrl = global.host + "Categories" + "?token=" + tokenNo;
+    this.http.get(getCategoriesUrl, {}).map(res=>res.json()).subscribe(data => {
+      if(data['Message']){
+        console.log(data['Message'])
+      }
+      else{
+        this.categoriesTypes = data
+        this.initSelectedCategories()
+      }
+    },
+  error=>{
+    console.log(error)
+  })
+  }
+  initSelectedCategories(){
+    this.categoriesSelected = new Array<boolean>(this.categoriesTypes.length).fill(false); 
+  }
+  categoryType(){
+    let i=0;
+    for(let isSelected of this.categoriesSelected){
+      if(isSelected){
+        this.categories = this.categoriesTypes[i].Id
+      }
+      i++;
+    }
+    // console.log(this.categories)
+  }
+
   // Save and Submit
   saveDraft(inIsDraft) {
     // Input Validation for save draft
@@ -468,6 +537,8 @@ export class CreateuserEditComponent implements OnInit {
         // "Id": (this.appInfo == null)?0:this.appInfo['Id'],
         Id: this.id,
         UserName: this.username,
+        CuisineId: this.cuisines,
+        CategoryId: this.categories,
         Password: this.password,
         AccountType: this.accountTypeSelection,
         Email: this.email,
@@ -544,10 +615,10 @@ export class CreateuserEditComponent implements OnInit {
     // Input Validation for save draft
     if (this.username !== undefined && this.mobile !== undefined  && this.password !== undefined && this.country !== undefined && this.postalcode !== undefined
       && this.email !== undefined && this.firstname !== undefined && this.lastname !== undefined && this.mobile !== undefined && this.icNumber !== undefined 
-      && this.legalEntitySelection !== undefined && this.bankName !== undefined && this.bankAccountName !== undefined 
+      && this.legalEntitySelection !== undefined && this.bankName !== undefined && this.bankAccountName !== undefined && this.cuisines !==undefined && this.categories != undefined
       && this.bankAccountNumber !== undefined && this.nricFrontImage != undefined && this.nricBackImage != undefined && this.businessLegalName !== undefined 
       && this.acra !== undefined && this.registeredAddress !== undefined && this.numberOfOutlet !== undefined && this.restaurantName !== undefined && 
-      this.username !== '' && this.mobile !== ''  && this.password !== '' && this.country !== '' && this.postalcode !== ''
+      this.username !== '' && this.mobile !== ''  && this.password !== '' && this.country !== '' && this.postalcode !== ''  && this.cuisines !== null && this.categories !== null
       && this.email !== '' && this.firstname !== '' && this.lastname !== '' && this.mobile !== '' && this.icNumber !== '' && this.legalEntitySelection !== '' 
       && this.bankName !== '' && this.bankAccountName !== '' && this.bankAccountNumber !== '' && this.nricFrontImage != '' && this.nricBackImage != '' 
       && this.businessLegalName !== '' && this.acra !== '' && this.registeredAddress !== '' && this.numberOfOutlet !== null && this.restaurantName !== '') {
@@ -555,6 +626,8 @@ export class CreateuserEditComponent implements OnInit {
         // "Id": (this.appInfo == null)?0:this.appInfo['Id'],
         Id: this.id,
         UserName: this.username,
+        CuisineId: this.cuisines,
+        CategoryId: this.categories,
         Password: this.password,
         AccountType: this.accountTypeSelection,
         Email: this.email,

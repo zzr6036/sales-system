@@ -90,9 +90,11 @@
                       <!-- <span class="dropdown-item"><a [routerLink]="['promotion/promotion-code']">Edit</a></span> -->
                       <!-- <span class="dropdown-item" (click)="deletePromCode()">Delete</span> -->
                       <div class="dropdown-divider"></div>
-                      <span class="dropdown-item" (click)="assignPromotion(promotionCode)" *ngIf="promotionCode.IsSpecial != true">Assign by MobileNo.</span>
+                      <span class="dropdown-item" (click)="assignPromotion(promotionCode)" *ngIf="promotionCode.IsSpecial != true">Assign by Mobile</span>
                       <div class="dropdown-divider"></div>
                       <span class="dropdown-item" (click)="assignPromotionToAll(promotionCode)" *ngIf="promotionCode.IsSpecial != true">Assign to All</span>
+                      <div class="dropdown-divider"></div>
+                      <span class="dropdown-item" (click)="assignPromitonByTimes(promotionCode)" *ngIf="promotionCode.IsSpecial != true">Assign by Times</span>
                       <!-- <span class="dropdown-item" data-toggle="modal" data-target="#exampleModal">
                         Assign Code
                       </span> -->

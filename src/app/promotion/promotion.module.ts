@@ -21,6 +21,7 @@ import { OrderModule } from 'ngx-order-pipe';
 import { PromotionUserlistComponent } from './promotion-userlist/promotion-userlist.component';
 import { AssignPromotionComponent } from './assign-promotion/assign-promotion.component';
 import { AssignPromotionUsersComponent } from './assign-promotion-users/assign-promotion-users.component';
+import { AssignPromotionTimesComponent } from './assign-promotion-times/assign-promotion-times.component';
 // import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @NgModule({
@@ -32,7 +33,7 @@ import { AssignPromotionUsersComponent } from './assign-promotion-users/assign-p
             AngularDateTimePickerModule,
             MomentModule,
             OrderModule,],
-  declarations: [PromotionComponent, PromotionCodeComponent, PromotionEditComponent, PromotionUserlistComponent, AssignPromotionComponent, AssignPromotionUsersComponent],
+  declarations: [PromotionComponent, PromotionCodeComponent, PromotionEditComponent, PromotionUserlistComponent, AssignPromotionComponent, AssignPromotionUsersComponent, AssignPromotionTimesComponent],
   // providers: [PromotionCodeService]
   providers: [PromotionService]
 })
