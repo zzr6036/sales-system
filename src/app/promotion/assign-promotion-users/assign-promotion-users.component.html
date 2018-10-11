@@ -65,9 +65,14 @@
     <!-- <font color="blue"><strong>Search by Balance:</strong></font>
     <select class="form-control amber-border" id="userSearchSelection" name="userSearchSelection"></select> -->
     <div class="row">
-      <div class="col col-lg-3 mt-2">
+      <div class="col col-lg-6 mt-2">
         <font color="blue">
           <strong>Balance Range:</strong>
+        </font>
+      </div>
+      <div class="col col-lg-6 mt-2 pl-3">
+        <font color="blue">
+          <strong>Id Range Selection:</strong>
         </font>
       </div>
     </div>
@@ -82,25 +87,28 @@
       <div class="col col-lg-2">
         <button type="button" class="btn btn-info btn-lg" id="BalanceRangeButton" (click)="BalanceRange()">Go</button>
       </div>
+
+      <div class="col col-lg-2">
+        <input type="number" class="form-control" name="minId" id="minId" [(ngModel)]="minId">
+      </div>
+      <strong>~</strong>
+      <div class="col col-lg-2">
+        <input type="number" class="form-control" name="maxId" id="maxId" [(ngModel)]="maxId">
+      </div>
+      <div class="col col-lg-1">
+        <button type="button" class="btn btn-info btn-lg" id="IdRangeCheck" (click)="IdRangeCheck()">Go</button>
+      </div>
     </div>
 
-    <!-- <div class="row">
-      <div class="col col-lg-3 mt-2">
-        <font color="blue"><strong>Assign Quantity:</strong></font>
-      </div>
-    </div>
     <div class="row">
-      <div class="col col-lg-2">
-        <input type="number" class="form-control" name="assignQty" id="assignQty" [(ngModel)]="assignQty">
-      </div>
-    </div>
-    <p *ngIf="assignQty != null">You select assign {{assignQty}} times</p> -->
-    <div class="row">
-      <div class="col col-lg-3">
+      <div class="col col-lg-6 mt-2">
         <h6 class="card-title">Please select following: </h6>
       </div>
+      <div class="col col-lg-6 mt-2">
+        <button type="button" id="submit" name="submit" class="btn btn-info" (click)="submit()"><strong>Submit</strong></button>
+      </div>
     </div>
-
+    
     <table class="table table-bordered table-striped" id="users-table">
       <thead>
         <tr>
@@ -116,7 +124,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let userInfo of userInfoes; let i=index">
+        <tr *ngFor="let userInfo of filterUserInfoes; let i=index">
           <th>{{userInfo.Id}}</th>
           <th>{{userInfo.FirstName}}</th>
           <th>{{userInfo.MobileNumber}}</th>
