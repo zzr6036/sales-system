@@ -29,22 +29,13 @@ export class FormesComponent implements OnInit {
 
   //Search
   itemSelected: String;
-  selections = ["Id", "RestaurantName", "Mobile", "Email", "Status" ];
+  selections = ["Id", "RestaurantName", "Mobile", "Email", "Status"];
   idList: Array<any> = [];
   restaurantNameList: Array<any> = [];
   emailList: Array<any> = [];
   mobileNoList: Array<any> = [];
   statusList: Array<any> = [];
-  idObject = {};
-  idSearchArrayList: Array<any> = [];
-  restaurantNameObject = {};
-  restaurantSearchArrayList: Array<any> = [];
-  mobileObject = {};
-  mobileSearchArrayList: Array<any> = [];
-  emailObject = {};
-  emailSearchArrayList: Array<any> = [];
-  statusObject = {};
-  statusSearchArrayList: Array<any> = [];
+  FilterList: Array<any> = [];
 
   constructor(
     private createuserService: CreateuserService,
@@ -70,7 +61,6 @@ export class FormesComponent implements OnInit {
     // if (roleName === "Sales" || roleName === "TeamLeader" || roleName === "TeamMember") {
       let tokenNo = localStorage.getItem("Token");
       let getResUrl = global.host + "merchantinfoes/?token=" + tokenNo;
-      // console.log(getResUrl);
       if (tokenNo === "") {
         window.alert("Internet Error");
       } 
@@ -81,11 +71,12 @@ export class FormesComponent implements OnInit {
                 console.log(data["Message"]);
               } else {
                 this.accounts = data;
+                this.FilterList = data;
+
               }
             },
             error => {
               console.log(error);
-              //this.onErrorBackToLogin(error);
             }
           );
       }
@@ -104,53 +95,39 @@ export class FormesComponent implements OnInit {
         for(var i=0; i<data.length; i++){
           this.restaurantNameList.push(data[i]["RestaurantName"]);
         }
-        // console.log(this.restaurantNameList);
       }
       if(this.itemSelected == 'Mobile'){
         for(var i=0; i<data.length; i++){
           this.mobileNoList.push(data[i]["Mobile"]);
         }
-        // console.log(this.mobileNoList);
       }
       if(this.itemSelected == 'Email'){
         for(var i=0; i<data.length; i++){
           this.emailList.push(data[i]["Email"]);
         }
-        // console.log(this.emailList);
       }
       if(this.itemSelected == 'Status'){
         for(var i=0; i<data.length; i++){
           this.statusList.push(data[i]["Status"]);
         }
-        // console.log(this.statusList);
       }
     })
   }
 
   onKeySearch(value: any){
-    let tokenNo = localStorage.getItem("Token");
-    let getResUrl = global.host + "merchantinfoes/?token=" + tokenNo;
     //Search By Id
     if(this.itemSelected == 'Id'){
       if(this.term == ''){
         this.emptyInput();
       }
       else {
+        this.FilterList = []
         for(var i=0; i<this.idList.length;i++){
           if((JSON.stringify(this.idList[i])).toLowerCase().includes((this.term).toLowerCase())){
-            let seq = i;
-            this.http.get(getResUrl, {}).map(res => res.json()).subscribe(data =>{
-              this.idObject = data[seq];
-              this.idSearchArrayList.push(this.idObject);
-              this.idObject = {};
-              this.accounts = this.idSearchArrayList;
-            })
-          }
-          if((JSON.stringify(this.idList[i])).toLowerCase() != (this.term).toLowerCase()){
-            this.accounts = [];
+            this.FilterList.push(this.accounts[i])
           }
         }
-        this.idSearchArrayList = [];
+        this.accounts = this.FilterList;
       }
     }
     //Search By Restaurant Name
@@ -160,24 +137,16 @@ export class FormesComponent implements OnInit {
         this.emptyInput();
       }
       else {
+        this.FilterList = [];
         for(var i=0; i<this.restaurantNameList.length; i++){
-          if((JSON.stringify(this.restaurantNameList[i])).toLowerCase().includes((this.term).toLowerCase()) &&
-             (JSON.stringify(this.restaurantNameList[i])) != "null"){
-               let seq = i;
-               this.http.get(getResUrl, {}).map(res => res.json()).subscribe(data => {
-                this.restaurantNameObject = data[seq];
-                this.restaurantSearchArrayList.push(this.restaurantNameObject);
-                this.restaurantNameObject = {};
-                this.accounts = this.restaurantSearchArrayList;
-               })
-          }
-          if((JSON.stringify(this.restaurantNameList[i])).toLowerCase() != (this.term).toLowerCase()){
-            this.accounts = [];
+          if((JSON.stringify(this.restaurantNameList[i])).toLowerCase().includes((this.term).toLowerCase()) && JSON.stringify(this.restaurantNameList[i] != 'null')){
+            this.FilterList.push(this.accounts[i])
           }
         }
-        this.restaurantSearchArrayList = [];
+        this.accounts = this.FilterList;
       }
     }
+      
     //Search By Mobile No
     if(this.itemSelected == 'Mobile'){
       let allItems = this.accounts;
@@ -185,22 +154,13 @@ export class FormesComponent implements OnInit {
         this.emptyInput();
       }
       else {
+        this.FilterList = [];
         for(var i=0; i<this.mobileNoList.length; i++){
-          if((JSON.stringify(this.mobileNoList[i])).toLowerCase().includes((this.term).toLowerCase()) &&
-             (JSON.stringify(this.mobileNoList[i])) != "null"){
-               let seq = i;
-               this.http.get(getResUrl, {}).map(res => res.json()).subscribe(data => {
-                this.mobileObject = data[seq];
-                this.mobileSearchArrayList.push(this.mobileObject);
-                this.mobileObject = {};
-                this.accounts = this.mobileSearchArrayList;
-               })
-          }
-          if((JSON.stringify(this.mobileNoList[i])).toLowerCase() != (this.term).toLowerCase()){
-            this.accounts = [];
+          if((JSON.stringify(this.mobileNoList[i])).toLowerCase().includes((this.term).toLowerCase()) && (JSON.stringify(this.mobileNoList[i])) != "null"){
+            this.FilterList.push(this.accounts[i])
           }
         }
-        this.mobileSearchArrayList = [];
+        this.accounts = this.FilterList;
       }
     }
 
@@ -211,24 +171,16 @@ export class FormesComponent implements OnInit {
         this.emptyInput();
       }
       else {
+        this.FilterList = [];
         for(var i=0; i<this.emailList.length; i++){
-          if((JSON.stringify(this.emailList[i])).toLowerCase().includes((this.term).toLowerCase()) &&
-             (JSON.stringify(this.emailList[i])) != "null"){
-               let seq = i;
-               this.http.get(getResUrl, {}).map(res => res.json()).subscribe(data => {
-                this.emailObject = data[seq];
-                this.emailSearchArrayList.push(this.emailObject);
-                this.emailObject = {};
-                this.accounts = this.emailSearchArrayList;
-               })
-          }
-          if((JSON.stringify(this.emailList[i])).toLowerCase() != (this.term).toLowerCase()){
-            this.accounts = [];
+          if((JSON.stringify(this.emailList[i])).toLowerCase().includes((this.term).toLowerCase()) && (JSON.stringify(this.emailList[i])) != 'null'){
+            this.FilterList.push(this.accounts[i])
           }
         }
-        this.emailSearchArrayList = [];
+        this.accounts = this.FilterList;
       }
     }
+ 
     //Search By Status
     if(this.itemSelected == 'Status'){
       let allItems = this.accounts;
@@ -236,22 +188,13 @@ export class FormesComponent implements OnInit {
         this.emptyInput();
       }
       else {
+        this.FilterList = []
         for(var i=0; i<this.statusList.length; i++){
-          if((JSON.stringify(this.statusList[i])).toLowerCase().includes((this.term).toLowerCase()) &&
-             (JSON.stringify(this.statusList[i])) != "null"){
-               let seq = i;
-               this.http.get(getResUrl, {}).map(res => res.json()).subscribe(data => {
-                this.statusObject = data[seq];
-                this.statusSearchArrayList.push(this.statusObject);
-                this.statusObject = {};
-                this.accounts = this.statusSearchArrayList;
-               })
-          }
-          if((JSON.stringify(this.statusList[i])).toLowerCase() != (this.term).toLowerCase()){
-            this.accounts = [];
+          if((JSON.stringify(this.statusList[i])).toLowerCase().includes((this.term).toLowerCase()) && (JSON.stringify(this.statusList[i])) != "null"){
+            this.FilterList.push(this.accounts[i])
           }
         }
-        this.statusSearchArrayList = [];
+        this.accounts = this.FilterList;
       }
     }
   }
@@ -277,8 +220,7 @@ export class FormesComponent implements OnInit {
     //     this.router.navigate(['/formes/']);
     //   })
     //   // window.alert("You are not allowed to create new merchant account");
-    // }
-    
+    // } 
   }
 
   merchantSearch(event, formData) {
@@ -288,9 +230,6 @@ export class FormesComponent implements OnInit {
     }
   }
   showDetail(account) {
-    // console.log(account);
-    // console.log(account.Status);
-    // this.router.navigate (['/formes/createuser', {'selectedAccount':JSON.stringify(acc)}]);
     localStorage.setItem("EditingUser", JSON.stringify(account));
     let Status = account.Status;
     if (Status === "approved" || Status === "pending" || Status === "Pending") {
@@ -306,7 +245,6 @@ export class FormesComponent implements OnInit {
           type: 'warning',
           title: 'You are not allowed to edit merchant information!',
           showConfirmButton: true,
-          // timer: 2500
         }).then(()=>{
           this.router.navigate(['/formes/']);
         })

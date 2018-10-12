@@ -59,24 +59,17 @@ export class AssignPromotionUsersComponent implements OnInit {
     this.promotionDetail.AssignOnly = assignPromoCodeAll["AssignOnly"];
     this.promotionDetail.MerchantId = assignPromoCodeAll["MerchantId"];
     this.promotionDetail.Amount = assignPromoCodeAll["Amount"];
-    this.promotionDetail.MaxRedemptPerUser =
-      assignPromoCodeAll["MaxRedemptPerUser"];
+    this.promotionDetail.MaxRedemptPerUser = assignPromoCodeAll["MaxRedemptPerUser"];
     this.promotionDetail.MaxDiscount = assignPromoCodeAll["MaxDiscount"];
     this.promotionDetail.Description = assignPromoCodeAll["Description"];
     this.promotionDetail.Description2 = assignPromoCodeAll["Description2"];
     this.promotionDetail.Status = assignPromoCodeAll["Status"];
-    this.promotionDetail.CreatedByUserId =
-      assignPromoCodeAll["CreatedByUserId"];
+    this.promotionDetail.CreatedByUserId = assignPromoCodeAll["CreatedByUserId"];
     this.promotionDetail.DeleteByUserId = assignPromoCodeAll["DeleteByUserId"];
 
     let tokenNo = localStorage.getItem("Token");
-    let getUserUrl =
-      global.host + "search/" + "user/" + "?keyword=" + "&token=" + tokenNo;
-    this.http
-      .get(getUserUrl, {})
-      .map(res => res.json())
-      .subscribe(
-        data => {
+    let getUserUrl = global.host + "search/" + "user/" + "?keyword=" + "&token=" + tokenNo;
+    this.http.get(getUserUrl, {}).map(res => res.json()).subscribe(data => {
           if (data["Message"]) {
             console.log(data["Message"]);
           } else {
@@ -100,10 +93,7 @@ export class AssignPromotionUsersComponent implements OnInit {
     let userListUrl = global.host + "search/" + "user/" + "?keyword=" + "&token=" + tokenNo;
     this.filterUserInfoes = [];
     for (var i = 0; i < this.userInfoes.length; i++) {
-      if (
-        this.minValue < this.userInfoes[i]["XinDollar"] &&
-        this.maxValue > this.userInfoes[i]["XinDollar"]
-      ) {
+      if (this.minValue < this.userInfoes[i]["XinDollar"] && this.maxValue > this.userInfoes[i]["XinDollar"]) {
         // this.userObject = this.userInfoes[i]
         this.filterUserInfoes.push(this.userInfoes[i])
         // this.userObject = {}
@@ -114,6 +104,7 @@ export class AssignPromotionUsersComponent implements OnInit {
         //   });
       }
     }
+    this.userInfoes = this.filterUserInfoes;
     //this.userInfoes = this.userList;
 
     if (this.minValue == null || this.maxValue == null) {
@@ -138,7 +129,7 @@ export class AssignPromotionUsersComponent implements OnInit {
         // })
       }
     }
-    console.log(this.userObject)
+    this.userInfoes = this.filterUserInfoes;
     // this.userInfoes = this.userList;
     // if(this.minId == null || this.maxId == null){
     //   this.ngOnInit();
@@ -147,17 +138,14 @@ export class AssignPromotionUsersComponent implements OnInit {
 
   checkAll() {
     if (this.selectedAll) {
-      this.selectedUsers = new Array<boolean>(this.userInfoes.length).fill(
-        true
-      );
+      this.selectedUsers = new Array<boolean>(this.userInfoes.length).fill(true);
       this.selectedUsersObj = this.userInfoes;
       // console.log(this.selectedUsersObj)
     } else {
-      this.selectedUsers = new Array<boolean>(this.userInfoes.length).fill(
-        false
-      );
+      this.selectedUsers = new Array<boolean>(this.userInfoes.length).fill(false);
       this.selectedUsersObj = [];
     }
+    // console.log(this.selectedUsers)
   }
 
   submit() {
@@ -248,11 +236,7 @@ export class AssignPromotionUsersComponent implements OnInit {
     if(inIndex < this.selectedUsersObj.length){
       this.assignUsersPromoCode.UserId = this.selectedUsersObj[inIndex]["Id"];
       if (this.promotionDetail.Qty > this.selectedUsersObj.length) {
-        this.http
-          .post(assignPromoCodeUrl, this.assignUsersPromoCode, {})
-          .map(res => res.json())
-          .subscribe(
-            data => {
+        this.http.post(assignPromoCodeUrl, this.assignUsersPromoCode, {}).map(res => res.json()).subscribe(data => {
               if (data["Message"] == undefined) {
                 ++inIndex;
                 this.recursiveSubmit(inIndex, assignPromoCodeUrl);
@@ -283,5 +267,6 @@ export class AssignPromotionUsersComponent implements OnInit {
     else{
       this.router.navigate(["/promotion/"]);
     }
+    // console.log(this.selectedUsersObj)
   }
 }
