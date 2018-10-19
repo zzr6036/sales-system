@@ -259,13 +259,24 @@
           <div class="table table-bordered table-striped mb-0">
             <thead>
               <tr>
-                <th>Operation Day</th>
-                <th>Opening Time</th>
-                <th>Closing Time</th>
-                <th>Closed Today</th>
-                <th>Action</th>
+                <th style="width: 25%">Operation Day</th>
+                <th style="width: 10%">Opening Time</th>
+                <th style="width: 10%">Closing Time</th>
+                <th style="width: 5%">Closed Today</th>
+                <th style="width: 50%">Action</th>
               </tr>
             </thead>
+            <ul *ngFor="let operatingDay of menuDetails.OpenTiming; let i=index">
+
+            </ul>
+            <!-- <tbody>
+              <tr *ngFor="let operatingDay of menuDetails.OpenTiming; let i=index">
+                <td>{{operatingDay.Name}}</td>
+                <td *ngFor="let operatingTime of operatingDay; let i=index">
+                  
+                </td>
+              </tr>
+            </tbody> -->
           </div>
         </div>
       </div>
