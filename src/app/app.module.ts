@@ -41,6 +41,8 @@ import { FilterPipe } from './filter.pipe';
 import * as moment from 'moment';
 import { SpecialpromotionComponent } from './specialpromotion/specialpromotion.component';
 import { DashboardsComponent } from './dashboards/dashboards.component';
+import { MenuComponent } from './menu/menu.component';
+// import { CreateMenuComponent } from './menu/create-menu/create-menu.component';
 // import { SpecialpromotionCodeComponent } from './specialpromotion/specialpromotion-code/specialpromotion-code.component';
 
 export function createTranslateLoader(http: HttpClient) {
@@ -53,6 +55,8 @@ export function createTranslateLoader(http: HttpClient) {
     AdminLayoutComponent,
     AuthLayoutComponent,
     FilterPipe,
+    // MenuComponent,
+    // CreateMenuComponent,
     // DashboardsComponent,
     // SpecialpromotionComponent,
     // SpecialpromotionCodeComponent,

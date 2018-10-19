@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, AfterViewInit } from "@angular/core";
 import { PromotionService } from "../promotion.service";
 import { PromotionView } from "../promotion-view.model";
 import { global } from "../../global";
@@ -28,6 +28,9 @@ export class AssignPromotionUsersComponent implements OnInit {
   Message: String;
   Subject: string;
 
+  //loading bar
+  value = 0;
+
   // User Selection
   selectedUsers = [];
   selectedUsersObj = [];
@@ -35,7 +38,6 @@ export class AssignPromotionUsersComponent implements OnInit {
   userObject = {};
   userList: Array<any> = [];
   // Filter by balance
-
 
   constructor(
     public http: Http,
@@ -87,6 +89,12 @@ export class AssignPromotionUsersComponent implements OnInit {
   initSelectedUser() {
     this.selectedUsers = new Array<boolean>(this.userInfoes.length).fill(false);
   }
+  // ngAfterViewInit() {
+  //   const loadingBar = setInterval(() => {
+  //     this.value <this.userInfoes.length ? this.value++ : clearInterval(loadingBar);
+  //   }, 100);
+  //   console.log(this.value)
+  // }
 
   BalanceRange() {
     let tokenNo = localStorage.getItem("Token");
@@ -94,18 +102,10 @@ export class AssignPromotionUsersComponent implements OnInit {
     this.filterUserInfoes = [];
     for (var i = 0; i < this.userInfoes.length; i++) {
       if (this.minValue < this.userInfoes[i]["XinDollar"] && this.maxValue > this.userInfoes[i]["XinDollar"]) {
-        // this.userObject = this.userInfoes[i]
         this.filterUserInfoes.push(this.userInfoes[i])
-        // this.userObject = {}
-        // this.http.get(userListUrl, {}).map(res => res.json()).subscribe(data => {
-        //     this.userObject = data[seq];
-        //     this.userList.push(this.userObject);
-        //     this.userObject = {};
-        //   });
       }
     }
     this.userInfoes = this.filterUserInfoes;
-    //this.userInfoes = this.userList;
 
     if (this.minValue == null || this.maxValue == null) {
       this.ngOnInit();
@@ -118,22 +118,10 @@ export class AssignPromotionUsersComponent implements OnInit {
     this.filterUserInfoes = [];
     for(var n=0; n<this.userInfoes.length; n++){
       if(this.minId < this.userInfoes[n]['Id'] && this.maxId > this.userInfoes[n]['Id']){
-        // this.userObject = this.filterUserInfoes[n]
         this.filterUserInfoes.push(this.userInfoes[n]);
-        // this.userObject = {}
-        // let seq = n;
-        // this.http.get(userListUrl, {}).map(res => res.json()).subscribe(data=>{
-        //   this.userObject = data[seq];
-        //   this.userList.push(this.userObject);
-        //   this.userInfoes = this.userList;
-        // })
       }
     }
     this.userInfoes = this.filterUserInfoes;
-    // this.userInfoes = this.userList;
-    // if(this.minId == null || this.maxId == null){
-    //   this.ngOnInit();
-    // }
   }
 
   checkAll() {
@@ -186,60 +174,23 @@ export class AssignPromotionUsersComponent implements OnInit {
       Subject: this.Subject,
       CreatedByUserId: this.promotionDetail.CreatedByUserId,
       DeleteByUserId: this.promotionDetail.DeleteByUserId,
+      //Above attribute all duplicate, only assign to different to different userId 
       UserId: null
     };
     this.recursiveSubmit(0, assignPromoCodeUrl);
-    //for (var n = 0; n < this.selectedUsersObj.length; n++) {
-      // this.assignUsersPromoCode.UserId = this.selectedUsersObj[n]["Id"];
-      // if (this.promotionDetail.IsSpecial == true) {
-      //   Swal({
-      //     position: "center",
-      //     type: "info",
-      //     title: "The Special Promotion Code is not allowed to assign customer",
-      //     showConfirmButton: true
-      //   }).then(() => {
-      //     this.router.navigate(["/promotion"]);
-      //   });
-      // } else {
-        //this.assignUsersPromoCode.UserId = this.selectedUsersObj[n]["Id"];
-        // if (this.promotionDetail.Qty > this.selectedUsersObj.length) {
-        //   this.http
-        //     .post(assignPromoCodeUrl, this.assignUsersPromoCode, {})
-        //     .map(res => res.json())
-        //     .subscribe(
-        //       data => {
-        //         if (data["Message"] == undefined) {
-        //           this.router.navigate(["/promotion/"]);
-        //         } else {
-        //           console.log(data["Message"]);
-        //         }
-        //       },
-        //       error => {
-        //         console.log(error);
-        //       }
-        //     );
-        // } else {
-        //   Swal({
-        //     position: "center",
-        //     type: "warning",
-        //     title:
-        //       "-----Unable Assign to User-----(The quantity of current promotion code is insufficient)",
-        //     showConfirmButton: true
-        //   });
-        // }
-      // }
-    //}
-    // console.log(this.selectedUsersObj)
   }
 
+  //The recursive function to ensure assign and get response from each user before assign to next user
   recursiveSubmit(inIndex, assignPromoCodeUrl){
     if(inIndex < this.selectedUsersObj.length){
       this.assignUsersPromoCode.UserId = this.selectedUsersObj[inIndex]["Id"];
       if (this.promotionDetail.Qty > this.selectedUsersObj.length) {
         this.http.post(assignPromoCodeUrl, this.assignUsersPromoCode, {}).map(res => res.json()).subscribe(data => {
-              if (data["Message"] == undefined) {
+          // If post each user successfully,  call recursiveSubmit() function again and assign&check to next user   
+          if (data["Message"] == undefined) {
                 ++inIndex;
                 this.recursiveSubmit(inIndex, assignPromoCodeUrl);
+                //if post api unsuccessfully, call recursiveSubmit() function and repeat this step
               } else {
                 console.log(data["Message"]);
                 ++inIndex;
@@ -256,8 +207,7 @@ export class AssignPromotionUsersComponent implements OnInit {
         Swal({
           position: "center",
           type: "warning",
-          title:
-            "-----Unable Assign to User-----(The quantity of current promotion code is insufficient)",
+          title: "-----Unable Assign to User-----(The quantity of current promotion code is insufficient)",
           showConfirmButton: true
         });
         ++inIndex;

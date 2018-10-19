@@ -1,9 +1,7 @@
 <h3> Manage Promotion Code
-  <!-- <a class="btn btn-primary" style="font-size: 1rem;float: right;" [routerLink]="['/promotion/promotion-code']">Create Promotion Code</a> -->
   <a class="btn btn-primary" style="font-size: 1rem;float: right;" id="createnewpromotion" (click)="createNewPromotion()">Create Promotion Code</a>
 </h3>
 <div class="row">
-  <!-- promotion code list -->
   <div class="col col-lg-12">
     <div class="card card-body">
       <div class="no-more-tables">
@@ -12,16 +10,12 @@
             <h4>Promotion Code List</h4>
           </div>
           <div class="col col-lg-6">
-            <!-- Search Engine -->
             <div class="input-group mb-3">
               <div class="input-group-addon">
                 <img src="assets/images/search.png" height="20px" width="20px">
               </div>
               <input type="text" class="form-control" placeholder="Promotion Code" aria-label="Code" aria-describedby="basic-addon2" name="searchString"
                 [(ngModel)]="term" style="width: 60%">
-              <!-- <div class="input-group-append">
-                <button class="btn btn-outline-dark" type="button" (click)="searchPromCode()">Search</button>
-              </div> -->
             </div>
           </div>
         </div>
@@ -31,24 +25,21 @@
             <tr>
               <th>Index</th>
               <th style="width:10%">Title</th>
-              <th [class.active]="order === 'info.Code'" (click)="setOrder('info.Code')"
-              class="mdl-data-table__cell--non-numeric" style="cursor: pointer;">Code
-                  <span [hidden]="reverse">▼</span>
-                  <span [hidden]="!reverse">▲</span>
+              <th [class.active]="order === 'info.Code'" (click)="setOrder('info.Code')" class="mdl-data-table__cell--non-numeric" style="cursor: pointer;">Code
+                <span [hidden]="reverse">▼</span>
+                <span [hidden]="!reverse">▲</span>
               </th>
               <th style="width: 15%;">Promotion info</th>
               <th>Date</th>
               <th>Qty</th>
               <th style="width: 15%;">Descirption</th>
-              <!-- <th>Status</th> -->
               <th>Action</th>
               <th>View</th>
             </tr>
           </thead>
+          <!-- Active PromoCode -->
           <tbody>
-            <!-- <tr *ngFor="let promotionCode of promotionCodes | filter: term"> -->
             <tr *ngFor="let promotionCode of promotionCodes | filter: term | orderBy: order: reverse: 'case-insensitive'; let i=index;">
-              <!-- <td>{{promotionCode.Id}}</td> -->
               <td>{{i+1}}</td>
               <td data-title="Title">{{promotionCode.Title}}</td>
               <td>{{promotionCode.Code}}</td>
@@ -75,10 +66,63 @@
                   <div class="between">
                     <span>{{promotionCode.Qty}}</span>
                   </div>
-                  <!-- <div>Balance:2</div> -->
                 </td>
                 <td>{{promotionCode.Description}}</td>
-                <!-- <td>{{promotionCode.Status}}</td> -->
+                <td>
+                  <div class="dropdown">
+                    <button [ngClass]="promotionCode.EndTime >= currentDate ? 'btn btn-info dropdown-toggle':'btn btn-warning dropdown-toggle'" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <!-- <button class="btn btn-outline-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> -->
+                      Action
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <span class="dropdown-item" (click)="editPromCode(promotionCode)">Edit</span>
+                      <div class="dropdown-divider"></div>
+                      <span class="dropdown-item" (click)="assignPromotion(promotionCode)" *ngIf="promotionCode.IsSpecial != true">Assign by Mobile</span>
+                      <div class="dropdown-divider"></div>
+                      <span class="dropdown-item" (click)="assignPromotionToAll(promotionCode)" *ngIf="promotionCode.IsSpecial != true">Assign to All</span>
+                      <div class="dropdown-divider"></div>
+                      <span class="dropdown-item" (click)="assignPromitonByTimes(promotionCode)" *ngIf="promotionCode.IsSpecial != true">Assign by Times</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                    <button [ngClass]="promotionCode.EndTime >= currentDate ? 'btn btn-info':'btn btn-warning'" type="button" (click)="viewDetail(promotionCode)">ViewDetail</button>
+                  <!-- <button *ngIf="promotionCode.EndTime >= currentDate"? class="btn btn-info":class="btn btn-warning" type="button" (click)="viewDetail(promotionCode)">ViewDetail</button> -->
+                </td>
+            </tr>
+          </tbody>
+
+          <!-- Inactive PromoCode -->
+          <!-- <tbody>
+            <tr *ngFor="let expiredPromotionCode of expiredPromotionCodes | filter: term | orderBy: order: reverse: 'case-insensitive'; let i=index;">
+              <td>{{i+1}}</td>
+              <td data-title="Title">{{expiredPromotionCode.Title}}</td>
+              <td>{{expiredPromotionCode.Code}}</td>
+              <td>
+                <div class="between">
+                  <span>Max Discount</span>
+                  <span contenteditable>{{expiredPromotionCode.MaxDiscount}}</span>
+                </div>
+                <div class="between">
+                  <span>Min Spend</span>
+                  <span contenteditable>{{expiredPromotionCode.MinUsed}}</span>
+                </div>
+                <td>
+                  <div class="between">
+                    <span>From</span>
+                    <span>{{expiredPromotionCode.StartTime | amLocal | amDateFormat: 'MM-DD-YYYY'}}</span>
+                  </div>
+                  <div class="between">
+                    <span>To</span>
+                    <span>{{expiredPromotionCode.EndTime | amLocal | amDateFormat: 'MM-DD-YYYY'}}</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="between">
+                    <span>{{expiredPromotionCode.Qty}}</span>
+                  </div>
+                </td>
+                <td>{{expiredPromotionCode.Description}}</td>
                 <td>
                   <div class="dropdown">
                     <button class="btn btn-outline-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
@@ -87,25 +131,20 @@
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                       <span class="dropdown-item" (click)="editPromCode(promotionCode)">Edit</span>
-                      <!-- <span class="dropdown-item"><a [routerLink]="['promotion/promotion-code']">Edit</a></span> -->
-                      <!-- <span class="dropdown-item" (click)="deletePromCode()">Delete</span> -->
                       <div class="dropdown-divider"></div>
-                      <span class="dropdown-item" (click)="assignPromotion(promotionCode)" *ngIf="promotionCode.IsSpecial != true">Assign by Mobile</span>
+                      <span class="dropdown-item" (click)="assignPromotion(promotionCode)" *ngIf="expiredPromotionCode.IsSpecial != true">Assign by Mobile</span>
                       <div class="dropdown-divider"></div>
-                      <span class="dropdown-item" (click)="assignPromotionToAll(promotionCode)" *ngIf="promotionCode.IsSpecial != true">Assign to All</span>
+                      <span class="dropdown-item" (click)="assignPromotionToAll(promotionCode)" *ngIf="expiredPromotionCode.IsSpecial != true">Assign to All</span>
                       <div class="dropdown-divider"></div>
-                      <span class="dropdown-item" (click)="assignPromitonByTimes(promotionCode)" *ngIf="promotionCode.IsSpecial != true">Assign by Times</span>
-                      <!-- <span class="dropdown-item" data-toggle="modal" data-target="#exampleModal">
-                        Assign Code
-                      </span> -->
+                      <span class="dropdown-item" (click)="assignPromitonByTimes(promotionCode)" *ngIf="expiredPromotionCode.IsSpecial != true">Assign by Times</span>
                     </div>
                   </div>
                 </td>
                 <td>
-                  <button class="btn btn-outline-info" type="button" (click)="viewDetail(promotionCode)">ViewDetail</button>
+                  <button class="btn btn-warning" type="button" (click)="viewDetail(promotionCode)">ViewDetail</button>
                 </td>
             </tr>
-          </tbody>
+          </tbody> -->
         </table>
       </div>
     </div>

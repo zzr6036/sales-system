@@ -1,4 +1,4 @@
-import { NgModule, Component, OnInit, Injectable } from '@angular/core';
+import { NgModule, Component, OnInit, Injectable, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -35,7 +35,8 @@ import { AssignPromotionTimesComponent } from './assign-promotion-times/assign-p
             OrderModule,],
   declarations: [PromotionComponent, PromotionCodeComponent, PromotionEditComponent, PromotionUserlistComponent, AssignPromotionComponent, AssignPromotionUsersComponent, AssignPromotionTimesComponent],
   // providers: [PromotionCodeService]
-  providers: [PromotionService]
+  providers: [PromotionService],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 
 export class PromotionModule {

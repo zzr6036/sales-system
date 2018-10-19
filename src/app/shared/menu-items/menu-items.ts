@@ -49,6 +49,12 @@ const MENUITEMS = [
     type: 'link',
     icon: 'basic-accelerator'
   },
+  {
+    state: 'menu',
+    name: 'Menu',
+    type: 'link',
+    icon: 'basic-webpage-txt'
+  },
   // {
   //   state: 'dashboards',
   //   name: "Dashboard",

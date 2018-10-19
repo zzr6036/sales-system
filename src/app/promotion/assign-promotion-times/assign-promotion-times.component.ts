@@ -18,6 +18,7 @@ export class AssignPromotionTimesComponent implements OnInit {
   promotionDetail: PromotionView = new PromotionView();
   promotionCodes: any;
   userInfoes: Array<any> = [];
+  filterUserInfoes: Array<any> = [];
   assignUsersPromoCode: any;
   minValue: Number;
   maxValue: Number;
@@ -80,20 +81,13 @@ export class AssignPromotionTimesComponent implements OnInit {
   }
 
   BalanceRange(){
-    let tokenNo = localStorage.getItem("Token")
-    let userListUrl = global.host + 'search/' + 'user/' + '?keyword=' + '&token=' + tokenNo;
+    this.filterUserInfoes = [];
     for(var i=0; i<this.userInfoes.length; i++){
       if(this.minValue < this.userInfoes[i]["XinDollar"] && this.maxValue > this.userInfoes[i]["XinDollar"]){
-        let seq = i;
-        this.http.get(userListUrl, {}).map(res => res.json()).subscribe(data => {
-          this.userObject = data[seq];
-          this.userList.push(this.userObject);
-          this.userObject = {};
-        })
+        this.filterUserInfoes.push(this.userInfoes[i])
       }  
     }
-    this.userInfoes = this.userList;
-
+    this.userInfoes = this.filterUserInfoes;
     if(this.minValue == null || this.maxValue == null){
       this.ngOnInit();
     }
@@ -125,78 +119,68 @@ export class AssignPromotionTimesComponent implements OnInit {
      // Assign Promotion Code to selected user
     let tokenNo = localStorage.getItem("Token");
     let assignPromoCodeUrl = global.host + 'promocodes/' + '?token=' + tokenNo;
-    for(var i=0; i<this.assignQty; i++){
-      for(var n=0; n<this.selectedUsersObj.length; n++){
-      this.assignUsersPromoCode = {
-        Id:  this.promotionDetail.Id,
-        Code: this.promotionDetail.Code,
-        Title: this.promotionDetail.Title,
-        MinUsed: this.promotionDetail.MinUsed,
-        StartTime: this.promotionDetail.StartTime,
-        EndTime: this.promotionDetail.EndTime,
-        Qty: this.promotionDetail.Qty,
-        IsSpecial: this.promotionDetail.IsSpecial,
-        IsPercent: this.promotionDetail.IsPercent,
-        IsJoint: this.promotionDetail.IsJoint,
-        AssignOnly: this.promotionDetail.AssignOnly,
-        MerchantId: this.promotionDetail.MerchantId,
-        Amount: this.promotionDetail.Amount,
-        _maxRedempt: 0,
-        MaxDiscount: this.promotionDetail.MaxDiscount,
-        Description: this.promotionDetail.Description,
-        Description2: this.promotionDetail.Description2,
-        Status: this.promotionDetail.Status,
-        Message: this.Message,
-        Subject: this.Subject,
-        CreatedByUserId: this.promotionDetail.CreatedByUserId,
-        DeleteByUserId: this.promotionDetail.DeleteByUserId,
-        UserId: this.selectedUsersObj[n]["Id"],
-      }
-      if(this.promotionDetail.IsSpecial == true){
-        Swal({
-          position: 'center',
-          type: 'info',
-          title: 'The Special Promotion Code is not allowed to assign customer',
-          showConfirmButton: true,
-        }).then(() => {
-          this.router.navigate(['/promotion']);
+    this.assignUsersPromoCode = {
+      Id:  this.promotionDetail.Id,
+      Code: this.promotionDetail.Code,
+      Title: this.promotionDetail.Title,
+      MinUsed: this.promotionDetail.MinUsed,
+      StartTime: this.promotionDetail.StartTime,
+      EndTime: this.promotionDetail.EndTime,
+      Qty: this.promotionDetail.Qty,
+      IsSpecial: this.promotionDetail.IsSpecial,
+      IsPercent: this.promotionDetail.IsPercent,
+      IsJoint: this.promotionDetail.IsJoint,
+      AssignOnly: this.promotionDetail.AssignOnly,
+      MerchantId: this.promotionDetail.MerchantId,
+      Amount: this.promotionDetail.Amount,
+      _maxRedempt: 0,
+      MaxDiscount: this.promotionDetail.MaxDiscount,
+      Description: this.promotionDetail.Description,
+      Description2: this.promotionDetail.Description2,
+      Status: this.promotionDetail.Status,
+      Message: this.Message,
+      Subject: this.Subject,
+      CreatedByUserId: this.promotionDetail.CreatedByUserId,
+      DeleteByUserId: this.promotionDetail.DeleteByUserId,
+      UserId: null
+    };
+    for(var n=0; n<this.assignQty; n++){
+      this.recursiveSubmit(0, assignPromoCodeUrl);
+    }
+}
+
+  recursiveSubmit(inIndex, assignPromoCodeUrl){
+    if(inIndex < this.selectedUsersObj.length){
+      this.assignUsersPromoCode.UserId = this.selectedUsersObj[inIndex]['Id'];
+      if(this.promotionDetail.Qty > this.selectedUsersObj.length){
+        this.http.post(assignPromoCodeUrl, this.assignUsersPromoCode, {}).map(res => res.json()).subscribe(data => {
+          if(data['Message'] == undefined){
+            ++inIndex;
+            this.recursiveSubmit(inIndex, assignPromoCodeUrl);
+          } else {
+            console.log(data['Message'])
+            ++inIndex;
+            this.recursiveSubmit(inIndex, assignPromoCodeUrl);
+          }
+        }, error => {
+          console.log(error);
+          ++inIndex;
+          this.recursiveSubmit(inIndex, assignPromoCodeUrl);
         })
       }
-      else{
-        if(this.promotionDetail.Qty > this.selectedUsersObj.length){
-          this.http.post(assignPromoCodeUrl, this.assignUsersPromoCode, {}).map(res => res.json()).subscribe(data => {
-            // console.log(data)
-            if(data["Message"] == undefined){
-              this.router.navigate(['/promotion/']);
-              // Swal({
-              //   position: 'center',
-              //   type: 'success',
-              //   title: 'Assign Successfully',
-              //   showConfirmButton: false,
-              //   timer: 1500,
-              // }).then(() => {
-              //   this.router.navigate(['/promotion/']);
-              // })
-            }
-            else{
-              console.log(data["Message"]);
-            }
-      }, error => {
-        console.log(error);
-      })
-        }
-        else {
-          Swal({
-            position:'center',
-            type:'warning',
-            title: '-----Unable Assign to User-----(The quantity of current promotion code is insufficient)',
-            showConfirmButton: true,
-          })
-        }
+      else {
+        Swal({
+          position: 'center',
+          type: 'warning',
+          title: '-----Unable Assign to User-----(The quantity of current promotion code is insufficient)',
+          showConfirmButton: true
+        });
+        ++inIndex;
+        this.recursiveSubmit(inIndex, assignPromoCodeUrl);
       }
     }
+    else {
+      this.router.navigate(['/promotion/']);
     }
-    
-    // console.log(this.selectedUsersObj)
   }
 }

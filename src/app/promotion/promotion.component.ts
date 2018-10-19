@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpModule, Http, Response } from '@angular/http';
 import { global } from '../global';
-import { ActivatedRoute } from '@angular/router';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { RequestOptions } from '@angular/http/src/base_request_options';
 import { OrderModule, OrderPipe } from 'ngx-order-pipe';
@@ -24,6 +23,7 @@ import { AssignPromotionUsersComponent } from './assign-promotion-users/assign-p
 export class PromotionComponent implements OnInit {
 
   promotionCodes:Array<any> = [];
+  expiredPromotionCodes: Array<any> = [];
   searchPromotionCodes: Array<any>=[];
   promotionDetail: PromotionView = new PromotionView();
 
@@ -34,6 +34,8 @@ export class PromotionComponent implements OnInit {
   public Status: String;
   deletePromotionCode: any;
   expireInfo: any;
+  currentDate: String;
+  StartTime: String;
 
   //Expired checking
   public EndTime: Date;
@@ -69,6 +71,9 @@ export class PromotionComponent implements OnInit {
 
   ngOnInit() {
     let roleName = localStorage.getItem('RoleName');
+    // this.currentDate = moment().format('MM-DD-YYYY')
+    this.currentDate = moment().format()
+
     if(roleName === 'Sales'){
       this.loadPromotionList();
       this.promotionEditComponent.expireCheck();
@@ -191,8 +196,15 @@ export class PromotionComponent implements OnInit {
         console.log(data["Message"]);
       }
       else{
+        // for(var i=0; i<data.length; i++){
+        //   if(data[i]['EndTime']>=this.currentDate){
+        //     this.promotionCodes.push(data[i])
+        //   }
+        //   else{
+        //     this.expiredPromotionCodes.push(data[i])
+        //   }
+        // }
         this.promotionCodes = data;
-        // console.log(data)
       }
     }, error => {
       console.log(error);

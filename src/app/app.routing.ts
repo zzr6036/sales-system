@@ -22,7 +22,6 @@ export const AppRoutes: Routes = [{
   children: [{
     path: 'formes',
     loadChildren: './formes/formes.module#FormesModule'
-    
   }, {
     path: 'email',
     loadChildren: './email/email.module#EmailModule'
@@ -44,6 +43,9 @@ export const AppRoutes: Routes = [{
   }, {
     path: 'promotion',
     loadChildren: './promotion/promotion.module#PromotionModule'
+  }, {
+    path: 'menu',
+    loadChildren: './menu/menu.module#MenuModule'
   }, {
     path: 'specialpromotion',
     loadChildren: './specialpromotion/specialpromotion.module#SpecialpromotionModule'

@@ -74,6 +74,8 @@ export class CreateuserComponent implements OnInit {
   cuisines: Number;
   cuisinesTypes: Array<any> = [];
   cuisinesSelected = [];
+  cuisineLists = [];
+
   categories: Number;
   categoriesTypes: Array<any> = [];
   categoriesSelected = [];
@@ -173,6 +175,7 @@ export class CreateuserComponent implements OnInit {
       enableSearchFilter: true,
       classes: "myclass custom-class"
     };
+    
   }
 
   onItemSelect(item: any) {
