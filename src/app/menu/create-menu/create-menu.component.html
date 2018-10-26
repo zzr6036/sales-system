@@ -8,80 +8,52 @@
     </div>
 
     <div class="form-group">
-      <label for="ProfileImage">
-        <strong>Profile Image</strong>
+      <label for="UserName">
+        <strong>UserName</strong>
       </label>
-      <input type="file" class="form-control" formControlName="ProfileImage" [(ngModel)]="menuDetails.ProfileImage">
+      <input type="text" class="form-control" formControlName="UserName" [(ngModel)]="menuDetails.UserName">
     </div>
 
     <div class="form-group">
-      <label for="Name">
-        <strong>Name</strong>
+      <label for="Password">
+        <strong>Password</strong>
       </label>
-      <input type="text" class="form-control" formControlName='Name' [(ngModel)]="menuDetails.Name">
+      <input type="text" class="form-control" formControlName="Password" [(ngModel)]="menuDetails.Password">
     </div>
 
     <div class="form-group">
-      <label for="ChineseName">
-        <strong>餐厅名 (中文)</strong>
+      <label for="Email">
+        <strong>Email</strong>
       </label>
-      <input type="text" class="form-control" formControlName="ChineseName" [(ngModel)]="menuDetails.ChineseName">
+      <input type="text" class="form-control" formControlName="Email" [(ngModel)]="menuDetails.Email">
     </div>
 
     <div class="form-group">
-      <label for="Details">
-        <strong>Details</strong>
+      <label for="Mobile">
+        <strong>Mobile</strong>
       </label>
-      <input type="text" class="form-control" formControlName="Details" [(ngModel)]="menuDetails.Details">
+      <input type="text" class="form-control" formControlName="Mobile" [(ngModel)]="menuDetails.Mobile">
     </div>
 
     <div class="form-group">
-      <label for="OtherInfo">
-        <strong>Other Info</strong>
+      <label for="RestaurantName">
+        <strong>Restaurant Name</strong>
       </label>
-      <input type="text" class="form-control" formControlName="OtherInfo" [(ngModel)]="menuDetails.OtherInfo">
+      <input type="text" class="form-control" formControlName="RestaurantName" [(ngModel)]="menuDetails.RestaurantName">
     </div>
 
     <div class="form-group">
-      <label for="Tags">
-        <strong>Tags</strong>
+      <label for="BusinessLegalName">
+        <strong>Business Legal Name</strong>
       </label>
-      <input type="text" class="form-control" formControlName="Tags" [(ngModel)]="menuDetails.Tags">
+      <input type="text" class="form-control" formControlName="BusinessLegalName" [(ngModel)]="menuDetails.BusinessLegalName">
     </div>
 
     <div class="form-group">
-      <label for="Website">
-        <strong>Website</strong>
+      <label for="Country">
+        <strong>Country</strong>
       </label>
-      <input type="text" class="form-control" formControlName="Website" [(ngModel)]="menuDetails.Website">
-    </div>
-
-    <div class="form-group">
-      <label for="PromotionDetails">
-        <strong>Promotion Details</strong>
-      </label>
-      <input type="text" class="form-control" formControlName="PromotionDetails" [(ngModel)]="menuDetails.PromotionDetails">
-    </div>
-
-    <div class="form-group">
-      <label for="PricingRange">
-        <strong>Pricing Range</strong>
-      </label>
-      <input type="text" class="form-control" formControlName="PricingRange" [(ngModel)]="menuDetails.PricingRange">
-    </div>
-
-    <div class="form-group">
-      <label for="PhoneNumber">
-        <strong>Phone Number</strong>
-      </label>
-      <input type="text" class="form-control" formControlName="PhoneNumber" [(ngModel)]="menuDetails.PhoneNumber">
-    </div>
-
-    <div class="form-group">
-      <label for="Address">
-        <strong>Address</strong>
-      </label>
-      <input type="text" class="form-control" formControlName="Address" [(ngModel)]="menuDetails.Address">
+      <input type="text" class="form-control" formControlName="Country" [(ngModel)]="menuDetails.Country">
     </div>
 
     <div class="form-group">
@@ -92,194 +64,124 @@
     </div>
 
     <div class="form-group">
-      <label for="Districts">
-        <strong>Districts</strong>
+      <label for="RegisteredAddress">
+        <strong>Registered Address</strong>
       </label>
-      <input type="text" class="form-control" formControlName="Districts" [(ngModel)]="menuDetails.Districts">
+      <input type="text" class="form-control" formControlName="RegisteredAddress" [(ngModel)]="menuDetails.RegisteredAddress">
     </div>
 
     <div class="form-group">
-      <label for="Zone">
-        <strong>Zone</strong>
+      <label for="LegalEntityType">
+        <strong>Legal Entity Type</strong>
       </label>
-      <input type="text" class="form-control" formControlName="Zone" [(ngModel)]="menuDetails.Zone">
-    </div>
-
-    <div class="form-group">
-      <label for="Country">
-        <strong>Country</strong>
-      </label>
-      <input type="text" class="form-control" formControlName="Country" [(ngModel)]="menuDetails.Country">
-    </div>
-    <div class="form-group">
-      <div class="row">
-        <div class="col col-lg-1 mt-1">
-          <input type="checkbox" class="form-control" formControlName="HasPromotion" [(ngModel)]="menuDetails.HasPromotion">
-        </div>
-        <div class="col col-lg-3">
-          <label for="HasPromotion">
-            <strong>Promotion</strong>
-          </label>
-        </div>
-        <div class="col col-lg-1 mt-1">
-          <input type="checkbox" class="form-control" formControlName="Featured" [(ngModel)]="menuDetails.Featured">
-        </div>
-        <div class="col col-lg-3">
-          <label for="Featured">
-            <strong>Featured</strong>
-          </label>
-        </div>
-        <div class="col col-lg-1 mt-1">
-          <input type="checkbox" class="form-control" formControlName="AvailableBooking" [(ngModel)]="menuDetails.AvailableBooking">
-        </div>
-        <div class="col col-lg-3">
-          <label for="Booking">
-            <strong>Avail. Booking</strong>
-          </label>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col col-lg-1 mt-1">
-          <input type="checkbox" class="form-control" formControlName="IsPartner" [(ngModel)]="menuDetails.IsParter">
-        </div>
-        <div class="col col-lg-3">
-          <label for="IsPartner">
-            <strong>Partner</strong>
-          </label>
-        </div>
-        <div class="col col-lg-1 mt-1">
-          <input type="checkbox" class="form-control" formControlName="IsTakeaway" [(ngModel)]="menuDetails.IsTakeaway">
-        </div>
-        <div class="col col-lg-3">
-          <label for="IsTakeaway">
-            <strong>Takeaway</strong>
-          </label>
-        </div>
-        <div class="col col-lg-1 mt-1">
-          <input type="checkbox" class="form-control" formControlName="HasQueue" [(ngModel)]="menuDetails.HasQueue">
-        </div>
-        <div class="col col-lg-3">
-          <label for="HasQueue">
-            <strong>Queue System</strong>
-          </label>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col col-lg-1 mt-1">
-          <input type="checkbox" class="form-control" formControlName="Verified" [(ngModel)]="menuDetails.Verified">
-        </div>
-        <div class="col col-lg-3">
-          <label for="Verified">
-            <strong>Verified</strong>
-          </label>
-        </div>
-        <div class="col col-lg-1 mt-1">
-          <input type="checkbox" class="form-control" formControlName="IsRecommended" [(ngModel)]="menuDetails.IsRecommended">
-        </div>
-        <div class="col col-lg-3">
-          <label for="IsRecommended">
-            <strong>Recommended</strong>
-          </label>
-        </div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="Category">
-        <strong>Category</strong>
-      </label>
-      <select class="form-control" formControlName="Category" [(ngModel)]="menuDetails.Category">
-        <option *ngFor="let categoryList of categoryLists">{{categoryList}}</option>
+      <select class="form-control" formControlName="LegalEntityType" [(ngModel)]="menuDetails.LegalEntityType">
+        <option *ngFor="let LegalEntityType of LegalEntityTypes">{{LegalEntityType}}</option>
       </select>
     </div>
 
     <div class="form-group">
-      <label for="Cuisine">
-        <strong>Cuisine</strong>
+      <label for="OpenTiming">
+        <!-- <strong>Open Timing</strong> -->
       </label>
-      <select class="form-control" formControlName="Cuisine" [(ngModel)]="menuDetails.Cuisine">
-        <option *ngFor="let cuisineList of cuisineLists">{{cuisineList}}</option>
-      </select>
-    </div>
 
-    <div class="form-group">
-      <label for="HawkerCenter">
-        <strong>Hawker Center</strong>
-      </label>
-      <select class="form-control" formControlName="HawkerCenter" [(ngModel)]="menuDetails.HawkerCenter">
-        <option *ngFor="let hawkerCenterList of hawkerCenterLists">{{hawkerCenterList}}</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="RestaurantGroup">
-        <strong>Restaurant Group</strong>
-      </label>
-      <select class="form-control" formControlName="RestaurantGroup" [(ngModel)]="menuDetails.RestaurantGroup">
-
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="RestaurantOwners">
-        <strong>Restaurant Owners</strong>
-      </label>
-      <select class="form-control" formControlName="RestaurantOwners" [(ngModel)]="menuDetails.RestaurantOwners">
-        <!-- TO DO -->
-      </select>
-
-      <div class="form-group">
-        <label for="Status">
-          <strong>Status</strong>
-        </label>
-        <select class="form-control" formControlName="Status" [(ngModel)]="Status">
-          <option *ngFor="let statusList of statusLists">{{statusList}}</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="Reservation Type">
-          <strong>Reservation Type</strong>
-        </label>
-        <angular2-multiselect [data]="ReservationDropdownLists" [settings]="ReservationDropdownSettings"  
-                              formControlName="ReservationType" [(ngModel)]="menuDetails.ReservationType" 
-                              (onSelect)="onItemSelect($event)" (onDeSelect)="onItemDeSelect($event)"
-                              (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)">
-        </angular2-multiselect>
-      </div>
-
-      <div class="form-group">
-        <label for="OpenTiming">
-          <strong>Open Timing</strong>
-        </label>
-
-        <div class="no-more-table">
-          <div class="table table-bordered table-striped mb-0">
-            <thead>
+      <div class="no-more-table">
+        <div class="table table-bordered table-striped mb-0">
+          <!-- <thead>
               <tr>
-                <th style="width: 25%">Operation Day</th>
-                <th style="width: 10%">Opening Time</th>
-                <th style="width: 10%">Closing Time</th>
-                <th style="width: 5%">Closed Today</th>
+                <th style="width: 25%">OperatingDay</th>
+                <th style="width: 5%">ClosedToday</th>
+                <th style="width: 20%">OperatingTime</th>
                 <th style="width: 50%">Action</th>
               </tr>
-            </thead>
-            <ul *ngFor="let operatingDay of menuDetails.OpenTiming; let i=index">
+            </thead> -->
 
-            </ul>
-            <!-- <tbody>
-              <tr *ngFor="let operatingDay of menuDetails.OpenTiming; let i=index">
+          <!-- <tbody *ngFor="let operatingDay of menuDetails.OpenTiming; let i=index">
+              <tr>
                 <td>{{operatingDay.Name}}</td>
-                <td *ngFor="let operatingTime of operatingDay; let i=index">
-                  
+                <td>
+                  <input type="checkbox" name="operatingDay" formControlName="ClosedToday" [(ngModel)]="operatingDay.ClosedToday">
+                </td>
+                <td>
+                  <div class="row">
+                    <div class="col col-lg-6">add</div>
+                    <div class="col col-lg-6">delete</div>
+                  </div>
+                </td>
+                <td>
+                  <tbody *ngFor="let operatingTime of operatingDay.OperationHourList; let i=index">
+                    <tr>
+                      <td>{{operatingTime.OpenTime}}</td>
+                      <td>{{operatingTime.CloseTime}}</td>
+                    </tr>
+                  </tbody>
                 </td>
               </tr>
             </tbody> -->
-          </div>
+
         </div>
       </div>
+
+      <div class="card">
+        <div class="card-header">
+          <label for="OpenTiming">
+            <strong>Open Timing</strong>
+          </label>
+        </div>
+
+        <div class="card-body">
+          <ng-container *ngFor="let operationData of menuDetails.OpenTiming; let dayIdx = index;">
+            <div class="row">
+              <div class="col col-lg-4">
+                <font color="blue">{{operationData.Name}}</font>
+              </div>
+              <div class="col col-lg-3">
+                <font color="blue">Close Today</font>
+              </div>
+              <div class="col col-lg-2 mb-2">
+                <input type="checkbox" formControlName="ClosedToday" [(ngModel)]="menuDetails.OpenTiming[dayIdx].ClosedToday">
+              </div>
+            </div>
+            <ng-container *ngFor="let operationTime of operationData.OperationHourList; let i=index;">
+              <!-- <div class="row">
+                  <div class="col col-lg-4">
+                    <font color="blue">{{operationData.Name}}</font>
+                  </div>
+                  <div class="col col-lg-3"><font color="blue">Close Today</font></div>
+                  <div class="col col-lg-2 mb-2">
+                    <input type="checkbox" formControlName="ClosedToday" [(ngModel)]="menuDetails.OpenTiming[dayIdx].ClosedToday">
+                  </div>
+                </div> -->
+
+              <ng-container *ngIf="!operationData.ClosedToday">
+                <div class="row">
+                  <div class="col col-lg-4 mb-2">
+                    <input class="form-control" type="time" formControlName="OpenTime" [(ngModel)]="menuDetails.OpenTiming[dayIdx].OperationHourList[i].OpenTime">
+                    <!-- <input class="form-control" type="time" formControlName="OpenTime" [(ngModel)]="operationTime.OpenTime"> -->
+                  </div>
+                  <div class="col col-lg-4 mb-2">
+                    <input class="form-control" type="time" formControlName="CloseTime" [(ngModel)]="menuDetails.OpenTiming[dayIdx].OperationHourList[i].CloseTime">
+                    <!-- <input class="form-control" type="time" formControlName="CloseTime" [(ngModel)]="operationTime.CloseTime"> -->
+                  </div>
+                  <div class="col col-lg-2 mb-2">
+                    <button type="button" class="btn btn-sm btn-info pull-right" style="width: 60px; height:35px" (click)="addOperationTime(dayIdx, i)">
+                    Add</button>
+                    <!-- <button type="button" class="btn btn-sm btn-link pull-right" (click)="addOperationTime(dayIdx, i)"> Add Shift</button> -->
+                    <!-- <button type="button" class="btn btn-sm btn-link pull-right" *ngIf="i==operationData.OperationHourList.length - 1"
+                      (click)="addOperationTime(dayIdx, i)"> Add Shift</button> -->
+                  </div>
+                  <div class="col col-lg-2 mb-2">
+                    <button type="button" class="btn btn-sm btn-danger pull-right" style="width: 60px; height:35px" (click)="removeOperationTime(dayIdx, i)">
+                    Delete</button>
+                    <!-- <button type="button" class="btn btn-sm btn-link pull-right" *ngIf="i==operationData.OperationHourList.length - 1"
+                      (click)="removeOperationTime(dayIdx, i)"> Delete</button> -->
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+
     </div>
   </form>
 </div>

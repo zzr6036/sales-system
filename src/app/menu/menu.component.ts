@@ -17,7 +17,7 @@ export class MenuComponent implements OnInit {
   ngOnInit() {
   }
 
-  createNewRestaurant(){
+  createOnboarding(){
     this.router.navigate(['/menu/create-menu/'])
   }
 

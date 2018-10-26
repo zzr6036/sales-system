@@ -39,21 +39,21 @@ const MENUITEMS = [
   // },
   {
     state: 'formes',
-    name:'Boarding',
+    name:'Online Boarding',
     type: 'link',
     icon: 'basic-sheet-pen'
+  },
+  {
+    state: 'menu',
+    name: 'Offline Boarding',
+    type: 'link',
+    icon: 'basic-webpage-txt'
   },
   {
     state: 'promotion',
     name:'Promotion',
     type: 'link',
     icon: 'basic-accelerator'
-  },
-  {
-    state: 'menu',
-    name: 'Menu',
-    type: 'link',
-    icon: 'basic-webpage-txt'
   },
   // {
   //   state: 'dashboards',

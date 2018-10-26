@@ -34,113 +34,113 @@
           <input type="text" class="form-control" name="password" id="password" (keyup)="autosave()" [(ngModel)]="password" #password1="ngModel">
         </div>
 
-        <div class="form-group">
+        <!-- <div class="form-group">
           <label for="cuisines">
             <font color="red">
               <strong>* </strong>
-            </font>Cuisines Id</label>
+            </font>Cuisines</label>
           <div class="row">
-            <div class="col col-lg-10">
-              <input type="text" class="form-control" name="cuisines" id="cuisines" [(ngModel)]="cuisines" #cuisines1="ngModel">
+              <div class="col col-lg-10">
+                <input type="text" class="form-control" name="cuisines" id="cuisines" [(ngModel)]="cuisines" #cuisines1="ngModel">
+              </div>
+              <div class="col col-lg-2">
+                <button type="button" class="btn btn-primary" id="cuisines" data-toggle="modal" data-target="#cuisinesModal" (click)="cuisinesCheck()">Search</button>
+              </div>
             </div>
-            <div class="col col-lg-2">
-              <button type="button" class="btn btn-primary" id="cuisines" data-toggle="modal" data-target="#cuisinesModal" (click)="cuisinesCheck()">Search</button>
-            </div>
-          </div>
         </div>
 
         <div class="modal fade" id="cuisinesModal" tabindex="-1" role="dialog" aria-labelledby="cuisinesModalLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="cuisinesModalLabel">Cuisines Type</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <div class="no-more-table">
-                  <table class="table table-bordered table-striped mb-0">
-                    <thead>
-                      <tr>
-                        <th style="width: 20%">Id</th>
-                        <th style="width: 60%">Name</th>
-                        <th style="width: 20%">Selected</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let cuisinesType of cuisinesTypes; let i=index">
-                        <td>{{cuisinesType.Id}}</td>
-                        <td>{{cuisinesType.Name}}</td>
-                        <td>
-                          <input type="checkbox" name="cuisinesSelected" [(ngModel)]="cuisinesSelected[i]" [checked]=true>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="cuisinesModalLabel">Cuisines Type</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="no-more-table">
+                    <table class="table table-bordered table-striped mb-0">
+                      <thead>
+                        <tr>
+                          <th style="width: 20%">Id</th>
+                          <th style="width: 60%">Name</th>
+                          <th style="width: 20%">Selected</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let cuisinesType of cuisinesTypes; let i=index">
+                          <td>{{cuisinesType.Id}}</td>
+                          <td>{{cuisinesType.Name}}</td>
+                          <td>
+                            <input type="checkbox" name="cuisinesSelected" [(ngModel)]="cuisinesSelected[i]" [checked]=true>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="cuisineType()">Confirm</button>
                 </div>
               </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="cuisineType()">Confirm</button>
-              </div>
             </div>
-          </div>
-        </div>
+          </div> -->
 
-        <div class="form-group">
+        <!-- <div class="form-group">
           <label for="categories">
             <font color="red">
               <strong>* </strong>
-            </font>Category Id</label>
+            </font>Category</label>
           <div class="row">
-            <div class="col col-lg-10">
-              <input type="text" class="form-control" name="categories" id="categories" [(ngModel)]="categories" #categories1="ngModel">
+              <div class="col col-lg-10">
+                <input type="text" class="form-control" name="categories" id="categories" [(ngModel)]="categories" #categories1="ngModel">
+              </div>
+              <div class="col col-lg-2">
+                <button type="button" class="btn btn-primary" id="categories" data-toggle="modal" data-target="#categoriesModal" (click)="categoriesCheck()">Search</button>
+              </div>
             </div>
-            <div class="col col-lg-2">
-              <button type="button" class="btn btn-primary" id="categories" data-toggle="modal" data-target="#categoriesModal" (click)="categoriesCheck()">Search</button>
-            </div>
-          </div>
         </div>
 
         <div class="modal fade" id="categoriesModal" tabindex="-1" role="dialog" aria-labelledby="categoriesModalLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="categoriesModalLabel">Category Type</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <div class="no-more-table">
-                  <table class="table table-bordered table-striped mb-0">
-                    <thead>
-                      <tr>
-                        <th style="width: 20%">Id</th>
-                        <th style="width: 60%">Name</th>
-                        <th style="width: 20%">Selected</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let categoriesType of categoriesTypes; let i=index">
-                        <td>{{categoriesType.Id}}</td>
-                        <td>{{categoriesType.Name}}</td>
-                        <td>
-                          <input type="checkbox" name="categoriesSelected" [(ngModel)]="categoriesSelected[i]" [checked]=true>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="categoriesModalLabel">Category Type</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="no-more-table">
+                    <table class="table table-bordered table-striped mb-0">
+                      <thead>
+                        <tr>
+                          <th style="width: 20%">Id</th>
+                          <th style="width: 60%">Name</th>
+                          <th style="width: 20%">Selected</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let categoriesType of categoriesTypes; let i=index">
+                          <td>{{categoriesType.Id}}</td>
+                          <td>{{categoriesType.Name}}</td>
+                          <td>
+                            <input type="checkbox" name="categoriesSelected" [(ngModel)]="categoriesSelected[i]" [checked]=true>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="categoryType()">Confirm</button>
                 </div>
               </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="categoryType()">Confirm</button>
-              </div>
             </div>
-          </div>
-        </div>
+          </div> -->
 
         <div class="form-group">
           <label for="exampleInputEmail">
@@ -275,7 +275,7 @@
             </div>
           </div>
           <div *ngIf="nricFrontImage != undefined && nricFrontImage != ''">
-            <img [src]="nricFrontImage" style="width:300px;height:400px;" />
+            <img [src]="nricFrontImage" style="width:auto;height:auto;" />
           </div>
           <input type="file" accept="image/*" (keyup)="autosave()" base-sixty-four-input (change)="changeListenerNricFront($event)"
           />
@@ -297,7 +297,7 @@
             </div>
           </div>
           <div *ngIf="nricBackImage != undefined && nricBackImage != ''">
-            <img [src]="nricBackImage" style="width:300px;height:400px;" />
+            <img [src]="nricBackImage" style="width:auto;height:auto;" />
           </div>
           <input type="file" accept="image/*" (keyup)="autosave()" base-sixty-four-input (change)="changeListenerNricBack($event)"
           />
@@ -316,7 +316,7 @@
             </div>
           </div>
           <div *ngIf="acraBizFile != undefined && acraBizFile != ''">
-            <img [src]="acraBizFile" style="width:300px;height:400px;" />
+            <img [src]="acraBizFile" style="width:auto;height:auto;" />
           </div>
           <input type="file" accept="image/*" (keyup)="autosave()" base-sixty-four-input (change)="changeListenerAcraBizFile($event)"
           />
@@ -334,7 +334,7 @@
             </div>
           </div>
           <div *ngIf="neaLicenseImage != undefined && neaLicenseImage != ''">
-            <img [src]="neaLicenseImage" style="width:300px;height:400px;" />
+            <img [src]="neaLicenseImage" style="width:auto;height:auto;" />
           </div>
           <input type="file" accept="image/*" (keyup)="autosave()" base-sixty-four-input (change)="changeListenerNea($event)" />
         </div>
@@ -351,7 +351,7 @@
             </div>
           </div>
           <div *ngIf="tobaccoAlcoholLicense != undefined && tobaccoAlcoholLicense != ''">
-            <img [src]="tobaccoAlcoholLicense" style="width:300px;height:400px;" />
+            <img [src]="tobaccoAlcoholLicense" style="width:auto;height:auto;" />
           </div>
           <input type="file" accept="image/*" (keyup)="autosave()" base-sixty-four-input (change)="changeListenerTob($event)" />
         </div>
@@ -474,7 +474,7 @@
             <font color="red">
               <strong>* </strong>
             </font>Legal Entity Type</label>
-          <select class="from-control" [(ngModel)]="legalEntitySelection" name="legalEntitySelection" style="width: 100%; height: 35px">
+          <select class="form-control" [(ngModel)]="legalEntitySelection" name="legalEntitySelection" style="width: 100%; height: 35px">
             <option *ngFor="let legalEntity of legalEntityType">{{legalEntity}}</option>
           </select>
         </div>

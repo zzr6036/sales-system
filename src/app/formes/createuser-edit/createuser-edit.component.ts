@@ -16,6 +16,7 @@ import { templateJitUrl } from "@angular/compiler";
 import { AngularMultiSelectModule } from "angular2-multiselect-dropdown/angular2-multiselect-dropdown";
 import Swal from 'sweetalert2';
 import { log } from "util";
+import { toString } from "@ng-bootstrap/ng-bootstrap/util/util";
 
 @Component({
   selector: 'app-createuser-edit',
@@ -69,10 +70,10 @@ export class CreateuserEditComponent implements OnInit {
   autosaveTimer = null;
   status: string;
 
-  cuisines: Number;
+  cuisines: string;
   cuisinesTypes: Array<any> = [];
   cuisinesSelected = [];
-  categories: Number;
+  categories: string;
   categoriesTypes: Array<any> = [];
   categoriesSelected = [];
 
@@ -198,6 +199,7 @@ export class CreateuserEditComponent implements OnInit {
      this.hasGST = assignMerchantDetails["HasGST"];
      this.hasCreditCard = assignMerchantDetails["HasCreditCard"];
      this.openTiming = JSON.parse(assignMerchantDetails["OpenTiming"]);
+
     this.dropdownSubscriptionsList = [
       { id: 1, itemName: "Restaurant" },
       { id: 2, itemName: "Hawker" }
@@ -211,6 +213,22 @@ export class CreateuserEditComponent implements OnInit {
       enableSearchFilter: true,
       classes: "myclass custom-class"
     };
+
+    // let tokenNo = localStorage.getItem("Token");
+    // let getCategoriesUrl = global.host + "Categories" + "?token=" + tokenNo;
+    // let getCuisinesUrl = global.host + "Cuisines" + "?token=" + tokenNo;
+    // //Get Cuisine Id
+    // this.http.get(getCuisinesUrl, {}).map(res => res.json()).subscribe(data => {
+    //   this.cuisinesTypes = data;
+    // })
+    // //Get Categories Id
+    // this.http.get(getCategoriesUrl, {}).map(res => res.json()).subscribe(data => {
+    //   this.categoriesTypes = data;
+    // })
+  }
+
+  onChangeCuisinesSelect(event){
+    this.cuisines = event.target.value
   }
 
   onItemSelect(item: any) {
@@ -469,65 +487,65 @@ export class CreateuserEditComponent implements OnInit {
     this.acraBizFile = "";
   }
 
-  cuisinesCheck(){
-    let tokenNo = localStorage.getItem("Token");
-    let getCuisinesUrl = global.host + "Cuisines" + "?token=" + tokenNo;
-    this.http.get(getCuisinesUrl, {}).map(res=>res.json()).subscribe(data => {
-      if(data['Message']){
-        console.log(data['Message'])
-      }
-      else{
-        this.cuisinesTypes = data
-        this.initSelectedCuisines()
-      }
-    },
-  error=>{
-    console.log(error)
-  })
-  }
-  initSelectedCuisines(){
-    this.cuisinesSelected = new Array<boolean>(this.cuisinesTypes.length).fill(false); 
-  }
-  cuisineType(){
-    let i=0;
-    for(let isSelected of this.cuisinesSelected){
-      if(isSelected){
-        this.cuisines = this.cuisinesTypes[i].Id
-      }
-      i++;
-    }
-    // console.log(this.cuisines)
-  }
+  // cuisinesCheck(){
+  //   let tokenNo = localStorage.getItem("Token");
+  //   let getCuisinesUrl = global.host + "Cuisines" + "?token=" + tokenNo;
+  //   this.http.get(getCuisinesUrl, {}).map(res=>res.json()).subscribe(data => {
+  //     if(data['Message']){
+  //       console.log(data['Message'])
+  //     }
+  //     else{
+  //       this.cuisinesTypes = data
+  //       this.initSelectedCuisines()
+  //     }
+  //   },
+  // error=>{
+  //   console.log(error)
+  // })
+  // }
+  // initSelectedCuisines(){
+  //   this.cuisinesSelected = new Array<boolean>(this.cuisinesTypes.length).fill(false); 
+  // }
+  // cuisineType(){
+  //   let i=0;
+  //   for(let isSelected of this.cuisinesSelected){
+  //     if(isSelected){
+  //       this.cuisines = this.cuisinesTypes[i].Id
+  //     }
+  //     i++;
+  //   }
+  //   // console.log(this.cuisines)
+  // }
 
-  categoriesCheck(){
-    let tokenNo = localStorage.getItem("Token");
-    let getCategoriesUrl = global.host + "Categories" + "?token=" + tokenNo;
-    this.http.get(getCategoriesUrl, {}).map(res=>res.json()).subscribe(data => {
-      if(data['Message']){
-        console.log(data['Message'])
-      }
-      else{
-        this.categoriesTypes = data
-        this.initSelectedCategories()
-      }
-    },
-  error=>{
-    console.log(error)
-  })
-  }
-  initSelectedCategories(){
-    this.categoriesSelected = new Array<boolean>(this.categoriesTypes.length).fill(false); 
-  }
-  categoryType(){
-    let i=0;
-    for(let isSelected of this.categoriesSelected){
-      if(isSelected){
-        this.categories = this.categoriesTypes[i].Id
-      }
-      i++;
-    }
-    // console.log(this.categories)
-  }
+  // categoriesCheck(){
+  //   let tokenNo = localStorage.getItem("Token");
+  //   let getCategoriesUrl = global.host + "Categories" + "?token=" + tokenNo;
+  //   this.http.get(getCategoriesUrl, {}).map(res=>res.json()).subscribe(data => {
+  //     if(data['Message']){
+  //       console.log(data['Message'])
+  //     }
+  //     else{
+  //       this.categoriesTypes = data
+  //       this.initSelectedCategories()
+  //     }
+  //   },
+  // error=>{
+  //   console.log(error)
+  // })
+  // }
+  // initSelectedCategories(){
+  //   this.categoriesSelected = new Array<boolean>(this.categoriesTypes.length).fill(false); 
+  // }
+  // categoryType(){
+  //   let i=0;
+  //   for(let isSelected of this.categoriesSelected){
+  //     if(isSelected){
+  //       this.categories = this.categoriesTypes[i].Id
+  //     }
+  //     i++;
+  //   }
+  //   // console.log(this.categories)
+  // }
 
   // Save and Submit
   saveDraft(inIsDraft) {
@@ -537,8 +555,8 @@ export class CreateuserEditComponent implements OnInit {
         // "Id": (this.appInfo == null)?0:this.appInfo['Id'],
         Id: this.id,
         UserName: this.username,
-        CuisineId: this.cuisines,
-        CategoryId: this.categories,
+        CuisineId: parseInt(this.cuisines),
+        CategoryId: parseInt(this.categories),
         Password: this.password,
         AccountType: this.accountTypeSelection,
         Email: this.email,

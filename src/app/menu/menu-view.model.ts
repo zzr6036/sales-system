@@ -1,37 +1,26 @@
 
 export class MenuView{
+    ConvertToOnboarding: Boolean;
     CoverPhoto: String;
-    ProfileImage: String;
-    Name: String;
-    ChineseName: String;
-    Details: String;
-    OtherInfo: String;
-    Tags: String;
-    OpenningTime: String;
-    ClosingTime: String;
-    OperatingDays: String;
-    OpenTiming: Array<any> = [];
-    Website: String;
-    HasPromotion: Boolean;
-    PricingRange: String;
-    PhoneNumber: String;
-    Category: String;
-    Cuisine: String;
-    HawkerCenter: String;
-    Featured: Boolean;
-    Address: String;
-    PostalCode: String;
-    Districts: String;
-    Zone: String;
+    UserName: String;
+    Password: String;
+    Email: String;
+    Mobile: String;
+    RestaurantName: String;
+    BusinessLegalName: String;
     Country: String;
-    RestaurantGroup: String;
-    RestaurantOwners: String;
-    ReservationType: Array<any> = []
-    Status: String;
-    AvailableBooking: String;
-    IsPartner: Boolean;
-    IsTakeaway: Boolean;
-    HasQueue: Boolean;
-    Verified: Boolean;
-    IsRecommended: Boolean;
+    PostalCode: String;
+    RegisteredAddress: String;
+    LegalEntityType: String;
+    OpenTiming: Array<any> = []
+    // OpenTiming: Array<any> = [{Name: 'Monday', ShortName: 'Mon', OperationHourList: [], ClosedToday: false},
+    //                           {Name: 'Tuesday', ShortName: 'Tue', OperationHourList: [], ClosedToday: false},
+    //                           {Name: 'Wednesday', ShortName: 'Wed', OperationHourList: [], ClosedToday: false},
+    //                           {Name: 'Thursday', ShortName: 'Thur', OperationHourList: [], ClosedToday: false},
+    //                           {Name: 'Friday', ShortName: 'Fri', OperationHourList: [], ClosedToday: false},
+    //                           {Name: 'Saturday', ShortName: 'Sat', OperationHourList: [], ClosedToday: false},
+    //                           {Name: 'Sunday', ShortName: 'Sun', OperationHourList: [], ClosedToday: false},
+    //                           {Name: 'Eve Of Public Holiday', ShortName: 'EveOfP.H', OperationHourList: [], ClosedToday: false},
+    //                           {Name: 'Public Holiday', ShortName: 'P.H', OperationHourList: [], ClosedToday: false}];
+    // OpenTiming: Array<any> = [{Name: '', ShortName: '', OperationHourList: [], ClosedToday: Boolean}];
 }
