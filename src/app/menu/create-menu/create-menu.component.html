@@ -1,24 +1,42 @@
 <div class="card card-body mb-0 rounded-0 p-5 col-sm-12 col-md-6 col-lg-8 offset-md-2">
-  <form [formGroup]="restaurant" (click)='createRestaurant()'>
+  <form [formGroup]="restaurant">
     <div class="form-group">
-      <label for="CoverPhoto">
-        <strong>Cover Photo</strong>
-      </label>
-      <input type="file" class="form-control" formControlName="CoverPhoto" [(ngModel)]="menuDetails.CoverPhoto">
+      <div class="row">
+        <div class="col">
+          <label for="CoverPhoto">
+            <strong>Cover Photo</strong>
+            </label>
+            <input type="file" class="form-control" id="CoverPhoto" accept="image/*" formControlName="CoverPhoto" (change)="handleFileSelect($event)">
+        </div>
+        <div class="col">
+          <div *ngIf="menuDetails.CoverPhoto != undefined && menuDetails.CoverPhoto !=''">
+            <img [src]="menuDetails.CoverPhoto" style="height: 120px; width:100px" align="right">
+          </div>
+        </div>
+      </div>
     </div>
+    <!-- {{menuDetails.CoverPhoto}} -->
 
     <div class="form-group">
       <label for="UserName">
+        <font color="red"><strong>* </strong></font>
         <strong>UserName</strong>
       </label>
-      <input type="text" class="form-control" formControlName="UserName" [(ngModel)]="menuDetails.UserName">
+      <input type="text" class="form-control" formControlName="UserName" [(ngModel)]="menuDetails.UserName" required>
+      <div class="form-control-feedback" *ngIf="restaurant.controls['UserName'].hasError('required') && restaurant.controls['UserName'].touched">
+        <font color="red">Username is required</font>
+      </div>
     </div>
 
     <div class="form-group">
       <label for="Password">
+        <font color="red"><strong>* </strong></font>
         <strong>Password</strong>
       </label>
       <input type="text" class="form-control" formControlName="Password" [(ngModel)]="menuDetails.Password">
+      <div class="form-control-feedback" *ngIf="restaurant.controls['Password'].hasError('required') && restaurant.controls['Password'].touched">
+        <font color="red">Password is required</font>
+      </div>
     </div>
 
     <div class="form-group">
@@ -37,7 +55,7 @@
 
     <div class="form-group">
       <label for="RestaurantName">
-        <strong>Restaurant Name</strong>
+        <strong>Outlet Name</strong>
       </label>
       <input type="text" class="form-control" formControlName="RestaurantName" [(ngModel)]="menuDetails.RestaurantName">
     </div>
@@ -65,69 +83,26 @@
 
     <div class="form-group">
       <label for="RegisteredAddress">
-        <strong>Registered Address</strong>
+        <strong>Outlet Address</strong>
       </label>
       <input type="text" class="form-control" formControlName="RegisteredAddress" [(ngModel)]="menuDetails.RegisteredAddress">
     </div>
 
-    <div class="form-group">
+    <!-- <div class="form-group">
       <label for="LegalEntityType">
         <strong>Legal Entity Type</strong>
       </label>
       <select class="form-control" formControlName="LegalEntityType" [(ngModel)]="menuDetails.LegalEntityType">
         <option *ngFor="let LegalEntityType of LegalEntityTypes">{{LegalEntityType}}</option>
       </select>
-    </div>
+    </div> -->
 
-    <div class="form-group">
-      <label for="OpenTiming">
-        <!-- <strong>Open Timing</strong> -->
-      </label>
-
-      <div class="no-more-table">
-        <div class="table table-bordered table-striped mb-0">
-          <!-- <thead>
-              <tr>
-                <th style="width: 25%">OperatingDay</th>
-                <th style="width: 5%">ClosedToday</th>
-                <th style="width: 20%">OperatingTime</th>
-                <th style="width: 50%">Action</th>
-              </tr>
-            </thead> -->
-
-          <!-- <tbody *ngFor="let operatingDay of menuDetails.OpenTiming; let i=index">
-              <tr>
-                <td>{{operatingDay.Name}}</td>
-                <td>
-                  <input type="checkbox" name="operatingDay" formControlName="ClosedToday" [(ngModel)]="operatingDay.ClosedToday">
-                </td>
-                <td>
-                  <div class="row">
-                    <div class="col col-lg-6">add</div>
-                    <div class="col col-lg-6">delete</div>
-                  </div>
-                </td>
-                <td>
-                  <tbody *ngFor="let operatingTime of operatingDay.OperationHourList; let i=index">
-                    <tr>
-                      <td>{{operatingTime.OpenTime}}</td>
-                      <td>{{operatingTime.CloseTime}}</td>
-                    </tr>
-                  </tbody>
-                </td>
-              </tr>
-            </tbody> -->
-
-        </div>
-      </div>
-
-      <div class="card">
+      <!-- <div class="card">
         <div class="card-header">
           <label for="OpenTiming">
             <strong>Open Timing</strong>
           </label>
         </div>
-
         <div class="card-body">
           <ng-container *ngFor="let operationData of menuDetails.OpenTiming; let dayIdx = index;">
             <div class="row">
@@ -142,46 +117,44 @@
               </div>
             </div>
             <ng-container *ngFor="let operationTime of operationData.OperationHourList; let i=index;">
-              <!-- <div class="row">
-                  <div class="col col-lg-4">
-                    <font color="blue">{{operationData.Name}}</font>
-                  </div>
-                  <div class="col col-lg-3"><font color="blue">Close Today</font></div>
-                  <div class="col col-lg-2 mb-2">
-                    <input type="checkbox" formControlName="ClosedToday" [(ngModel)]="menuDetails.OpenTiming[dayIdx].ClosedToday">
-                  </div>
-                </div> -->
-
               <ng-container *ngIf="!operationData.ClosedToday">
                 <div class="row">
                   <div class="col col-lg-4 mb-2">
                     <input class="form-control" type="time" formControlName="OpenTime" [(ngModel)]="menuDetails.OpenTiming[dayIdx].OperationHourList[i].OpenTime">
-                    <!-- <input class="form-control" type="time" formControlName="OpenTime" [(ngModel)]="operationTime.OpenTime"> -->
                   </div>
                   <div class="col col-lg-4 mb-2">
                     <input class="form-control" type="time" formControlName="CloseTime" [(ngModel)]="menuDetails.OpenTiming[dayIdx].OperationHourList[i].CloseTime">
-                    <!-- <input class="form-control" type="time" formControlName="CloseTime" [(ngModel)]="operationTime.CloseTime"> -->
                   </div>
                   <div class="col col-lg-2 mb-2">
-                    <button type="button" class="btn btn-sm btn-info pull-right" style="width: 60px; height:35px" (click)="addOperationTime(dayIdx, i)">
-                    Add</button>
-                    <!-- <button type="button" class="btn btn-sm btn-link pull-right" (click)="addOperationTime(dayIdx, i)"> Add Shift</button> -->
-                    <!-- <button type="button" class="btn btn-sm btn-link pull-right" *ngIf="i==operationData.OperationHourList.length - 1"
-                      (click)="addOperationTime(dayIdx, i)"> Add Shift</button> -->
+                    <button type="button" class="btn btn-sm btn-info pull-right" style="width: 60px; height:35px" (click)="addOperationTime(dayIdx, i)">Add</button>
                   </div>
                   <div class="col col-lg-2 mb-2">
-                    <button type="button" class="btn btn-sm btn-danger pull-right" style="width: 60px; height:35px" (click)="removeOperationTime(dayIdx, i)">
+                    <button type="button" class="btn btn-sm btn-danger pull-right" style="width: 60px; height:35px" *ngIf="(i == operationData.OperationHourList.length-1)" (click)="removeOperationTime(dayIdx, i)">
                     Delete</button>
-                    <!-- <button type="button" class="btn btn-sm btn-link pull-right" *ngIf="i==operationData.OperationHourList.length - 1"
-                      (click)="removeOperationTime(dayIdx, i)"> Delete</button> -->
                   </div>
                 </div>
               </ng-container>
             </ng-container>
           </ng-container>
         </div>
+      </div> -->
+
+      <div class="form-group">
+        <div class="custom-controls-stakced d-block my-3">
+          <label class="custom-control material-checkbox">
+            <input type="checkbox" class="material-control-input" name="ConvertToOnboarding" formControlName="ConvertToOnboarding" [(ngModel)]="menuDetails.ConvertToOnboarding">
+            <span class="material-control-indicator"></span>
+            <span class="material-control-description"><font color="black"><strong>Convert to Online Onboarding</strong></font></span>
+          </label>
+        </div>
+      </div>
+      
+      <div class="buttonContainer">
+        <div class="buttonGroup">
+          <button class="btn btn-warning controlBtn" type="reset">Reset</button>
+          <button class="btn btn-success controlBtn" type="submit"  (click)='createRestaurant()' [disabled]="!restaurant.valid">Submit</button>
+        </div>
       </div>
 
-    </div>
   </form>
 </div>

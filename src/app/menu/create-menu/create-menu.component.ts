@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { HttpClient } from "@angular/common/http";
 import { Headers,URLSearchParams,RequestMethod,RequestOptions,RequestOptionsArgs,ResponseContentType,HttpModule,Http,Response } from "@angular/http";
 import { AngularMultiSelectModule } from "angular2-multiselect-dropdown/angular2-multiselect-dropdown";
@@ -40,9 +40,13 @@ class OperationItem {
 export class CreateMenuComponent implements OnInit {
   menuDetails: MenuView = new MenuView();
   restaurant: FormGroup;
-  merchantInfoes: Array<any> = [];
+  merchantInfoes: any;
   operationListJson: Array<any> = [];
-  
+  operationList: any;
+  editOperationList: Array<any> = [];
+  //upload image
+  loaded = false;
+  base64textString: String = "";
   LegalEntityTypes = ["NEA Hawker",
                       "Limited Liability Company",
                       "Private Limited Company",
@@ -91,9 +95,11 @@ export class CreateMenuComponent implements OnInit {
     //                                {Name: 'Public Holiday', ShortName: 'P.H', OperationHourList: [], ClosedToday: false}]
 
     this.restaurant = this.frmBuilder.group({
-      CoverPhoto: [""],
+      // CoverPhoto: [""],
+      CoverPhoto: [this.menuDetails.CoverPhoto],
+      // UserName: [null, Validators.compose([Validators.required])],
       UserName: ["", [Validators.required]],
-      Password: [""],
+      Password: ["", [Validators.required]],
       Email: [""],
       Mobile: [""],
       RestaurantName: [""],
@@ -104,9 +110,46 @@ export class CreateMenuComponent implements OnInit {
       LegalEntityType: [""],
       OpenTime: [""],
       CloseTime: [""],
-      ClosedToday: [false]
+      ClosedToday: [false],
+      ConvertToOnboarding: [false]
     })
   }
+
+  _handleReaderLoaded(readerEvt) {
+    var reader = readerEvt.target;
+    this.menuDetails.CoverPhoto = reader.result;
+    this.loaded = true;
+    // var binaryString = readerEvt.target.result;
+    // // this.base64textString = btoa(binaryString);
+    // this.menuDetails.CoverPhoto = btoa(binaryString);
+    // console.log(btoa(binaryString))
+    // // this.menuDetails.CoverPhoto = binaryString;
+  }
+
+  handleFileSelect(evt){
+    var file = evt.dataTransfer ? evt.dataTransfer.files[0] : evt.target.files[0];
+    if (file == undefined){
+      this.menuDetails.CoverPhoto = undefined;
+      return;
+    }
+    var pattern = /image-*/;
+    var reader = new FileReader();
+    if(!file.type.match(pattern)){
+      alert("invalid format");
+      return;
+    }
+    this.loaded = false;
+    reader.onload = this._handleReaderLoaded.bind(this);
+    reader.readAsDataURL(file);
+    // var files = evt.target.files;
+    // var file = files[0];
+    // if(files && file){
+    //   var reader = new FileReader();
+    //   reader.onload = this._handleReaderLoaded.bind(this);
+    //   reader.readAsBinaryString(file)
+    // }
+  }
+ 
 
   initOperationList(){
     // this.menuDetails.OpenTiming = []
@@ -132,14 +175,15 @@ export class CreateMenuComponent implements OnInit {
     this.menuDetails.OpenTiming.push(new OperationItem('Public Holiday', 'P.H', [new OperationHour()], false));
     // console.log(this.menuDetails.OpenTiming)
   }
-  editOperationList(){
-    this.menuDetails.OpenTiming = [];
+  editOperation(){
+    this.editOperationList = []
     for(let operationData of this.menuDetails.OpenTiming){
-      let operationHourList = [];
+      let copyOpTimeList = []
       for(let operationTime of operationData.OperationHourList){
-        operationHourList.push(new OperationHour(operationTime.OpenTime, operationTime.CloseTime))
+        let copyOpTime = new OperationHour(operationTime.OpenTime, operationTime.CloseTime)
+        copyOpTimeList.push(copyOpTime)
       }
-      this.menuDetails.OpenTiming.push(new OperationItem(operationData.Name, operationData.ShortName, operationData.operationHourList, operationData.ClosedToday))
+      this.editOperationList.push(new OperationItem(operationData.Name, operationData.ShortName, copyOpTimeList, operationData.ClosedToday))
     }
   }
   // onItemSelect(item: any){
@@ -152,16 +196,63 @@ export class CreateMenuComponent implements OnInit {
   // }
   // onDeSelectAll(items: any){
   // }
+
+  // addOperationTime(inDayIdx, inOpTimeIdx){
+  //   let operationHourItem: any;
+  //   for(let operationData of this.menuDetails.OpenTiming[inDayIdx]){
+  //     operationHourItem.push(new OperationHour(operationData.OpenTime, operationData.CloseTime))
+  //     // operationHourItem.push(new OperationHour(operationTime[inOpTimeIdx].OpenTime, operationTime[inOpTimeIdx].CloseTime))
+  //   }
+  //   this.menuDetails.OpenTiming[inDayIdx].OperationHourList.push(operationHourItem)
+  //   // operationHourItem = {}
+  //   // this.menuDetails.OpenTiming[inDayIdx].OperationHourList.push(new OperationHour())
+  //   console.log(this.menuDetails.OpenTiming[0].OperationHourList)
+  //   console.log(this.menuDetails.OpenTiming)
+  // }
+
+  
+
   addOperationTime(inDayIdx, inOpTimeIdx){
     let operationHourItem: any;
-    for(let operationTime of this.menuDetails.OpenTiming[inDayIdx]){
-      operationHourItem.push(new OperationHour(operationTime.OpenTime, operationTime.CloseTime))
+    for(let operationData of this.menuDetails.OpenTiming[inDayIdx].OperationHourList){
+      operationHourItem = new OperationHour(operationData.OpenTime, operationData.CloseTime)
     }
     this.menuDetails.OpenTiming[inDayIdx].OperationHourList.push(operationHourItem)
-    // operationHourItem = {}
-    // this.menuDetails.OpenTiming[inDayIdx].OperationHourList.push(new OperationHour())
     console.log(this.menuDetails.OpenTiming)
   }
+
+
+  // addOperationTime(inDayIdx, inOpTimeIdx){
+  //   let env = this;
+  //   let operationOpenTime: any;
+  //   let operationCloseTime: any;
+  //   let copyOpTimeList = []
+  //   this.editOperationList = [];
+  //   let operationData: any
+  //   let operationTime: any;
+  //   let operationTimeItem: any;
+  //   for (operationData of this.menuDetails.OpenTiming){
+  //     for(let operationTime of operationData.OperationHourList){
+  //       operationTimeItem = new OperationHour(operationTime.OpenTime, operationTime.CloseTime)
+  //       copyOpTimeList.push(operationTimeItem)
+  //     }
+  //     // this.editOperationList.push(new OperationItem(operationData.Name, operationData.ShortName, copyOpTimeList, operationData.ClosedToday))
+  //   }
+  //   // this.editOperationList.push(new OperationItem(operationData.Name, operationData.ShortName, copyOpTimeList, operationData.ClosedToday))
+  //   // console.log(copyOpTimeList)
+  //   // this.menuDetails.OpenTiming[inDayIdx].operationHourList.push(copyOpTimeList)
+  //   console.log(this.editOperationList)
+  // }
+
+  // addOperationTime(inDayIdx, inOpTimeIdx) {
+  //   let operationItem = {OpenTime: '09:00', CloseTime: '05:00'}
+  //   this.menuDetails.OpenTiming[0].OperationHourList.push(operationItem)
+  //   // for(var n=0; n<this.menuDetails.OpenTiming.length; n++){
+  //   //   let operationData = this.menuDetails.OpenTiming[n].OperationHourList;
+  //   //   console.log(operationData)
+  //   // }
+  // }
+
   removeOperationTime(inDayIdx, inOpTimeIdx){
     this.menuDetails.OpenTiming[inDayIdx].OperationHourList.splice(inOpTimeIdx, 1)
   }
@@ -180,7 +271,29 @@ export class CreateMenuComponent implements OnInit {
   }
 
   createRestaurant(){
-    // console.log('ok')
+    if(this.restaurant.valid){
+      //No tick the convert to online merchant checkbox
+    if(!this.menuDetails.ConvertToOnboarding){
+      this.merchantInfoes = {
+        CoverPhoto: this.menuDetails.CoverPhoto,
+        UserName: this.menuDetails.UserName,
+        Password: this.menuDetails.Password,
+        Email: this.menuDetails.Email,
+        Mobile: this.menuDetails.Mobile,
+        RestaurantName: this.menuDetails.RestaurantName,
+        BusinessLegalName: this.menuDetails.BusinessLegalName,
+        Country: this.menuDetails.Country,
+        PostalCode: this.menuDetails.PostalCode,
+        RegisteredAddress: this.menuDetails.RegisteredAddress,
+        LegalEntityType: this.menuDetails.LegalEntityType,
+        OpenTiming: this.menuDetails.OpenTiming
+      }
+      console.log(this.merchantInfoes)
+      //to do, post to offline merchant api
+    }
+    //Tick the convert to online merchant checkbox
+    else {
+    }
+    }
   }
-
 }

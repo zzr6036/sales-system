@@ -1,7 +1,7 @@
 
 export class MenuView{
     ConvertToOnboarding: Boolean;
-    CoverPhoto: String;
+    CoverPhoto: String = "";
     UserName: String;
     Password: String;
     Email: String;

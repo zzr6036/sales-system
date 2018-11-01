@@ -1,7 +1,7 @@
 import { NgModule, Component, OnInit, Injectable } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, NgModel } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, NgModel, NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown';
 import { Observable } from 'rxjs/Observable';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -14,6 +14,7 @@ import { CreateMenuComponent } from './create-menu/create-menu.component';
             FormsModule, ReactiveFormsModule,
             AngularMultiSelectModule],
   declarations: [MenuComponent, CreateMenuComponent],
+  providers: [{provide: NG_VALUE_ACCESSOR, useExisting: MenuModule, multi: true}]
   // providers: [PromotionCodeService]
 //   providers: [PromotionService]
 })
