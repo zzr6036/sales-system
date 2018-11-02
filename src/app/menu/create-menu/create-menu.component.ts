@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { HttpClient } from "@angular/common/http";
 import { Headers,URLSearchParams,RequestMethod,RequestOptions,RequestOptionsArgs,ResponseContentType,HttpModule,Http,Response } from "@angular/http";
 import { AngularMultiSelectModule } from "angular2-multiselect-dropdown/angular2-multiselect-dropdown";
-import { ChangeDetectorRef } from '@angular/core'
+import { Router, ActivatedRoute } from "@angular/router";
 import { MenuView } from '../menu-view.model'
 import { FormControl } from '@angular/forms/src/model';
 import { global } from '../../global';
+import Swal from 'sweetalert2';
 
 class OperationHour {
   OpenTime;
@@ -40,13 +41,15 @@ class OperationItem {
 export class CreateMenuComponent implements OnInit {
   menuDetails: MenuView = new MenuView();
   restaurant: FormGroup;
-  merchantInfoes: any;
+  offlineMerchantInfoes: any;
+  onlineMerchantInfoes: any;
   operationListJson: Array<any> = [];
   operationList: any;
   editOperationList: Array<any> = [];
   //upload image
   loaded = false;
   base64textString: String = "";
+  existingMerchants: Array<any> = [];
   LegalEntityTypes = ["NEA Hawker",
                       "Limited Liability Company",
                       "Private Limited Company",
@@ -66,9 +69,11 @@ export class CreateMenuComponent implements OnInit {
 
   constructor(private frmBuilder: FormBuilder,
               public http: Http,
-              private cdRef: ChangeDetectorRef) { }
+              private cdRef: ChangeDetectorRef,
+              private router: Router,) { }
 
   ngOnInit() {
+    this.checkDuplicateUserName()
     this.initOperationList();
     // this.editOperationList();
     let tokenNo = localStorage.getItem("Token");
@@ -152,6 +157,7 @@ export class CreateMenuComponent implements OnInit {
  
 
   initOperationList(){
+    
     // this.menuDetails.OpenTiming = []
     // let isOperationListStringValid = this.isJsonString(this.menuDetails.OpenTiming)
     // for(var i=0; i<this.menuDetails.OpenTiming.length; i++){
@@ -270,29 +276,93 @@ export class CreateMenuComponent implements OnInit {
     return this.restaurant.controls;
   }
 
+  checkDuplicateUserName(){
+    let token = localStorage.getItem("Token");
+    let getOnlineMerchantUrl = global.host + "merchantinfoes" + "?token=" + token;
+    this.http.get(getOnlineMerchantUrl, {}).map(res => res.json()).subscribe(merchantInfoes => {
+      for (let merchantInfoe of merchantInfoes){
+        this.existingMerchants.push(merchantInfoe.UserName)
+      }
+      // for (let username of this.existingMerchants){
+      //   if(this.menuDetails.UserName == username){
+      //     alert("Existing username, please change a new username!")
+      //   }
+      // }
+      console.log(this.existingMerchants)
+    })
+  }
+
   createRestaurant(){
+    let token = localStorage.getItem("Token");
+    let postOnlineMerchantUrl = global.host + "merchantinfoes" + "?token=" + token;
     if(this.restaurant.valid){
       //No tick the convert to online merchant checkbox
     if(!this.menuDetails.ConvertToOnboarding){
-      this.merchantInfoes = {
+      this.offlineMerchantInfoes = {
+        Id: this.menuDetails.Id,
         CoverPhoto: this.menuDetails.CoverPhoto,
         UserName: this.menuDetails.UserName,
         Password: this.menuDetails.Password,
         Email: this.menuDetails.Email,
-        Mobile: this.menuDetails.Mobile,
+        Mobile: '+65-'+this.menuDetails.Mobile,
         RestaurantName: this.menuDetails.RestaurantName,
         BusinessLegalName: this.menuDetails.BusinessLegalName,
         Country: this.menuDetails.Country,
         PostalCode: this.menuDetails.PostalCode,
         RegisteredAddress: this.menuDetails.RegisteredAddress,
         LegalEntityType: this.menuDetails.LegalEntityType,
-        OpenTiming: this.menuDetails.OpenTiming
+        OpenTiming: JSON.stringify(this.menuDetails.OpenTiming),
       }
-      console.log(this.merchantInfoes)
+      console.log(this.offlineMerchantInfoes)
       //to do, post to offline merchant api
     }
     //Tick the convert to online merchant checkbox
     else {
+      this.onlineMerchantInfoes = {
+        Id: this.menuDetails.Id,
+        OutletPhoto: this.menuDetails.CoverPhoto,
+        UserName: this.menuDetails.UserName,
+        Password: this.menuDetails.Password,
+        Email: this.menuDetails.Email,
+        Mobile: '+65-'+this.menuDetails.Mobile,
+        RestaurantName: this.menuDetails.RestaurantName,
+        BusinessLegalName: this.menuDetails.BusinessLegalName,
+        Country: this.menuDetails.Country,
+        PostalCode: this.menuDetails.PostalCode,
+        RegisteredAddress: this.menuDetails.RegisteredAddress,
+        LegalEntityType: this.menuDetails.LegalEntityType,
+        OpenTiming: JSON.stringify(this.menuDetails.OpenTiming),
+        Status: 'draft',
+      }
+      console.log(this.onlineMerchantInfoes)
+
+      // for(var i=0; i<this.existingMerchants.length; i++){
+        if(this.existingMerchants.includes((this.menuDetails.UserName).toString())){
+          window.alert('Existing username, please change a new username.')
+        }
+        else {
+          this.http.post(postOnlineMerchantUrl, this.onlineMerchantInfoes, {}).map(res => res.json()).subscribe(data =>{
+            console.log(data)
+            if(data['Message']==undefined){
+              Swal({
+                position: 'center',
+                type: 'success',
+                title: 'Convert to online merchant successfully',
+                showConfirmButton: false,
+                timer: 2000,
+              }).then(() =>{
+                this.router.navigate(['/formes'])
+              })
+            }
+            else {
+              console.log(data['Message']);
+              window.alert(data['Message'])
+            }
+          }, error =>{
+            console.log(error)
+          })
+        }
+      // }
     }
     }
   }

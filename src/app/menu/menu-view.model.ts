@@ -1,7 +1,8 @@
 
 export class MenuView{
+    Id: Number;
     ConvertToOnboarding: Boolean;
-    CoverPhoto: String = "";
+    CoverPhoto: String;
     UserName: String;
     Password: String;
     Email: String;
@@ -12,7 +13,7 @@ export class MenuView{
     PostalCode: String;
     RegisteredAddress: String;
     LegalEntityType: String;
-    OpenTiming: Array<any> = []
+    OpenTiming: Array<any> = [];
     // OpenTiming: Array<any> = [{Name: 'Monday', ShortName: 'Mon', OperationHourList: [], ClosedToday: false},
     //                           {Name: 'Tuesday', ShortName: 'Tue', OperationHourList: [], ClosedToday: false},
     //                           {Name: 'Wednesday', ShortName: 'Wed', OperationHourList: [], ClosedToday: false},
