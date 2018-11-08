@@ -34,11 +34,11 @@ class OperationItem {
 }
 
 @Component({
-  selector: 'app-create-menu',
-  templateUrl: './create-menu.component.html',
-  styleUrls: ['./create-menu.component.scss']
+  selector: 'app-edit-menu',
+  templateUrl: './edit-menu.component.html',
+  styleUrls: ['./edit-menu.component.scss']
 })
-export class CreateMenuComponent implements OnInit {
+export class EditMenuComponent implements OnInit {
   menuDetails: MenuView = new MenuView();
   restaurant: FormGroup;
   offlineMerchantInfoes: any;
@@ -46,6 +46,7 @@ export class CreateMenuComponent implements OnInit {
   operationListJson: Array<any> = [];
   operationList: any;
   editOperationList: Array<any> = [];
+  editMerchantInfoes: any;
   //upload image
   loaded = false;
   base64textString: String = "";
@@ -73,6 +74,19 @@ export class CreateMenuComponent implements OnInit {
               private router: Router,) { }
 
   ngOnInit() {
+    this.editMerchantInfoes = localStorage.getItem('OfflineMerchantInfoes');
+    let assignMerchantInfoes = JSON.parse(this.editMerchantInfoes);
+    this.menuDetails.Id = assignMerchantInfoes['Id'];
+    this.menuDetails.CoverPhoto = assignMerchantInfoes['OutletPhoto'];
+    this.menuDetails.UserName = assignMerchantInfoes['UserName'];
+    this.menuDetails.Password = assignMerchantInfoes['Password'];
+    this.menuDetails.Email = assignMerchantInfoes['Email'];
+    this.menuDetails.Mobile = assignMerchantInfoes['Mobile'];
+    this.menuDetails.RestaurantName = assignMerchantInfoes['RestaurantName'];
+    this.menuDetails.BusinessLegalName = assignMerchantInfoes['BusinessLegalName'];
+    this.menuDetails.Country = assignMerchantInfoes['Country'];
+    this.menuDetails.PostalCode = assignMerchantInfoes['PostalCode'];
+    this.menuDetails.RegisteredAddress = assignMerchantInfoes['RegisteredAddress']
     this.checkDuplicateUserName()
     this.initOperationList();
     // this.editOperationList();
@@ -116,7 +130,7 @@ export class CreateMenuComponent implements OnInit {
       OpenTime: [""],
       CloseTime: [""],
       ClosedToday: [false],
-      ConvertToOnboarding: [false]
+      ConvertToOnboarding: [false],
     })
   }
 
@@ -283,12 +297,11 @@ export class CreateMenuComponent implements OnInit {
     if(!this.menuDetails.ConvertToOnboarding){
       this.offlineMerchantInfoes = {
         Id: this.menuDetails.Id,
-        OutletPhoto: this.menuDetails.CoverPhoto,
+        CoverPhoto: this.menuDetails.CoverPhoto,
         UserName: this.menuDetails.UserName,
         Password: this.menuDetails.Password,
         Email: this.menuDetails.Email,
-        // Mobile: '+65-'+this.menuDetails.Mobile,
-        Mobile: this.menuDetails.Mobile.includes('+65-') ? this.menuDetails.Mobile : '+65-'+ this.menuDetails.Mobile,
+        Mobile: '+65-'+this.menuDetails.Mobile,
         RestaurantName: this.menuDetails.RestaurantName,
         BusinessLegalName: this.menuDetails.BusinessLegalName,
         Country: this.menuDetails.Country,
@@ -298,20 +311,16 @@ export class CreateMenuComponent implements OnInit {
         OpenTiming: JSON.stringify(this.menuDetails.OpenTiming),
         Status: 'offline',
       }
-      if(this.existingMerchants.includes(((this.menuDetails.UserName).toUpperCase()).toString())){
-        window.alert('Existing username, please change a new username.');
-      }
-      else {
         this.http.post(postOfflineMerchantUrl, this.offlineMerchantInfoes, {}).map(res => res.json()).subscribe(data => {
           if(data['Message']==undefined){
             Swal({
               position: 'center',
               type: 'success',
-              title: 'Convert to online merchant successfully',
+              title: 'Offline Onboarding Successfully',
               showConfirmButton: false, 
               timer: 2000,
             }).then(() =>{
-              this.router.navigate(['/formes'])
+              this.router.navigate(['/menu'])
             })
           }
           else {
@@ -321,7 +330,6 @@ export class CreateMenuComponent implements OnInit {
         }, error => {
           console.log(error)
         })
-      }
     }
     //Tick the convert to online merchant checkbox, now online = offline onboard
     else {
@@ -342,10 +350,6 @@ export class CreateMenuComponent implements OnInit {
         Status: 'draft',
       }
       console.log(this.onlineMerchantInfoes)
-        if(this.existingMerchants.includes(((this.menuDetails.UserName).toUpperCase()).toString())){
-          window.alert('Existing username, please change a new username.');
-        }
-        else {
           this.http.post(postOnlineMerchantUrl, this.onlineMerchantInfoes, {}).map(res => res.json()).subscribe(data =>{
             console.log(data)
             if(data['Message']==undefined){
@@ -366,8 +370,8 @@ export class CreateMenuComponent implements OnInit {
           }, error =>{
             console.log(error)
           })
-        }
     }
     }
   }
+
 }

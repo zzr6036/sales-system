@@ -155,6 +155,16 @@
       <input type="text" name="detailDescription" class="form-control" id="detailDescription" [(ngModel)]="promotionDetail.Description2">
     </div>
 
+    <!-- <div class="form-group">
+      <label for="image">
+        <strong>Image</strong>
+      </label>
+      <input type="file" class="form-control" id="Image" accept="image/*" base-sixty-four-input (change)="handleFileSelect($event)">
+      <div *ngIf="promotionDetail.Image != undefined && promotionDetail.Image !=''">
+        <img [src]="promotionDetail.Image" style="height: 300px; width:300px" align="right">
+      </div>
+    </div> -->
+
     <div class="form-group">
       <label for="status">
         <strong>Status</strong>

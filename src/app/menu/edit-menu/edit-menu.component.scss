@@ -1,0 +1,39 @@
+//Checkbox animation
+.custom-control {
+    &.material-checkbox {
+        --color: #26a69a;
+        .material-control-input {
+            display: none;
+            &:checked~.material-control-indicator {
+                border-color: var(--color);
+                transform: rotateZ(45deg)
+translate(1px, -5px);
+                width: 10px;
+                border-top: 0px solid #fff;
+                border-left: 0px solid #fff;
+            }
+        }
+        .material-control-indicator {
+            display: inline-block;
+            position: absolute;
+            left: 0;
+			width: 16px;
+			height: 16px;
+			border: 2px solid #aaa;
+			transition: .3s;
+        }
+    }
+}
+
+//Submit button
+.buttonContainer {
+    display: flex;
+    .buttonGroup {
+        margin: auto auto auto auto;
+        .controlBtn{
+            width: 100px;
+            height: 32px;
+            margin: 0px 5px 0px 5px;
+        }
+    }
+}

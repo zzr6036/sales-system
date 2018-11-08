@@ -21,4 +21,5 @@ export class PromotionView {
     Status: String;
     CreatedByUserId: Number;
     DeleteByUserId: Number;
+    Image: String;
 }

@@ -8,12 +8,13 @@ import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MenuComponent } from './menu.component';
 import { MenuRoutes } from './menu.routing'
 import { CreateMenuComponent } from './create-menu/create-menu.component';
+import { EditMenuComponent } from './edit-menu/edit-menu.component';
 
 @NgModule({
   imports: [CommonModule, RouterModule.forChild(MenuRoutes), 
             FormsModule, ReactiveFormsModule,
             AngularMultiSelectModule],
-  declarations: [MenuComponent, CreateMenuComponent],
+  declarations: [MenuComponent, CreateMenuComponent, EditMenuComponent],
   providers: [{provide: NG_VALUE_ACCESSOR, useExisting: MenuModule, multi: true}]
   // providers: [PromotionCodeService]
 //   providers: [PromotionService]

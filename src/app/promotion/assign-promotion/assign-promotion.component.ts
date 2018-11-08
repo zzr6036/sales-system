@@ -85,6 +85,7 @@ export class AssignPromotionComponent implements OnInit {
     this.promotionDetail.Description = assignPromotionCodes["Description"];
     this.promotionDetail.Description2 = assignPromotionCodes["Description2"];
     this.promotionDetail.Status = assignPromotionCodes["Status"];
+    // this.promotionDetail.Image = JSON.parse(assignPromotionCodes["Image"]);
     this.expireCheck();
   }
 
@@ -143,6 +144,7 @@ export class AssignPromotionComponent implements OnInit {
             "Status": data[i]["Status"],
             "CreatedByUserId": data[i]["CreatedByUsedId"],
             "DeleteByUserId": data[i]["DeleteByUseId"],
+            // "Image": JSON.stringify(data[i]["Image"]),
             "UserId": this.UserId,
             "Message": this.Message,
             "Subject": this.Subject
@@ -229,6 +231,7 @@ export class AssignPromotionComponent implements OnInit {
       "Title": this.promotionDetail.Title,
       "Description": this.promotionDetail.Description,
       "Description2": this.promotionDetail.Description2,
+      // "Image": JSON.stringify(this.promotionDetail.Image),
       "Status": 'expired',
     }
     this.TodayTime = moment().format();//String

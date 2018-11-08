@@ -278,7 +278,7 @@
             </div>
           </div>
           <div *ngIf="nricFrontImage != undefined && nricFrontImage != ''">
-            <img [src]="nricFrontImage" style="width:auto;height:auto;" />
+            <img [src]="nricFrontImage" style="width:100px;height:120px;" />
           </div>
           <input type="file" accept="image/*" (keyup)="autosave()" base-sixty-four-input (change)="changeListenerNricFront($event)"
           />
@@ -300,7 +300,7 @@
             </div>
           </div>
           <div *ngIf="nricBackImage != undefined && nricBackImage != ''">
-            <img [src]="nricBackImage" style="width:auto;height:auto;" />
+            <img [src]="nricBackImage" style="width:100px;height:120px;" />
           </div>
           <input type="file" accept="image/*" (keyup)="autosave()" base-sixty-four-input (change)="changeListenerNricBack($event)"
           />
@@ -318,7 +318,7 @@
             </div>
           </div>
           <div *ngIf="acraBizFile != undefined && acraBizFile != ''">
-            <img [src]="acraBizFile" style="width:auto;height:auto;" />
+            <img [src]="acraBizFile" style="width:100px;height:120px;" />
           </div>
           <input type="file" accept="image/*" (keyup)="autosave()" base-sixty-four-input (change)="changeListenerAcraBizFile($event)"
           />
@@ -336,7 +336,7 @@
             </div>
           </div>
           <div *ngIf="neaLicenseImage != undefined && neaLicenseImage != ''">
-            <img [src]="neaLicenseImage" style="width:auto;height:auto;" />
+            <img [src]="neaLicenseImage" style="width:100px;height:120px;" />
           </div>
           <input type="file" accept="image/*" (keyup)="autosave()" base-sixty-four-input (change)="changeListenerNea($event)" />
         </div>
@@ -353,7 +353,7 @@
             </div>
           </div>
           <div *ngIf="tobaccoAlcoholLicense != undefined && tobaccoAlcoholLicense != ''">
-            <img [src]="tobaccoAlcoholLicense" style="width:auto;height:auto;" />
+            <img [src]="tobaccoAlcoholLicense" style="width:100px;height:120px;" />
           </div>
           <input type="file" multiple accept="image/*" (keyup)="autosave()" base-sixty-four-input (change)="changeListenerTob($event)"
           />

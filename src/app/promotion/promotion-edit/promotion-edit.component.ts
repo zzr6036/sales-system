@@ -60,6 +60,7 @@ export class PromotionEditComponent implements OnInit {
     this.promotionDetail.Description = assignPromotionCodes["Description"];
     this.promotionDetail.Description2 = assignPromotionCodes["Description2"];
     this.promotionDetail.Status = assignPromotionCodes["Status"];
+    // this.promotionDetail.Image = JSON.parse(assignPromotionCodes["Image"]);
 
     this.expireCheck();
   }
@@ -95,6 +96,7 @@ export class PromotionEditComponent implements OnInit {
       "Description": this.promotionDetail.Description,
       "Description2": this.promotionDetail.Description2,
       "Status": 'expired',
+      // "Image": JSON.stringify(this.promotionDetail.Image),
     }
     this.TodayTime = moment().format();//String
     this.EndTime = moment(expirePromInfo['EndTime']).format() //String
@@ -132,6 +134,7 @@ export class PromotionEditComponent implements OnInit {
       "Description": this.promotionDetail.Description,
       "Description2": this.promotionDetail.Description2,
       "Status": this.promotionDetail.Status,
+      // "Image": JSON.stringify(this.promotionDetail.Image),
     }
     this.promotionCodes = localStorage.getItem("EditingPromoCode");
     let assignPromotionCodes = JSON.parse(this.promotionCodes);

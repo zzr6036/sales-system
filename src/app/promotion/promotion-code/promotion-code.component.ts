@@ -34,6 +34,8 @@ export class PromotionCodeComponent implements OnInit {
   StartTimeArr: Array<any> = [];
   EndTimeArr: Array<any> = [];
   CodeArr: Array<any> = [];
+  //upload image
+  loaded = false;
 
   constructor(
     public http: Http,
@@ -59,5 +61,27 @@ export class PromotionCodeComponent implements OnInit {
   addPromotion(){
     // localStorage.setItem("PromoCode", this.promotionDetail.Code);
     this.promotionService.addPromotion(this.promotionDetail);
+  }
+
+  _handleReaderLoaded(readerEvt) {
+    var reader = readerEvt.target;
+    this.promotionDetail.Image = reader.result;
+    this.loaded = true;
+  }
+  handleFileSelect(evt){
+    var file = evt.dataTransfer ? evt.dataTransfer.files[0]:evt.target.files[0];
+    if (file == undefined){
+      this.promotionDetail.Image = undefined
+      return;
+    }
+    var pattern = /image-*/;
+    var reader = new FileReader();
+    if(!file.type.match(pattern)){
+      window.alert("invaild format");
+      return;
+    }
+    this.loaded = false;
+    reader.onload = this._handleReaderLoaded.bind(this);
+    reader.readAsDataURL(file);
   }
 }

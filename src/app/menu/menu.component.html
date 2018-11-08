@@ -1,3 +1,50 @@
 <h3> Manage Offline Onboarding
   <a class="btn btn-primary" style="font-size: 1rem;float: right;" id="onboarding" (click)="createOnboarding()">Onboarding Now</a>
 </h3>
+
+<div class="card" style="width: 100%">
+  <div class="card-title">
+    <!-- <h3><font color="blue">Offline Merchant List</font></h3> -->
+  </div>
+  <div class="card-body">
+    <table class="table table-striped table-bordered table-hover table-condensed">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Username</th>
+          <th>Mobile</th>
+          <th>Outlet Name</th>
+          <th>Created Date</th>
+          <th>Salesman</th>
+          <th>Status</th>
+          <th>Menu</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let merchantInfo of merchantInfoes; let i=index">
+          <td>{{merchantInfo.Id}}</td>
+          <td>{{merchantInfo.UserName}}</td>
+          <td>{{merchantInfo.Mobile}}</td>
+          <td>{{merchantInfo.RestaurantName}}</td>
+          <td>{{merchantInfo.LastUpdated}}</td>
+          <td>{{merchantInfo.SaleInCharge.FirstName}}</td>
+          <td>
+            <div class="dropdown">
+              <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{merchantInfo.Status}}
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <span class="dropdown-item" (click)="showDetail(merchantInfo)">Edit</span>
+                <div class="dropdown-divider"></div>
+              </div>
+            </div>
+            <!-- <button type="button" class="btn btn-link" (click)=showDetail(merchantInfo)>{{merchantInfo.Status}}</button> -->
+          </td>
+          <td>
+              <button type="button" class="btn btn-link">Menu</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

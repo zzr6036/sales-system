@@ -597,10 +597,10 @@ export class CreateuserComponent implements OnInit {
     // Input Validation for save draft
     if (this.username !== undefined && this.mobile !== undefined  && this.password !== undefined && this.country !== undefined && this.postalcode !== undefined
     && this.email !== undefined && this.firstname !== undefined && this.lastname !== undefined && this.mobile !== undefined && this.icNumber !== undefined 
-    && this.legalEntitySelection !== undefined && this.bankName !== undefined && this.bankAccountName !== undefined && this.cuisines !==undefined && this.categories != undefined
+    && this.legalEntitySelection !== undefined && this.bankName !== undefined && this.bankAccountName !== undefined
     && this.bankAccountNumber !== undefined && this.nricFrontImage != undefined && this.nricBackImage != undefined && this.businessLegalName !== undefined 
     && this.acra !== undefined && this.registeredAddress !== undefined && this.numberOfOutlet !== undefined && this.restaurantName !== undefined && 
-    this.username !== '' && this.mobile !== ''  && this.password !== '' && this.country !== '' && this.postalcode !== '' && this.cuisines !== null && this.categories !== null
+    this.username !== '' && this.mobile !== ''  && this.password !== '' && this.country !== '' && this.postalcode !== ''
     && this.email !== '' && this.firstname !== '' && this.lastname !== '' && this.mobile !== '' && this.icNumber !== '' && this.legalEntitySelection !== '' 
     && this.bankName !== '' && this.bankAccountName !== '' && this.bankAccountNumber !== '' && this.nricFrontImage != '' && this.nricBackImage != '' 
     && this.businessLegalName !== '' && this.acra !== '' && this.registeredAddress !== '' && this.numberOfOutlet !== null && this.restaurantName !== '') {

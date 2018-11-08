@@ -37,8 +37,11 @@ export class PromotionService {
       MaxDiscount: promotion.MaxDiscount,
       Title: promotion.Title,
       Description: promotion.Description,
-      Description2: promotion.Description2
+      Description2: promotion.Description2,
+      // Image: JSON.stringify(promotion.Image)
     };
+
+    console.log(promInfo)
 
     let tokenNo = localStorage.getItem("Token");
     let addUrl = global.host + "addcode" + "?token=" + tokenNo;
@@ -87,7 +90,8 @@ export class PromotionService {
       Title: promotion.Title,
       Description: promotion.Description,
       Description2: promotion.Description2,
-      Status: promotion.Status
+      Status: promotion.Status,
+      // Image: JSON.stringify(promotion.Image)
     };
 
     let isExistingCode = editPromInfo["Id"] > 0;
@@ -143,7 +147,8 @@ export class PromotionService {
       Title: promotionCode.Title,
       Description: promotionCode.Description,
       Description2: promotionCode.Description2,
-      UserId: promotionCode.UserId
+      UserId: promotionCode.UserId,
+      // Image: JSON.stringify(promotionCode.Image),
     };
 
     let tokenNo = localStorage.getItem("Token");

@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import { AngularMultiSelect } from 'angular2-multiselect-dropdown/multiselect.component';
 import Swal from 'sweetalert2';
 import { assertPlatform } from '@angular/core/src/application_ref';
+import { assertNotNull } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-assign-promotion-times',
@@ -60,6 +61,7 @@ export class AssignPromotionTimesComponent implements OnInit {
     this.promotionDetail.Status = assignPromoCodeAll["Status"];
     this.promotionDetail.CreatedByUserId = assignPromoCodeAll["CreatedByUserId"];
     this.promotionDetail.DeleteByUserId = assignPromoCodeAll["DeleteByUserId"];
+    // this.promotionDetail.Image = JSON.stringify(assignPromoCodeAll["Image"]);
 
     let tokenNo = localStorage.getItem("Token");
     let getUserUrl = global.host + 'search/' + 'user/' + '?keyword=' + '&token=' + tokenNo;
@@ -142,6 +144,7 @@ export class AssignPromotionTimesComponent implements OnInit {
       Subject: this.Subject,
       CreatedByUserId: this.promotionDetail.CreatedByUserId,
       DeleteByUserId: this.promotionDetail.DeleteByUserId,
+      // Image: JSON.stringify(this.promotionDetail.Image),
       UserId: null
     };
     for(var n=0; n<this.assignQty; n++){
