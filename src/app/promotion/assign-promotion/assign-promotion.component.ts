@@ -32,7 +32,8 @@ export class AssignPromotionComponent implements OnInit {
    public EndTime: String;
    EndTimeArr: Array<any> = [];
    public TodayTime: String;
-
+   //upload image
+  loaded = false;
 
   //Toggle for show
   show: Boolean = false;
@@ -85,13 +86,35 @@ export class AssignPromotionComponent implements OnInit {
     this.promotionDetail.Description = assignPromotionCodes["Description"];
     this.promotionDetail.Description2 = assignPromotionCodes["Description2"];
     this.promotionDetail.Status = assignPromotionCodes["Status"];
-    // this.promotionDetail.Image = JSON.parse(assignPromotionCodes["Image"]);
+    this.promotionDetail.Image = assignPromotionCodes["Image"];
     this.expireCheck();
   }
 
   onKeydown(event){
     this.searchUser();
     // console.log(event);
+  }
+
+  _handleReaderLoaded(readerEvt) {
+    var reader = readerEvt.target;
+    this.promotionDetail.Image = reader.result;
+    this.loaded = true;
+  }
+  handleFileSelect(evt){
+    var file = evt.dataTransfer ? evt.dataTransfer.files[0]:evt.target.files[0];
+    if (file == undefined){
+      this.promotionDetail.Image = undefined
+      return;
+    }
+    var pattern = /image-*/;
+    var reader = new FileReader();
+    if(!file.type.match(pattern)){
+      window.alert("invaild format");
+      return;
+    }
+    this.loaded = false;
+    reader.onload = this._handleReaderLoaded.bind(this);
+    reader.readAsDataURL(file);
   }
 
   searchUser(){
@@ -141,6 +164,7 @@ export class AssignPromotionComponent implements OnInit {
             "MaxDiscount": data[i]["MaxDiscount"],
             "Title": data[i]["Title"],
             "Description": data[i]["Description"],
+            "Description1": data[i]["Description1"],
             "Status": data[i]["Status"],
             "CreatedByUserId": data[i]["CreatedByUsedId"],
             "DeleteByUserId": data[i]["DeleteByUseId"],

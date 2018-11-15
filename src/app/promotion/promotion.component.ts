@@ -191,7 +191,7 @@ export class PromotionComponent implements OnInit {
 
   loadPromotionList(){
     this.promotionService.getPromotionList().subscribe(data =>{
-      // console.log(data)
+      console.log(data)
       if(data["Message"]){
         console.log(data["Message"]);
       }

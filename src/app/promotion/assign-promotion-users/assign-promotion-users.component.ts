@@ -68,6 +68,7 @@ export class AssignPromotionUsersComponent implements OnInit {
     this.promotionDetail.Status = assignPromoCodeAll["Status"];
     this.promotionDetail.CreatedByUserId = assignPromoCodeAll["CreatedByUserId"];
     this.promotionDetail.DeleteByUserId = assignPromoCodeAll["DeleteByUserId"];
+    this.promotionDetail.Image = assignPromoCodeAll["Image"];
 
     let tokenNo = localStorage.getItem("Token");
     let getUserUrl = global.host + "search/" + "user/" + "?keyword=" + "&token=" + tokenNo;
@@ -174,9 +175,11 @@ export class AssignPromotionUsersComponent implements OnInit {
       Subject: this.Subject,
       CreatedByUserId: this.promotionDetail.CreatedByUserId,
       DeleteByUserId: this.promotionDetail.DeleteByUserId,
+      Image: this.promotionDetail.Image,
       //Above attribute all duplicate, only assign to different to different userId 
       UserId: null
     };
+    // console.log(this.assignUsersPromoCode)
     this.recursiveSubmit(0, assignPromoCodeUrl);
   }
 

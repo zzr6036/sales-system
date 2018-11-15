@@ -18,6 +18,30 @@ import { AngularMultiSelectModule } from "angular2-multiselect-dropdown/angular2
 import Swal from 'sweetalert2';
 import { log } from "util";
 
+class OperationHour {
+  OpenTime;
+  CloseTime;
+
+  constructor(inOpenTime = '08:00', inCloseTime  = '22:00'){
+    this.OpenTime = inOpenTime;
+    this.CloseTime = inCloseTime;
+  }
+}
+
+class OperationItem {
+  Name;
+  ShortName;
+  OperationHourList;
+  ClosedToday;
+
+  constructor(inName = 'Monday', inShortName = 'Mon', inOperationHourList = [], inClosedToday = false){
+    this.Name = inName;
+    this.ShortName = inShortName;
+    this.OperationHourList = inOperationHourList;
+    this.ClosedToday = inClosedToday;
+  }
+}
+
 @Component({
   selector: "app-createuser",
   templateUrl: "./createuser.component.html",
@@ -47,9 +71,9 @@ export class CreateuserComponent implements OnInit {
   postalcode: string;
   registeredAddress: string;
   numberOfOutlet: number;
-  qr: number;
   outletAddress: Array<any> = [{Name:"", Address:""}];
   newOutletAddress: any={};
+  OpenTiming: Array<any> = [];
   
   //image to base64
   nricOfApplication: any;
@@ -60,7 +84,6 @@ export class CreateuserComponent implements OnInit {
   nricFrontImage:string;
   nricBackImage: string;
   acraBizFile: string;
-  // otherDocuments: Array<any> = [{Document:""}];
 
   hasGST: boolean = false;
   hasCreditCard: boolean = false;
@@ -102,56 +125,6 @@ export class CreateuserComponent implements OnInit {
   ];
   legalEntitySelection: "";
 
-  isClosedMonday: boolean = false;
-  isClosedTuesday: boolean = false;
-  isClosedWednesday: boolean = false;
-  isClosedThursday: boolean = false;
-  isClosedFriday: boolean = false;
-  isClosedSaturday: boolean = false;
-  isClosedSunday: boolean = false;
-  isClosedPublicHoliday: boolean = false;
-  isClosedEveOfPH: boolean = false;
-
-
-  public mondayDurations = [{OpenTime:"08:00", CloseTime:"22:00"}];
-  public newMondayDuration: any = {};
-
-  public tuesdayDurations = [{OpenTime:"08:00", CloseTime:"22:00"}];
-  public newTuesdayDuration: any = {};
-
-  public wednesdayDurations = [{OpenTime:"08:00", CloseTime:"22:00"}];
-  public newWednesdayDuration: any = {};
-
-  public thursdayDurations = [{OpenTime:"08:00", CloseTime:"22:00"}];
-  public newThursdayDuration: any = {};
-
-  public fridayDurations = [{OpenTime:"08:00", CloseTime:"22:00"}];
-  public newFridayDuration: any = {};
-
-  public saturdayDurations =  [{OpenTime:"08:00", CloseTime:"22:00"}];
-  public newSaturdayDuration: any = {};
-
-  public sundayDurations = [{OpenTime:"08:00", CloseTime:"22:00"}];
-  public newSundayDuration: any = {};
-
-  public publicHolidayDurations = [{OpenTime:"08:00", CloseTime:"22:00"}];
-  public newPublicHolidayDuration: any = {};
-
-  public eveOfPHs = [{OpenTime:"08:00", CloseTime:"22:00"}];
-  public newEveOfPH: any = {};
-
-  openTiming = [
-    {Name: "Monday", ShortName: "Mon", OperationHourList: this.mondayDurations, ClosedToday: this.isClosedMonday},
-    {Name: "Tuesday", ShortName: "Tue", OperationHourList: this.tuesdayDurations, ClosedToday: this.isClosedTuesday},
-    {Name: "Wednesday", ShortName: "Wed", OperationHourList: this.wednesdayDurations, ClosedToday: this.isClosedWednesday},
-    {Name: "Thursday", ShortName: "Thur", OperationHourList: this.thursdayDurations, ClosedToday: this.isClosedThursday},
-    {Name: "Friday", ShortName: "Fri", OperationHourList: this.fridayDurations, ClosedToday: this.isClosedFriday},
-    {Name: "Saturday", ShortName: "Sat", OperationHourList: this.saturdayDurations, ClosedToday: this.isClosedSaturday},
-    {Name: "Sunday", ShortName: "Sun", OperationHourList: this.sundayDurations, ClosedToday: this.isClosedSunday},
-    {Name: "Public Holiday", ShortName: "PH", OperationHourList: this.publicHolidayDurations, ClosedToday: this.isClosedPublicHoliday},
-    {Name: "Eve Of Public Holiday", ShortName: "EveOfP.H", OperationHourList: this.eveOfPHs, ClosedToday: this.isClosedEveOfPH}
-  ];
-
   public myForm: FormGroup;
 
   constructor(
@@ -165,6 +138,7 @@ export class CreateuserComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.initOperationList();
     this.dropdownSubscriptionsList = [
       { id: 1, itemName: "Restaurant" },
       { id: 2, itemName: "Hawker" }
@@ -178,23 +152,46 @@ export class CreateuserComponent implements OnInit {
       enableSearchFilter: true,
       classes: "myclass custom-class"
     };
-
-    // let tokenNo = localStorage.getItem("Token");
-    // let getCategoriesUrl = global.host + "Categories" + "?token=" + tokenNo;
-    // let getCuisinesUrl = global.host + "Cuisines" + "?token=" + tokenNo;
-    // //Get Cuisine Id
-    // this.http.get(getCuisinesUrl, {}).map(res => res.json()).subscribe(data => {
-    //   this.cuisinesTypes = data;
-    // })
-    // //Get Categories Id
-    // this.http.get(getCategoriesUrl, {}).map(res => res.json()).subscribe(data => {
-    //   this.categoriesTypes = data;
-    // })
+  }
+  initOperationList(){
+    this.OpenTiming.push(new OperationItem('Monday', 'Mon', [new OperationHour()], false));
+    this.OpenTiming.push(new OperationItem('Tuesday', 'Tue', [new OperationHour()], false));
+    this.OpenTiming.push(new OperationItem('Wednesday', 'Wed', [new OperationHour()], false));
+    this.OpenTiming.push(new OperationItem('Thursday', 'Thur', [new OperationHour()], false));
+    this.OpenTiming.push(new OperationItem('Friday', 'Fri', [new OperationHour()], false));
+    this.OpenTiming.push(new OperationItem('Saturday', 'Sat', [new OperationHour()], false));
+    this.OpenTiming.push(new OperationItem('Sunday', 'Sun', [new OperationHour()], false));
+    this.OpenTiming.push(new OperationItem('Eve Of Public Holiday', 'EveOfP.H', [new OperationHour()], false));
+    this.OpenTiming.push(new OperationItem('Public Holiday', 'P.H', [new OperationHour()], false));
+    // console.log(this.menuDetails.OpenTiming)
   }
 
-  onChangeCuisinesSelect(event){
-    this.cuisines = event.target.value
+  addOperationTime(inDayIdx, inOpTimeIdx){
+    this.OpenTiming[inDayIdx].OperationHourList.push(new OperationHour("08:00", "22:00"));
+    console.log(this.OpenTiming)
   }
+
+  removeOperationTime(inDayIdx, inOpTimeIdx){
+    this.OpenTiming[inDayIdx].OperationHourList.splice(inOpTimeIdx, 1)
+  }
+
+  openTimeChanged(event,dayIdx, i){
+    if(event == ""){
+      this.OpenTiming[dayIdx].OperationHourList[i].OpenTime = "00:00";
+    }
+    console.log(event);
+  }
+
+  closeTimeChanged(event,dayIdx, i){
+    if(event == ""){
+      this.OpenTiming[dayIdx].OperationHourList[i].CloseTime = "00:00";
+    }
+    console.log(event);
+  }
+
+  // onChangeCuisinesSelect(event){
+  //   this.cuisines = event.target.value
+  // }
 
   onItemSelect(item: any) {
     // console.log(item);
@@ -213,82 +210,6 @@ export class CreateuserComponent implements OnInit {
   }
   deleteOutletAddress(index){
     this.outletAddress.splice(index, 1);
-  }
-
-  // openTiming edit
-  addMondayDurations() {
-    this.mondayDurations.push(this.newMondayDuration);
-    this.newMondayDuration = {};
-  }
-
-  deleteMondayDurations(index) {
-    this.mondayDurations.splice(index, 1);
-  }
-  addTuesdayDurations() {
-    this.tuesdayDurations.push(this.newTuesdayDuration);
-    this.newTuesdayDuration = {};
-  }
-
-  deleteTuesdayDurations(index) {
-    this.tuesdayDurations.splice(index, 1);
-  }
-
-  addWednesdayDurations() {
-    this.wednesdayDurations.push(this.newWednesdayDuration);
-    this.newWednesdayDuration = {};
-  }
-
-  deleteWednesdayDurations(index) {
-    this.wednesdayDurations.splice(index, 1);
-  }
-  addThursdayDurations() {
-    this.thursdayDurations.push(this.newThursdayDuration);
-    this.newThursdayDuration = {};
-  }
-
-  deleteThursdayDurations(index) {
-    this.thursdayDurations.splice(index, 1);
-  }
-  addFridayDurations() {
-    this.fridayDurations.push(this.newFridayDuration);
-    this.newFridayDuration = {};
-  }
-
-  deleteFridayDurations(index) {
-    this.fridayDurations.splice(index, 1);
-  }
-  addSaturdayDurations() {
-    this.saturdayDurations.push(this.newSaturdayDuration);
-    this.newSaturdayDuration = {};
-  }
-
-  deleteSaturdayDurations(index) {
-    this.saturdayDurations.splice(index, 1);
-  }
-  addSundayDurations() {
-    this.sundayDurations.push(this.newSundayDuration);
-    this.newSundayDuration = {};
-  }
-
-  deleteSundayDurations(index) {
-    this.sundayDurations.splice(index, 1);
-  }
-  addPublicHolidayDurations() {
-    this.publicHolidayDurations.push(this.newPublicHolidayDuration);
-    this.newPublicHolidayDuration = {};
-  }
-
-  deletePublicHolidayDurations(index) {
-    this.publicHolidayDurations.splice(index, 1);
-  }
-
-  addEveOfPH() {
-    this.openTiming[8].OperationHourList.push(this.newEveOfPH);
-    this.newEveOfPH = {};
-  }
-
-  deleteEveOfPH(index) {
-    this.openTiming[8].OperationHourList.splice(index, 1);
   }
 
   // Convert outlet photo to base64
@@ -539,9 +460,8 @@ export class CreateuserComponent implements OnInit {
         RegisteredAddress: this.registeredAddress,
         OutletAddress: JSON.stringify(this.outletAddress),
         NoOfOutlet: this.numberOfOutlet,
-        QR: this.qr,
         LegalEntityType: this.legalEntitySelection,
-        OpenTiming: JSON.stringify(this.openTiming),
+        OpenTiming: JSON.stringify(this.OpenTiming),
         //image to base64
         NricFrontImage:  this.nricFrontImage,
         NricBackImage: this.nricBackImage,
@@ -556,6 +476,7 @@ export class CreateuserComponent implements OnInit {
         Country: this.country,
         PostalCode: this.postalcode,
         Status: "draft",
+        ConvertToOnboarding: false,
       };
       let tokenNo = localStorage.getItem("Token");
       let getResUrl = global.host + "merchantinfoes" + "?token=" + tokenNo;
@@ -571,7 +492,7 @@ export class CreateuserComponent implements OnInit {
           }
           let httpCall = isExistingUser ? this.http.post(getResUrl, this.appInfo, {}): this.http.post(getResUrl, this.appInfo, {});
           httpCall.map(res => res.json()).subscribe(data => {
-              console.log(data);
+              // console.log(data);
               if (data["Message"] == undefined) {
                 // console.log(data["Message"]);
                 if (this.appInfo["Status"] === "Pending") {
@@ -627,9 +548,8 @@ export class CreateuserComponent implements OnInit {
         RegisteredAddress: this.registeredAddress,
         OutletAddress: JSON.stringify(this.outletAddress),
         NoOfOutlet: this.numberOfOutlet,
-        QR: this.qr,
         LegalEntityType: this.legalEntitySelection,
-        OpenTiming: JSON.stringify(this.openTiming),
+        OpenTiming: JSON.stringify(this.OpenTiming),
         //image to base64
         NricFrontImage:  this.nricFrontImage,
         NricBackImage: this.nricBackImage,
@@ -644,6 +564,7 @@ export class CreateuserComponent implements OnInit {
         Country: this.country,
         PostalCode: this.postalcode,
         Status: "pending",
+        ConvertToOnboarding: true,
       };
       let tokenNo = localStorage.getItem("Token");
       let getResUrl = global.host + "merchantinfoes" + "?token=" + tokenNo;
@@ -659,7 +580,7 @@ export class CreateuserComponent implements OnInit {
           }
           let httpCall = isExistingUser ? this.http.post(getResUrl, this.appInfo, {}): this.http.post(getResUrl, this.appInfo, {});
           httpCall.map(res => res.json()).subscribe(data => {
-              // console.log(data);
+              console.log(data);
               if (data["Message"] == undefined) {
                 Swal({
                   position: 'center',

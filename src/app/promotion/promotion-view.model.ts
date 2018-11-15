@@ -22,4 +22,5 @@ export class PromotionView {
     CreatedByUserId: Number;
     DeleteByUserId: Number;
     Image: String;
+    HawkerCenterId: Number;
 }

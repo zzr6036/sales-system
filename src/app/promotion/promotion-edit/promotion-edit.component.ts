@@ -29,6 +29,8 @@ export class PromotionEditComponent implements OnInit {
    public EndTime: String;
    EndTimeArr: Array<any> = [];
    public TodayTime: String;
+   //image upload
+   loaded = false;
 
   //Toggle for show
   show: Boolean = false;
@@ -60,7 +62,8 @@ export class PromotionEditComponent implements OnInit {
     this.promotionDetail.Description = assignPromotionCodes["Description"];
     this.promotionDetail.Description2 = assignPromotionCodes["Description2"];
     this.promotionDetail.Status = assignPromotionCodes["Status"];
-    // this.promotionDetail.Image = JSON.parse(assignPromotionCodes["Image"]);
+    this.promotionDetail.Image = JSON.stringify(assignPromotionCodes["Image"]);
+    console.log(this.promotionDetail.Image)
 
     this.expireCheck();
   }
@@ -74,6 +77,27 @@ export class PromotionEditComponent implements OnInit {
     else {
       this.buttonName = "Assign to Merchant";
     }
+  }
+  _handleReaderLoaded(readerEvt) {
+    var reader = readerEvt.target;
+    this.promotionDetail.Image = reader.result;
+    this.loaded = true;
+  }
+  handleFileSelect(evt){
+    var file = evt.dataTransfer ? evt.dataTransfer.files[0]:evt.target.files[0];
+    if (file == undefined){
+      this.promotionDetail.Image = undefined
+      return;
+    }
+    var pattern = /image-*/;
+    var reader = new FileReader();
+    if(!file.type.match(pattern)){
+      window.alert("invaild format");
+      return;
+    }
+    this.loaded = false;
+    reader.onload = this._handleReaderLoaded.bind(this);
+    reader.readAsDataURL(file);
   }
 
   expireCheck(){
@@ -95,6 +119,7 @@ export class PromotionEditComponent implements OnInit {
       "Title": this.promotionDetail.Title,
       "Description": this.promotionDetail.Description,
       "Description2": this.promotionDetail.Description2,
+      "Image": this.promotionDetail.Image,
       "Status": 'expired',
       // "Image": JSON.stringify(this.promotionDetail.Image),
     }
@@ -133,6 +158,7 @@ export class PromotionEditComponent implements OnInit {
       "Title": this.promotionDetail.Title,
       "Description": this.promotionDetail.Description,
       "Description2": this.promotionDetail.Description2,
+      "Image": this.promotionDetail.Image,
       "Status": this.promotionDetail.Status,
       // "Image": JSON.stringify(this.promotionDetail.Image),
     }

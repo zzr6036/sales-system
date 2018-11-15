@@ -7,6 +7,8 @@ export const global = {
     host:  'https://xindotsuat.azurewebsites.net/_xin/api/',
     // production
     // host3: 'http://192.168.1.12:3000/_xin/api/',
+    // menu website
+    menu: 'https://update-pos.xindots.com/merchant-menu/',
 }
 
 // export const global = {

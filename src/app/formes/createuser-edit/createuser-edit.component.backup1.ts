@@ -18,36 +18,11 @@ import Swal from 'sweetalert2';
 import { log } from "util";
 import { toString } from "@ng-bootstrap/ng-bootstrap/util/util";
 
-class OperationHour {
-  OpenTime;
-  CloseTime;
-
-  constructor(inOpenTime = '08:00', inCloseTime  = '22:00'){
-    this.OpenTime = inOpenTime;
-    this.CloseTime = inCloseTime;
-  }
-}
-
-class OperationItem {
-  Name;
-  ShortName;
-  OperationHourList;
-  ClosedToday;
-
-  constructor(inName = 'Monday', inShortName = 'Mon', inOperationHourList = [], inClosedToday = false){
-    this.Name = inName;
-    this.ShortName = inShortName;
-    this.OperationHourList = inOperationHourList;
-    this.ClosedToday = inClosedToday;
-  }
-}
-
 @Component({
   selector: 'app-createuser-edit',
   templateUrl: './createuser-edit.component.html',
   styleUrls: ['./createuser-edit.component.scss']
 })
-
 export class CreateuserEditComponent implements OnInit {
   merchantDetails: any;
   appInfo: any;
@@ -89,7 +64,6 @@ export class CreateuserEditComponent implements OnInit {
   hasGST: boolean = false;
   hasCreditCard: boolean = false;
   servChargeRate: number;
-  OpenTiming: Array<any> = [];
 
   isDraft: boolean;
   loaded = false;
@@ -120,6 +94,57 @@ export class CreateuserEditComponent implements OnInit {
     "Limited Liability Partnership (LLP)"
   ];
   legalEntitySelection: "";
+
+  isClosedMonday: boolean = false;
+  isClosedTuesday: boolean = false;
+  isClosedWednesday: boolean = false;
+  isClosedThursday: boolean = false;
+  isClosedFriday: boolean = false;
+  isClosedSaturday: boolean = false;
+  isClosedSunday: boolean = false;
+  isClosedPublicHoliday: boolean = false;
+  isClosedEveOfPH: boolean = false;
+
+  // public mondayDurations: Array<any> = [];
+  // public newMondayDuration: any = {};
+  public mondayDurations = [{OpenTime:"", CloseTime:""}];
+  public newMondayDuration: any = {};
+
+  public tuesdayDurations = [{OpenTime:"", CloseTime:""}];
+  public newTuesdayDuration: any = {};
+
+  public wednesdayDurations = [{OpenTime:"", CloseTime:""}];
+  public newWednesdayDuration: any = {};
+
+  public thursdayDurations = [{OpenTime:"", CloseTime:""}];
+  public newThursdayDuration: any = {};
+
+  public fridayDurations = [{OpenTime:"", CloseTime:""}];
+  public newFridayDuration: any = {};
+
+  public saturdayDurations =  [{OpenTime:"", CloseTime:""}];
+  public newSaturdayDuration: any = {};
+
+  public sundayDurations = [{OpenTime:"", CloseTime:""}];
+  public newSundayDuration: any = {};
+
+  public publicHolidayDurations = [{OpenTime:"", CloseTime:""}];;
+  public newPublicHolidayDuration: any = {};
+
+  public eveOfPHs = [{OpenTime:"", CloseTime:""}];
+  public newEveOfPH: any = {};
+
+  openTiming = [
+    {Name: "Monday", ShortName: "Mon", OperationHourList: this.mondayDurations, ClosedToday: this.isClosedMonday},
+    {Name: "Tuesday", ShortName: "Tue", OperationHourList: this.tuesdayDurations, ClosedToday: this.isClosedTuesday},
+    {Name: "Wednesday", ShortName: "Wed", OperationHourList: this.wednesdayDurations, ClosedToday: this.isClosedWednesday},
+    {Name: "Thursday", ShortName: "Thur", OperationHourList: this.thursdayDurations, ClosedToday: this.isClosedThursday},
+    {Name: "Friday", ShortName: "Fri", OperationHourList: this.fridayDurations, ClosedToday: this.isClosedFriday},
+    {Name: "Saturday", ShortName: "Sat", OperationHourList: this.saturdayDurations, ClosedToday: this.isClosedSaturday},
+    {Name: "Sunday", ShortName: "Sun", OperationHourList: this.sundayDurations, ClosedToday: this.isClosedSunday},
+    {Name: "Public Holiday", ShortName: "PH", OperationHourList: this.publicHolidayDurations, ClosedToday: this.isClosedPublicHoliday},
+    {Name: "Eve Of Public Holiday", ShortName: "EveOfP.H", OperationHourList: this.eveOfPHs, ClosedToday: this.isClosedEveOfPH}
+  ];
 
   public myForm: FormGroup;
   
@@ -173,7 +198,7 @@ export class CreateuserEditComponent implements OnInit {
      this.legalEntitySelection = assignMerchantDetails["LegalEntityType"];
      this.hasGST = assignMerchantDetails["HasGST"];
      this.hasCreditCard = assignMerchantDetails["HasCreditCard"];
-     this.OpenTiming = JSON.parse(assignMerchantDetails["OpenTiming"]);
+     this.openTiming = JSON.parse(assignMerchantDetails["OpenTiming"]);
 
     this.dropdownSubscriptionsList = [
       { id: 1, itemName: "Restaurant" },
@@ -224,27 +249,82 @@ export class CreateuserEditComponent implements OnInit {
     this.outletAddress.splice(index, 1);
   }
 
-  addOperationTime(inDayIdx, inOpTimeIdx){
-    this.OpenTiming[inDayIdx].OperationHourList.push(new OperationHour("08:00", "22:00"));
-    console.log(this.OpenTiming)
+  // openTiming edit
+  addMondayDurations() {
+    // console.log("add");
+    this.openTiming[0].OperationHourList.push(this.newMondayDuration);
+    this.newMondayDuration = {};
+    // this.mondayDurations.push(this.newMondayDuration);
+    // this.newMondayDuration = {};
   }
 
-  removeOperationTime(inDayIdx, inOpTimeIdx){
-    this.OpenTiming[inDayIdx].OperationHourList.splice(inOpTimeIdx, 1)
+  deleteMondayDurations(index) {
+    this.openTiming[0].OperationHourList.splice(index, 1);
+    // this.mondayDurations.splice(index, 1);
+  }
+  addTuesdayDurations() {
+    this.openTiming[1].OperationHourList.push(this.newTuesdayDuration);
+    this.newTuesdayDuration = {};
   }
 
-  openTimeChanged(event,dayIdx, i){
-    if(event == ""){
-      this.OpenTiming[dayIdx].OperationHourList[i].OpenTime = "00:00";
-    }
-    console.log(event);
+  deleteTuesdayDurations(index) {
+    this.openTiming[1].OperationHourList.splice(index, 1);
   }
 
-  closeTimeChanged(event,dayIdx, i){
-    if(event == ""){
-      this.OpenTiming[dayIdx].OperationHourList[i].CloseTime = "00:00";
-    }
-    console.log(event);
+  addWednesdayDurations() {
+    this.openTiming[2].OperationHourList.push(this.newWednesdayDuration);
+    this.newWednesdayDuration = {};
+  }
+
+  deleteWednesdayDurations(index) {
+    this.openTiming[2].OperationHourList.splice(index, 1);
+  }
+  addThursdayDurations() {
+    this.openTiming[3].OperationHourList.push(this.newThursdayDuration);
+    this.newThursdayDuration = {};
+  }
+
+  deleteThursdayDurations(index) {
+    this.openTiming[3].OperationHourList.splice(index, 1);
+  }
+  addFridayDurations() {
+    this.openTiming[4].OperationHourList.push(this.newFridayDuration);
+    this.newFridayDuration = {};
+  }
+
+  deleteFridayDurations(index) {
+    this.openTiming[4].OperationHourList.splice(index, 1);
+  }
+  addSaturdayDurations() {
+    this.openTiming[5].OperationHourList.push(this.newSaturdayDuration);
+    this.newSaturdayDuration = {};
+  }
+
+  deleteSaturdayDurations(index) {
+    this.openTiming[5].OperationHourList.splice(index, 1);
+  }
+  addSundayDurations() {
+    this.openTiming[6].OperationHourList.push(this.newSundayDuration);
+    this.newSundayDuration = {};
+  }
+
+  deleteSundayDurations(index) {
+    this.openTiming[6].OperationHourList.splice(index, 1);
+  }
+  addPublicHolidayDurations() {
+    this.openTiming[7].OperationHourList.push(this.newPublicHolidayDuration);
+    this.newPublicHolidayDuration = {};
+  }
+
+  deletePublicHolidayDurations(index) {
+    this.openTiming[7].OperationHourList.splice(index, 1);
+  }
+  addEveOfPH() {
+    this.openTiming[8].OperationHourList.push(this.newEveOfPH);
+    this.newEveOfPH = {};
+  }
+  deleteEveOfPH(index) {
+    this.openTiming[8].OperationHourList.splice(index, 1);
   }
 
   // Convert outlet photo to base64
@@ -496,7 +576,7 @@ export class CreateuserEditComponent implements OnInit {
         QR: this.qr,
         NoOfOutlet: this.numberOfOutlet,
         LegalEntityType: this.legalEntitySelection,
-        OpenTiming: JSON.stringify(this.OpenTiming),
+        OpenTiming: JSON.stringify(this.openTiming),
         //image to base64
         NricFrontImage:  this.nricFrontImage,
         NricBackImage: this.nricBackImage,
@@ -586,7 +666,7 @@ export class CreateuserEditComponent implements OnInit {
         QR: this.qr,
         NoOfOutlet: this.numberOfOutlet,
         LegalEntityType: this.legalEntitySelection,
-        OpenTiming: JSON.stringify(this.OpenTiming),
+        OpenTiming: JSON.stringify(this.openTiming),
         //image to base64
         NricFrontImage:  this.nricFrontImage,
         NricBackImage: this.nricBackImage,

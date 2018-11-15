@@ -1,11 +1,29 @@
 <div class="card card-body mb-0 rounded-0 p-5 col-sm-12 col-md-6 col-lg-8 offset-md-2">
   <div class="container">
+
     <div class="form-group">
       <label for="code">
         <strong>Promotion Code</strong>
       </label>
       <input type="text" name="code" class="form-control" id="code" [(ngModel)]="promotionDetail.Code">
     </div>
+
+    <div class="form-group">
+      <label for="image">
+        <strong>Image</strong>
+      </label>
+      <div class="row">
+        <div class="col">
+          <input type="file" class="form-control" id="Image" accept="image/*" base-sixty-four-input (change)="handleFileSelect($event)">
+        </div>
+        <div class="col">
+          <div *ngIf="promotionDetail.Image != undefined && promotionDetail.Image !=''">
+            <img [src]="promotionDetail.Image" style="height: 30%; width:30%" align="right">
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- {{promotionDetail.Image}} -->
 
     <div class="row">
       <div class="col col-lg-6">
@@ -75,6 +93,58 @@
         <strong>Quantity</strong>
       </label>
       <input type="number" name="quantity" class="form-control" id="quantity" min="1" [(ngModel)]="promotionDetail.Qty">
+    </div>
+
+    <div class="form-group">
+      <label for="hawkerCenterId">
+        <strong>Hawker Center Id</strong>
+      </label>
+      <div class="row">
+        <div class="col col-lg-10">
+          <input type="text" class="form-control" name="hawkerCenterId" id="hawkerCenterId" [(ngModel)]="promotionDetail.HawkerCenterId">
+        </div>
+        <div class="col col-lg-2">
+          <button type="button" class="btn btn-primary" id="hawkerCenterIdButton" data-toggle="modal" data-target="#hawkerCenterIdModal" (click)="searchHawerCenter()">Search</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="hawkerCenterIdModal" tabindex="-1" role="dialog" aria-labelledby="hawkerCenterIdModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="hawkerCenterIdModalLabel">Hawker Center</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="no-more-table">
+              <table class="table table-bordered table-striped mb-0">
+                <thead>
+                  <tr>
+                    <th style="width: 20%">Id</th>
+                    <th style="width: 60%">Name</th>
+                    <th style="width: 20%">Selected</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let HawkerCenterList of HawkerCenterLists; let i=index">
+                    <td>{{HawkerCenterList.Id}}</td>
+                    <td>{{HawkerCenterList.Name}}</td>
+                    <td>
+                      <input type="checkbox" name="HawkerCenterSelected" [(ngModel)]="HawkerCenterSelected[i]" [checked]=true>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="HawkerCenterSelection()">Submit</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="form-group">

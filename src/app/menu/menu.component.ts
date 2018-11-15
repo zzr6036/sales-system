@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { HttpModule, Http, Response } from '@angular/http';
 import { global } from '../global';
 import { Router, ActivatedRoute } from '@angular/router';
+// import { window } from 'rxjs/operators/window';
+import { Observable } from 'rxjs/Rx';
+import { DOCUMENT } from '@angular/common';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-menu',
@@ -37,6 +41,15 @@ export class MenuComponent implements OnInit {
 
   createOnboarding(){
     this.router.navigate(['/menu/create-menu/'])
+  }
+
+  linkToMenu(){
+    //Open external url to replace current url
+    // window.location.href='https://www.google.com';
+
+    //Open external url as new tabl
+    // window.open('https://update-pos.xindots.com/merchant-menu', '_blank')
+    window.open(global.menu, '_blank')
   }
 
   showDetail(merchantInfo){

@@ -61,7 +61,7 @@ export class AssignPromotionTimesComponent implements OnInit {
     this.promotionDetail.Status = assignPromoCodeAll["Status"];
     this.promotionDetail.CreatedByUserId = assignPromoCodeAll["CreatedByUserId"];
     this.promotionDetail.DeleteByUserId = assignPromoCodeAll["DeleteByUserId"];
-    // this.promotionDetail.Image = JSON.stringify(assignPromoCodeAll["Image"]);
+    this.promotionDetail.Image = assignPromoCodeAll["Image"];
 
     let tokenNo = localStorage.getItem("Token");
     let getUserUrl = global.host + 'search/' + 'user/' + '?keyword=' + '&token=' + tokenNo;
@@ -144,7 +144,7 @@ export class AssignPromotionTimesComponent implements OnInit {
       Subject: this.Subject,
       CreatedByUserId: this.promotionDetail.CreatedByUserId,
       DeleteByUserId: this.promotionDetail.DeleteByUserId,
-      // Image: JSON.stringify(this.promotionDetail.Image),
+      Image: this.promotionDetail.Image,
       UserId: null
     };
     for(var n=0; n<this.assignQty; n++){

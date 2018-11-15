@@ -1,161 +1,156 @@
 <div class="card card-body mb-0 rounded-0 p-5 col-sm-12 col-md-6 col-lg-8 offset-md-2">
-    <form [formGroup]="restaurant">
-      <div class="form-group">
+  <form [formGroup]="restaurant">
+    <div class="form-group">
+      <div class="row">
+        <div class="col">
+          <label for="CoverPhoto">
+            <strong>Outlet Photo</strong>
+          </label>
+          <input type="file" class="form-control" id="CoverPhoto" accept="image/*" formControlName="CoverPhoto" (change)="handleFileSelect($event)">
+        </div>
+        <div class="col">
+          <div *ngIf="menuDetails.CoverPhoto != undefined && menuDetails.CoverPhoto !=''">
+            <img [src]="menuDetails.CoverPhoto" style="height: 30%; width:30%" align="right">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="UserName">
+        <font color="red"><strong>* </strong></font>
+        <strong>UserName</strong>
+      </label>
+      <input type="text" class="form-control" formControlName="UserName" [(ngModel)]="menuDetails.UserName" required>
+      <div class="form-control-feedback" *ngIf="restaurant.controls['UserName'].hasError('required') && restaurant.controls['UserName'].touched">
+        <font color="red">Username is required</font>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="Password">
+        <font color="red"><strong>* </strong></font>
+        <strong>Password</strong>
+      </label>
+      <input type="text" class="form-control" formControlName="Password" [(ngModel)]="menuDetails.Password" pattern="[0-9]{8}">
+      <div class="form-control-feedback" *ngIf="restaurant.controls['Password'].hasError('required') && restaurant.controls['Password'].touched">
+        <font color="red">Password is required</font>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="Mobile">
+        <font color="red"><strong>* </strong></font>
+        <strong>Mobile</strong>
+      </label>
+      <input type="text" class="form-control" formControlName="Mobile" [(ngModel)]="menuDetails.Mobile">
+      <div class="form-control-feedback" *ngIf="restaurant.controls['Mobile'].errors && (restaurant.controls['Mobile'].touched || restaurant.controls['Mobile'].touched)">
+        <p *ngIf="restaurant.controls['Mobile'].errors.required"><font color="red">Mobile No. is required</font></p>
+        <p *ngIf="restaurant.controls['Mobile'].errors.pattern"><font color="red">Mobile No. is in 8 digitals</font></p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="Email">
+        <strong>Email</strong>
+      </label>
+      <input type="text" class="form-control" formControlName="Email" [(ngModel)]="menuDetails.Email">
+    </div>
+
+    <div class="form-group">
+      <label for="RestaurantName">
+        <strong>Outlet Name</strong>
+      </label>
+      <input type="text" class="form-control" formControlName="RestaurantName" [(ngModel)]="menuDetails.RestaurantName">
+    </div>
+
+    <div class="form-group">
+      <label for="BusinessLegalName">
+        <strong>Business Legal Name</strong>
+      </label>
+      <input type="text" class="form-control" formControlName="BusinessLegalName" [(ngModel)]="menuDetails.BusinessLegalName">
+    </div>
+
+    <div class="form-group">
+      <label for="Country">
+        <strong>Country</strong>
+      </label>
+      <input type="text" class="form-control" formControlName="Country" [(ngModel)]="menuDetails.Country">
+    </div>
+
+    <div class="form-group">
+      <label for="PostalCode">
+        <strong>Postal Code</strong>
+      </label>
+      <input type="text" class="form-control" formControlName="PostalCode" [(ngModel)]="menuDetails.PostalCode">
+    </div>
+
+    <div class="form-group">
+      <label for="RegisteredAddress">
+        <strong>Outlet Address</strong>
+      </label>
+      <input type="text" class="form-control" formControlName="RegisteredAddress" [(ngModel)]="menuDetails.RegisteredAddress">
+    </div>
+
+  </form>
+
+  <!-- <div class="card">
+    <div class="card-header">
+      <label for="OpenTiming">
+        <strong>Open Timing</strong>
+      </label>
+    </div>
+    <div class="card-body">
+      <ng-container *ngFor="let operationData of menuDetails.OpenTiming; let dayIdx = index;">
         <div class="row">
-          <div class="col">
-            <label for="CoverPhoto">
-              <strong>Cover Photo</strong>
-              </label>
-              <input type="file" class="form-control" id="CoverPhoto" accept="image/*" (change)="handleFileSelect($event)">
-              <input type="hidden" name="fileHidden" formControlName="CoverPhoto">
+          <div class="col col-lg-4">
+            <font color="blue">{{operationData.Name}}</font>
           </div>
-          <div class="col">
-            <div *ngIf="menuDetails.CoverPhoto != undefined && menuDetails.CoverPhoto !=''">
-              <img [src]="menuDetails.CoverPhoto" style="height: 120px; width:100px" align="right">
-            </div>
+          <div class="col col-lg-3">
+            <font color="blue">Close Today</font>
+          </div>
+          <div class="col col-lg-2 mb-2">
+            <input type="checkbox"[(ngModel)]="menuDetails.OpenTiming[dayIdx].ClosedToday">
           </div>
         </div>
-      </div>
-      <!-- {{menuDetails.CoverPhoto}} -->
-  
-      <div class="form-group">
-        <label for="UserName">
-          <font color="red"><strong>* </strong></font>
-          <strong>UserName</strong>
-        </label>
-        <input type="text" class="form-control" formControlName="UserName" [(ngModel)]="menuDetails.UserName" required>
-        <div class="form-control-feedback" *ngIf="restaurant.controls['UserName'].hasError('required') && restaurant.controls['UserName'].touched">
-          <font color="red">Username is required</font>
-        </div>
-      </div>
-  
-      <div class="form-group">
-        <label for="Password">
-          <font color="red"><strong>* </strong></font>
-          <strong>Password</strong>
-        </label>
-        <input type="text" class="form-control" formControlName="Password" [(ngModel)]="menuDetails.Password">
-        <div class="form-control-feedback" *ngIf="restaurant.controls['Password'].hasError('required') && restaurant.controls['Password'].touched">
-          <font color="red">Password is required</font>
-        </div>
-      </div>
-  
-      <div class="form-group">
-        <label for="Email">
-          <strong>Email</strong>
-        </label>
-        <input type="text" class="form-control" formControlName="Email" [(ngModel)]="menuDetails.Email">
-      </div>
-  
-      <div class="form-group">
-        <label for="Mobile">
-          <strong>Mobile</strong>
-        </label>
-        <input type="text" class="form-control" formControlName="Mobile" [(ngModel)]="menuDetails.Mobile">
-      </div>
-  
-      <div class="form-group">
-        <label for="RestaurantName">
-          <strong>Outlet Name</strong>
-        </label>
-        <input type="text" class="form-control" formControlName="RestaurantName" [(ngModel)]="menuDetails.RestaurantName">
-      </div>
-  
-      <div class="form-group">
-        <label for="BusinessLegalName">
-          <strong>Business Legal Name</strong>
-        </label>
-        <input type="text" class="form-control" formControlName="BusinessLegalName" [(ngModel)]="menuDetails.BusinessLegalName">
-      </div>
-  
-      <div class="form-group">
-        <label for="Country">
-          <strong>Country</strong>
-        </label>
-        <input type="text" class="form-control" formControlName="Country" [(ngModel)]="menuDetails.Country">
-      </div>
-  
-      <div class="form-group">
-        <label for="PostalCode">
-          <strong>Postal Code</strong>
-        </label>
-        <input type="text" class="form-control" formControlName="PostalCode" [(ngModel)]="menuDetails.PostalCode">
-      </div>
-  
-      <div class="form-group">
-        <label for="RegisteredAddress">
-          <strong>Outlet Address</strong>
-        </label>
-        <input type="text" class="form-control" formControlName="RegisteredAddress" [(ngModel)]="menuDetails.RegisteredAddress">
-      </div>
-  
-      <!-- <div class="form-group">
-        <label for="LegalEntityType">
-          <strong>Legal Entity Type</strong>
-        </label>
-        <select class="form-control" formControlName="LegalEntityType" [(ngModel)]="menuDetails.LegalEntityType">
-          <option *ngFor="let LegalEntityType of LegalEntityTypes">{{LegalEntityType}}</option>
-        </select>
-      </div> -->
-  
-        <!-- <div class="card">
-          <div class="card-header">
-            <label for="OpenTiming">
-              <strong>Open Timing</strong>
-            </label>
-          </div>
-          <div class="card-body">
-            <ng-container *ngFor="let operationData of menuDetails.OpenTiming; let dayIdx = index;">
-              <div class="row">
-                <div class="col col-lg-4">
-                  <font color="blue">{{operationData.Name}}</font>
-                </div>
-                <div class="col col-lg-3">
-                  <font color="blue">Close Today</font>
-                </div>
-                <div class="col col-lg-2 mb-2">
-                  <input type="checkbox" formControlName="ClosedToday" [(ngModel)]="menuDetails.OpenTiming[dayIdx].ClosedToday">
-                </div>
+        <ng-container *ngFor="let operationTime of operationData.OperationHourList; let i=index;">
+          <ng-container *ngIf="!operationData.ClosedToday">
+            <div class="row">
+              <div class="col col-lg-4 mb-2">
+                <input class="form-control" type="time"  [(ngModel)]="menuDetails.OpenTiming[dayIdx].OperationHourList[i].OpenTime" (blur)="openTimeChanged($event.target.value,dayIdx, i)" required> 
               </div>
-              <ng-container *ngFor="let operationTime of operationData.OperationHourList; let i=index;">
-                <ng-container *ngIf="!operationData.ClosedToday">
-                  <div class="row">
-                    <div class="col col-lg-4 mb-2">
-                      <input class="form-control" type="time" formControlName="OpenTime" [(ngModel)]="menuDetails.OpenTiming[dayIdx].OperationHourList[i].OpenTime">
-                    </div>
-                    <div class="col col-lg-4 mb-2">
-                      <input class="form-control" type="time" formControlName="CloseTime" [(ngModel)]="menuDetails.OpenTiming[dayIdx].OperationHourList[i].CloseTime">
-                    </div>
-                    <div class="col col-lg-2 mb-2">
-                      <button type="button" class="btn btn-sm btn-info pull-right" style="width: 60px; height:35px" (click)="addOperationTime(dayIdx, i)">Add</button>
-                    </div>
-                    <div class="col col-lg-2 mb-2">
-                      <button type="button" class="btn btn-sm btn-danger pull-right" style="width: 60px; height:35px" *ngIf="(i == operationData.OperationHourList.length-1)" (click)="removeOperationTime(dayIdx, i)">
-                      Delete</button>
-                    </div>
-                  </div>
-                </ng-container>
-              </ng-container>
-            </ng-container>
-          </div>
-        </div> -->
-  
-        <div class="form-group">
-          <div class="custom-controls-stakced d-block my-3">
-            <label class="custom-control material-checkbox">
-              <input type="checkbox" class="material-control-input" name="ConvertToOnboarding" formControlName="ConvertToOnboarding" [(ngModel)]="menuDetails.ConvertToOnboarding">
-              <span class="material-control-indicator"></span>
-              <span class="material-control-description"><font color="blue"><strong>Convert to Online Onboarding</strong></font></span>
-            </label>
-          </div>
-        </div>
-        
-        <div class="buttonContainer">
-          <div class="buttonGroup">
-            <button class="btn btn-warning controlBtn" type="reset">Reset</button>
-            <button class="btn btn-success controlBtn" type="submit"  (click)='createRestaurant()' [disabled]="!restaurant.valid">Submit</button>
-          </div>
-        </div>
-  
-    </form>
+              <div class="col col-lg-4 mb-2">
+                <input class="form-control" type="time" [(ngModel)]="menuDetails.OpenTiming[dayIdx].OperationHourList[i].CloseTime" (blur)="closeTimeChanged($event.target.value,dayIdx, i)" required>
+              </div>
+              <div class="col col-lg-2 mb-2">
+                <button type="button" class="btn btn-sm btn-info pull-right" style="width: 60px; height:35px" (click)="addOperationTime(dayIdx, i)">Add</button>
+              </div>
+              <div class="col col-lg-2 mb-2">
+                <button type="button" class="btn btn-sm btn-danger pull-right" style="width: 60px; height:35px" *ngIf="(i > 0  && i == operationData.OperationHourList.length-1)" (click)="removeOperationTime(dayIdx, i)">
+                Delete</button>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div> -->
+
+  <div class="form-group">
+    <div class="custom-controls-stakced d-block my-3">
+      <label class="custom-control material-checkbox">
+        <input type="checkbox" class="material-control-input" name="ConvertToOnboarding" [(ngModel)]="menuDetails.ConverToOnboarding">
+        <span class="material-control-indicator"></span>
+        <span class="material-control-description"><font color="blue"><strong>Convert to Online Onboarding</strong></font></span>
+      </label>
+    </div>
   </div>
+  
+  <div class="buttonContainer">
+    <div class="buttonGroup">
+      <button class="btn btn-warning controlBtn" type="reset">Reset</button>
+      <button class="btn btn-success controlBtn" type="submit"  (click)='createRestaurant()'>Submit</button>
+      <!-- <button class="btn btn-success controlBtn" type="submit"  (click)='createRestaurant()' [disabled]="!restaurant.valid">Submit</button> -->
+    </div>
+  </div>
+</div>

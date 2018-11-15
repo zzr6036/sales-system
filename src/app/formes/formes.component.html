@@ -4,21 +4,19 @@
     moment().format();
   </script>
   <h3> Manage Merchant Information
-    <!-- <a class="btn btn-primary" style="font-size: 1rem;float: right;" id="createnewuser" [routerLink]="['/formes/createuser']">Create New User!</a> -->
     <a class="btn btn-primary" style="font-size: 1rem;float: right;" id="createnewuser" (click)="createNewUser()">Create New Merchant!</a>
   </h3>
   <div class="card">
-    <div class="card-body">
-      <!-- Search Engine -->
+    <div class="card-body searchEngine">
       <div class="form-group">
         <font color="blue"><strong>Search by:</strong></font>
         <div class="row">
           <div class="col col-md-3" >
-            <select class="form-control amber-border" id="searchSelection" [(ngModel)]="itemSelected" name="itemSelected" (ngModelChange)="onSelect()" style="width: 80%; height: 35px">
+            <select class="form-control amber-border" id="searchSelection" [(ngModel)]="itemSelected" name="itemSelected" (ngModelChange)="onSelect()" style="width: 100%; height: 35px">
               <option *ngFor="let selection of selections">{{selection}}</option>
             </select>
           </div>
-          <div class="col col-md-6">
+          <div class="col col-md-8">
             <div class="row">
               <div class="col col-md-5">
                 <input type="text" class="form-control" name="searchString" placeholder="Search..." [(ngModel)]="term"  (keydown.enter)="onKeydown($event)">
@@ -85,7 +83,20 @@
                 {{account.SaleInCharge.FirstName}}
               </td>
               <td data-title="Status" class="numeric">
-                <button type="button" class="btn btn-link" (click)=showDetail(account)>{{account.Status}}</button>
+                <div class="dropdown">
+                  <button [ngClass]="{'btn btn-success dropdown-toggle': account.Status == 'approved',
+                                      'btn btn-danger dropdown-toggle': account.Status == 'rejected',
+                                      'btn btn-info dropdown-toggle': account.Status == 'pending',
+                                      'btn btn-warning dropdown-toggle': account.Status == 'draft'}" 
+                  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  {{account.Status}}
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <span class="dropdown-item" (click)="showDetail(account)" *ngIf="account.Status == 'draft' || account.Status == 'rejected'">Edit</span>
+                    <span class="dropdown-item" (click)="showDetail(account)" *ngIf="account.Status == 'approved' || account.Status == 'pending'">View</span>
+                  </div>
+                  </div>
+                <!-- <button type="button" class="btn btn-link" (click)=showDetail(account)>{{account.Status}}</button> -->
               </td>
 
             </tr>

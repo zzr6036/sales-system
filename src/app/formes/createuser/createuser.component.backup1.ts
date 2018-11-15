@@ -1,11 +1,12 @@
 import {Component,OnInit,Injectable,Inject,Optional,CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
-import {FormBuilder,FormGroup,Validators,FormControl,FormsModule,ReactiveFormsModule,NgModel} from "@angular/forms";
+import {FormBuilder,FormGroup,Validators,FormControl,FormsModule,ReactiveFormsModule,NgModel, FormArray} from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
 import {Headers,URLSearchParams,RequestMethod,RequestOptions,RequestOptionsArgs,ResponseContentType,HttpModule,Http,Response} from "@angular/http";
 import { Observable } from "rxjs/Rx";
 import { HttpClient } from "@angular/common/http";
 import { global } from "../../global";
+import { server } from "../../server";
 import { AsyncLocalStorage } from "angular-async-local-storage";
 import { AlertsService } from "angular-alert-module";
 import { CustomValidators } from "ng2-validation";
@@ -16,41 +17,15 @@ import { templateJitUrl } from "@angular/compiler";
 import { AngularMultiSelectModule } from "angular2-multiselect-dropdown/angular2-multiselect-dropdown";
 import Swal from 'sweetalert2';
 import { log } from "util";
-import { toString } from "@ng-bootstrap/ng-bootstrap/util/util";
-
-class OperationHour {
-  OpenTime;
-  CloseTime;
-
-  constructor(inOpenTime = '08:00', inCloseTime  = '22:00'){
-    this.OpenTime = inOpenTime;
-    this.CloseTime = inCloseTime;
-  }
-}
-
-class OperationItem {
-  Name;
-  ShortName;
-  OperationHourList;
-  ClosedToday;
-
-  constructor(inName = 'Monday', inShortName = 'Mon', inOperationHourList = [], inClosedToday = false){
-    this.Name = inName;
-    this.ShortName = inShortName;
-    this.OperationHourList = inOperationHourList;
-    this.ClosedToday = inClosedToday;
-  }
-}
 
 @Component({
-  selector: 'app-createuser-edit',
-  templateUrl: './createuser-edit.component.html',
-  styleUrls: ['./createuser-edit.component.scss']
+  selector: "app-createuser",
+  templateUrl: "./createuser.component.html",
+  styleUrls: ["./createuser.component.scss"]
 })
-
-export class CreateuserEditComponent implements OnInit {
-  merchantDetails: any;
+export class CreateuserComponent implements OnInit {
   appInfo: any;
+
   id: number;
   username: string;
   password: string;
@@ -68,11 +43,11 @@ export class CreateuserEditComponent implements OnInit {
   restaurantName: string;
   businessLegalName: string;
   acra: string;
+  country: string;
+  postalcode: string;
   registeredAddress: string;
   numberOfOutlet: number;
   qr: number;
-  country: string;
-  postalcode: string;
   outletAddress: Array<any> = [{Name:"", Address:""}];
   newOutletAddress: any={};
   
@@ -85,21 +60,27 @@ export class CreateuserEditComponent implements OnInit {
   nricFrontImage:string;
   nricBackImage: string;
   acraBizFile: string;
+  // otherDocuments: Array<any> = [{Document:""}];
 
   hasGST: boolean = false;
   hasCreditCard: boolean = false;
   servChargeRate: number;
-  OpenTiming: Array<any> = [];
 
   isDraft: boolean;
   loaded = false;
   autosaveTimer = null;
   status: string;
 
-  cuisines: string;
+  cuisines: "";
   cuisinesTypes: Array<any> = [];
+  // cuisinesIds: Array<any> = [];
+  // cuisinesNames: Array<any> = [];
   cuisinesSelected = [];
-  categories: string;
+  cuisineLists = [];
+
+  // categoriesIds: Array<any> = [];
+  // categoriesNames: Array<any> = [];
+  categories: "";
   categoriesTypes: Array<any> = [];
   categoriesSelected = [];
 
@@ -121,8 +102,58 @@ export class CreateuserEditComponent implements OnInit {
   ];
   legalEntitySelection: "";
 
+  isClosedMonday: boolean = false;
+  isClosedTuesday: boolean = false;
+  isClosedWednesday: boolean = false;
+  isClosedThursday: boolean = false;
+  isClosedFriday: boolean = false;
+  isClosedSaturday: boolean = false;
+  isClosedSunday: boolean = false;
+  isClosedPublicHoliday: boolean = false;
+  isClosedEveOfPH: boolean = false;
+
+
+  public mondayDurations = [{OpenTime:"08:00", CloseTime:"18:00"}];
+  public newMondayDuration: any = {};
+
+  public tuesdayDurations = [{OpenTime:"08:00", CloseTime:"18:00"}];
+  public newTuesdayDuration: any = {};
+
+  public wednesdayDurations = [{OpenTime:"08:00", CloseTime:"18:00"}];
+  public newWednesdayDuration: any = {};
+
+  public thursdayDurations = [{OpenTime:"08:00", CloseTime:"18:00"}];
+  public newThursdayDuration: any = {};
+
+  public fridayDurations = [{OpenTime:"08:00", CloseTime:"18:00"}];
+  public newFridayDuration: any = {};
+
+  public saturdayDurations =  [{OpenTime:"08:00", CloseTime:"18:00"}];
+  public newSaturdayDuration: any = {};
+
+  public sundayDurations = [{OpenTime:"08:00", CloseTime:"18:00"}];
+  public newSundayDuration: any = {};
+
+  public publicHolidayDurations = [{OpenTime:"08:00", CloseTime:"18:00"}];
+  public newPublicHolidayDuration: any = {};
+
+  public eveOfPHs = [{OpenTime:"08:00", CloseTime:"18:00"}];
+  public newEveOfPH: any = {};
+
+  openTiming = [
+    {Name: "Monday", ShortName: "Mon", OperationHourList: this.mondayDurations, ClosedToday: this.isClosedMonday},
+    {Name: "Tuesday", ShortName: "Tue", OperationHourList: this.tuesdayDurations, ClosedToday: this.isClosedTuesday},
+    {Name: "Wednesday", ShortName: "Wed", OperationHourList: this.wednesdayDurations, ClosedToday: this.isClosedWednesday},
+    {Name: "Thursday", ShortName: "Thur", OperationHourList: this.thursdayDurations, ClosedToday: this.isClosedThursday},
+    {Name: "Friday", ShortName: "Fri", OperationHourList: this.fridayDurations, ClosedToday: this.isClosedFriday},
+    {Name: "Saturday", ShortName: "Sat", OperationHourList: this.saturdayDurations, ClosedToday: this.isClosedSaturday},
+    {Name: "Sunday", ShortName: "Sun", OperationHourList: this.sundayDurations, ClosedToday: this.isClosedSunday},
+    {Name: "Public Holiday", ShortName: "PH", OperationHourList: this.publicHolidayDurations, ClosedToday: this.isClosedPublicHoliday},
+    {Name: "Eve Of Public Holiday", ShortName: "EveOfP.H", OperationHourList: this.eveOfPHs, ClosedToday: this.isClosedEveOfPH}
+  ];
+
   public myForm: FormGroup;
-  
+
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -134,47 +165,6 @@ export class CreateuserEditComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-     // Match Details
-     this.merchantDetails = localStorage.getItem("EditingUser");
-     let assignMerchantDetails = JSON.parse(this.merchantDetails);
-    //  console.log(assignMerchantDetails);
-     this.outletPhoto = assignMerchantDetails["OutletPhoto"];
-     this.id = assignMerchantDetails["Id"];
-     this.username = assignMerchantDetails["UserName"];
-     this.cuisines = assignMerchantDetails["CuisineId"];
-     this.categories = assignMerchantDetails["CategoryId"];
-     this.password = assignMerchantDetails["Password"];
-     this.email = assignMerchantDetails["Email"];
-     this.firstname = assignMerchantDetails["FirstName"];
-     this.lastname = assignMerchantDetails["LastName"];
-     this.icNumber = assignMerchantDetails["NRIC"];
-     this.mobile = assignMerchantDetails["Mobile"];
-     this.accountTypeSelection = assignMerchantDetails["AccountType"];
-     this.selectedSubscriptionsItems = JSON.parse(assignMerchantDetails["Subscription"]);
-     this.bankName = assignMerchantDetails["BankName"];
-     this.bankAccountName = assignMerchantDetails["BankAccountName"];
-     this.bankAccountNumber = assignMerchantDetails["BankAccountNumber"];
-     this.bankStatementEmail = assignMerchantDetails["BankStatementEmail"];
-     this.nricFrontImage = assignMerchantDetails["NricFrontImage"];
-     this.nricBackImage = assignMerchantDetails["NricBackImage"];
-     this.neaLicenseImage = assignMerchantDetails["NeaLicenseImage"];
-     this.tobaccoAlcoholLicense = assignMerchantDetails["TobaccoAlcoholLicense"];
-     this.acraBizFile = assignMerchantDetails["ACRABizFile"];
-     this.restaurantName = assignMerchantDetails["RestaurantName"];
-     this.businessLegalName = assignMerchantDetails["BusinessLegalName"];
-     this.acra = assignMerchantDetails["ACRA"];
-     this.registeredAddress = assignMerchantDetails["RegisteredAddress"];
-     this.qr = assignMerchantDetails["QR"];
-     this.country = assignMerchantDetails["Country"];
-     this.postalcode = assignMerchantDetails["PostalCode"];
-     this.outletAddress = JSON.parse(assignMerchantDetails["OutletAddress"]);
-     this.servChargeRate = assignMerchantDetails["ServChargeRate"];
-     this.numberOfOutlet = assignMerchantDetails["NoOfOutlet"];
-     this.legalEntitySelection = assignMerchantDetails["LegalEntityType"];
-     this.hasGST = assignMerchantDetails["HasGST"];
-     this.hasCreditCard = assignMerchantDetails["HasCreditCard"];
-     this.OpenTiming = JSON.parse(assignMerchantDetails["OpenTiming"]);
-
     this.dropdownSubscriptionsList = [
       { id: 1, itemName: "Restaurant" },
       { id: 2, itemName: "Hawker" }
@@ -207,11 +197,12 @@ export class CreateuserEditComponent implements OnInit {
   }
 
   onItemSelect(item: any) {
+    // console.log(item);
+    // console.log(this.selectedSubscriptionsItems);
   }
   OnItemDeSelect(item: any) {
   }
   onSelectAll(items: any) {
-    // console.log(items);
   }
   onDeSelectAll(items: any) {
   }
@@ -224,27 +215,80 @@ export class CreateuserEditComponent implements OnInit {
     this.outletAddress.splice(index, 1);
   }
 
-  addOperationTime(inDayIdx, inOpTimeIdx){
-    this.OpenTiming[inDayIdx].OperationHourList.push(new OperationHour("08:00", "22:00"));
-    console.log(this.OpenTiming)
+  // openTiming edit
+  addMondayDurations() {
+    this.mondayDurations.push(this.newMondayDuration);
+    this.newMondayDuration = {};
   }
 
-  removeOperationTime(inDayIdx, inOpTimeIdx){
-    this.OpenTiming[inDayIdx].OperationHourList.splice(inOpTimeIdx, 1)
+  deleteMondayDurations(index) {
+    this.mondayDurations.splice(index, 1);
+  }
+  addTuesdayDurations() {
+    this.tuesdayDurations.push(this.newTuesdayDuration);
+    this.newTuesdayDuration = {};
   }
 
-  openTimeChanged(event,dayIdx, i){
-    if(event == ""){
-      this.OpenTiming[dayIdx].OperationHourList[i].OpenTime = "00:00";
-    }
-    console.log(event);
+  deleteTuesdayDurations(index) {
+    this.tuesdayDurations.splice(index, 1);
   }
 
-  closeTimeChanged(event,dayIdx, i){
-    if(event == ""){
-      this.OpenTiming[dayIdx].OperationHourList[i].CloseTime = "00:00";
-    }
-    console.log(event);
+  addWednesdayDurations() {
+    this.wednesdayDurations.push(this.newWednesdayDuration);
+    this.newWednesdayDuration = {};
+  }
+
+  deleteWednesdayDurations(index) {
+    this.wednesdayDurations.splice(index, 1);
+  }
+  addThursdayDurations() {
+    this.thursdayDurations.push(this.newThursdayDuration);
+    this.newThursdayDuration = {};
+  }
+
+  deleteThursdayDurations(index) {
+    this.thursdayDurations.splice(index, 1);
+  }
+  addFridayDurations() {
+    this.fridayDurations.push(this.newFridayDuration);
+    this.newFridayDuration = {};
+  }
+
+  deleteFridayDurations(index) {
+    this.fridayDurations.splice(index, 1);
+  }
+  addSaturdayDurations() {
+    this.saturdayDurations.push(this.newSaturdayDuration);
+    this.newSaturdayDuration = {};
+  }
+
+  deleteSaturdayDurations(index) {
+    this.saturdayDurations.splice(index, 1);
+  }
+  addSundayDurations() {
+    this.sundayDurations.push(this.newSundayDuration);
+    this.newSundayDuration = {};
+  }
+
+  deleteSundayDurations(index) {
+    this.sundayDurations.splice(index, 1);
+  }
+  addPublicHolidayDurations() {
+    this.publicHolidayDurations.push(this.newPublicHolidayDuration);
+    this.newPublicHolidayDuration = {};
+  }
+
+  deletePublicHolidayDurations(index) {
+    this.publicHolidayDurations.splice(index, 1);
+  }
+
+  addEveOfPH() {
+    this.openTiming[8].OperationHourList.push(this.newEveOfPH);
+    this.newEveOfPH = {};
+  }
+
+  deleteEveOfPH(index) {
+    this.openTiming[8].OperationHourList.splice(index, 1);
   }
 
   // Convert outlet photo to base64
@@ -464,11 +508,12 @@ export class CreateuserEditComponent implements OnInit {
   //     }
   //     i++;
   //   }
-  //   // console.log(this.categories)
+  //   console.log(this.categories)
   // }
 
   // Save and Submit
   saveDraft(inIsDraft) {
+
     // Input Validation for save draft
     if (this.mobile !== undefined && this.username !== undefined) {
       this.appInfo = {
@@ -483,7 +528,7 @@ export class CreateuserEditComponent implements OnInit {
         Firstname: this.firstname,
         Lastname: this.lastname,
         NRIC: this.icNumber,
-        Mobile: this.mobile,
+        Mobile: "+65-"+this.mobile,
         BankName: this.bankName,
         BankAccountName: this.bankAccountName,
         BankAccountNumber: this.bankAccountNumber,
@@ -493,10 +538,10 @@ export class CreateuserEditComponent implements OnInit {
         ACRA: this.acra,
         RegisteredAddress: this.registeredAddress,
         OutletAddress: JSON.stringify(this.outletAddress),
-        QR: this.qr,
         NoOfOutlet: this.numberOfOutlet,
+        QR: this.qr,
         LegalEntityType: this.legalEntitySelection,
-        OpenTiming: JSON.stringify(this.OpenTiming),
+        OpenTiming: JSON.stringify(this.openTiming),
         //image to base64
         NricFrontImage:  this.nricFrontImage,
         NricBackImage: this.nricBackImage,
@@ -518,13 +563,13 @@ export class CreateuserEditComponent implements OnInit {
       let isExistingUser = this.appInfo["Id"] > 0;
 
       //Checking existing username
-      // let boardingGetUrl = global.host + "merchantinfoes" + "?token=" + tokenNo;
-      // this.http.get(boardingGetUrl, {}).map(res => res.json()).subscribe(data => {
-      //     for (var i = 0; i < data.length; i++) {
-      //       if (this.username === data[i]["UserName"]) {
-      //         window.alert("User already in used");
-      //       }
-      //     }
+      let boardingGetUrl = global.host + "merchantinfoes" + "?token=" + tokenNo;
+      this.http.get(boardingGetUrl, {}).map(res => res.json()).subscribe(data => {
+          for (var i = 0; i < data.length; i++) {
+            if (this.username === data[i]["UserName"]) {
+              window.alert("User already in used");
+            }
+          }
           let httpCall = isExistingUser ? this.http.post(getResUrl, this.appInfo, {}): this.http.post(getResUrl, this.appInfo, {});
           httpCall.map(res => res.json()).subscribe(data => {
               // console.log(data);
@@ -543,9 +588,8 @@ export class CreateuserEditComponent implements OnInit {
               console.log(error);
             }
           );
-        // });
-    } 
-    else {
+        });
+    } else {
       window.alert("Please fill in Username and Mobile Number");
     }
   }
@@ -553,27 +597,27 @@ export class CreateuserEditComponent implements OnInit {
   onSubmit(){
     // Input Validation for save draft
     if (this.username !== undefined && this.mobile !== undefined  && this.password !== undefined && this.country !== undefined && this.postalcode !== undefined
-      && this.email !== undefined && this.firstname !== undefined && this.lastname !== undefined && this.mobile !== undefined && this.icNumber !== undefined 
-      && this.legalEntitySelection !== undefined && this.bankName !== undefined && this.bankAccountName !== undefined
-      && this.bankAccountNumber !== undefined && this.nricFrontImage != undefined && this.nricBackImage != undefined && this.businessLegalName !== undefined 
-      && this.acra !== undefined && this.registeredAddress !== undefined && this.numberOfOutlet !== undefined && this.restaurantName !== undefined && 
-      this.username !== '' && this.mobile !== ''  && this.password !== '' && this.country !== '' && this.postalcode !== ''
-      && this.email !== '' && this.firstname !== '' && this.lastname !== '' && this.mobile !== '' && this.icNumber !== '' && this.legalEntitySelection !== '' 
-      && this.bankName !== '' && this.bankAccountName !== '' && this.bankAccountNumber !== '' && this.nricFrontImage != '' && this.nricBackImage != '' 
-      && this.businessLegalName !== '' && this.acra !== '' && this.registeredAddress !== '' && this.numberOfOutlet !== null && this.restaurantName !== '') {
+    && this.email !== undefined && this.firstname !== undefined && this.lastname !== undefined && this.mobile !== undefined && this.icNumber !== undefined 
+    && this.legalEntitySelection !== undefined && this.bankName !== undefined && this.bankAccountName !== undefined
+    && this.bankAccountNumber !== undefined && this.nricFrontImage != undefined && this.nricBackImage != undefined && this.businessLegalName !== undefined 
+    && this.acra !== undefined && this.registeredAddress !== undefined && this.numberOfOutlet !== undefined && this.restaurantName !== undefined && 
+    this.username !== '' && this.mobile !== ''  && this.password !== '' && this.country !== '' && this.postalcode !== ''
+    && this.email !== '' && this.firstname !== '' && this.lastname !== '' && this.mobile !== '' && this.icNumber !== '' && this.legalEntitySelection !== '' 
+    && this.bankName !== '' && this.bankAccountName !== '' && this.bankAccountNumber !== '' && this.nricFrontImage != '' && this.nricBackImage != '' 
+    && this.businessLegalName !== '' && this.acra !== '' && this.registeredAddress !== '' && this.numberOfOutlet !== null && this.restaurantName !== '') {
       this.appInfo = {
         // "Id": (this.appInfo == null)?0:this.appInfo['Id'],
         Id: this.id,
         UserName: this.username,
-        CuisineId: this.cuisines,
-        CategoryId: this.categories,
+        CuisineId: parseInt(this.cuisines),
+        CategoryId: parseInt(this.categories),
         Password: this.password,
         AccountType: this.accountTypeSelection,
         Email: this.email,
         Firstname: this.firstname,
         Lastname: this.lastname,
         NRIC: this.icNumber,
-        Mobile: this.mobile,
+        Mobile: '+65-'+this.mobile,
         BankName: this.bankName,
         BankAccountName: this.bankAccountName,
         BankAccountNumber: this.bankAccountNumber,
@@ -583,10 +627,10 @@ export class CreateuserEditComponent implements OnInit {
         ACRA: this.acra,
         RegisteredAddress: this.registeredAddress,
         OutletAddress: JSON.stringify(this.outletAddress),
-        QR: this.qr,
         NoOfOutlet: this.numberOfOutlet,
+        QR: this.qr,
         LegalEntityType: this.legalEntitySelection,
-        OpenTiming: JSON.stringify(this.OpenTiming),
+        OpenTiming: JSON.stringify(this.openTiming),
         //image to base64
         NricFrontImage:  this.nricFrontImage,
         NricBackImage: this.nricBackImage,
@@ -608,26 +652,25 @@ export class CreateuserEditComponent implements OnInit {
       let isExistingUser = this.appInfo["Id"] > 0;
 
       //Checking existing username
-      // let boardingGetUrl = global.host + "merchantinfoes" + "?token=" + tokenNo;
-      // this.http.get(boardingGetUrl, {}).map(res => res.json()).subscribe(data => {
-      //     for (var i = 0; i < data.length; i++) {
-      //       if (this.username === data[i]["UserName"]) {
-      //         window.alert("User already in used");
-      //       }
-      //     }
+      let boardingGetUrl = global.host + "merchantinfoes" + "?token=" + tokenNo;
+      this.http.get(boardingGetUrl, {}).map(res => res.json()).subscribe(data => {
+          for (var i = 0; i < data.length; i++) {
+            if (this.username === data[i]["UserName"]) {
+              window.alert("User already in used");
+            }
+          }
           let httpCall = isExistingUser ? this.http.post(getResUrl, this.appInfo, {}): this.http.post(getResUrl, this.appInfo, {});
           httpCall.map(res => res.json()).subscribe(data => {
-              // console.log(data);
+              console.log(data);
               if (data["Message"] == undefined) {
                 Swal({
                   position: 'center',
                   type: 'success',
-                  title: "Submit Successfully",
+                  title: 'Submit Successfully!',
                   showConfirmButton: false,
                   timer: 1500
                 }).then(()=>{
-                   // console.log(data["Message"]);
-                if (this.appInfo["Status"] === "Pending") {
+                if (this.appInfo["Status"] === "Pending" || this.appInfo["Status"] === "pending") {
                   this.router.navigate(["/formes"]);
                 } else {
                   this.router.navigate(["/formes"]);
@@ -641,7 +684,7 @@ export class CreateuserEditComponent implements OnInit {
               console.log(error);
             }
           );
-        // });
+        });
     } else {
       window.alert("All the * fields are required");
     }

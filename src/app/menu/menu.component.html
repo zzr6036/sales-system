@@ -26,7 +26,7 @@
           <td>{{merchantInfo.UserName}}</td>
           <td>{{merchantInfo.Mobile}}</td>
           <td>{{merchantInfo.RestaurantName}}</td>
-          <td>{{merchantInfo.LastUpdated}}</td>
+          <td>{{merchantInfo.LastUpdated | date: 'yyyy-MM-dd'}}</td>
           <td>{{merchantInfo.SaleInCharge.FirstName}}</td>
           <td>
             <div class="dropdown">
@@ -35,13 +35,13 @@
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <span class="dropdown-item" (click)="showDetail(merchantInfo)">Edit</span>
-                <div class="dropdown-divider"></div>
+                <!-- <div class="dropdown-divider"></div> -->
               </div>
             </div>
             <!-- <button type="button" class="btn btn-link" (click)=showDetail(merchantInfo)>{{merchantInfo.Status}}</button> -->
           </td>
           <td>
-              <button type="button" class="btn btn-link">Menu</button>
+            <button type="button" class="btn btn-info" id="linkToMenu" (click)="linkToMenu()">Create Menu</button>
           </td>
         </tr>
       </tbody>

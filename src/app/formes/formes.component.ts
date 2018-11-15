@@ -19,7 +19,6 @@ import { ExcelService } from '../services/excel.service';
   templateUrl: "./formes.component.html",
   styleUrls: ["./formes.component.scss"],
   providers: [CreateuserService]
-  // template: `LastUpdated: {{ mydate | amLocal | amDateFormat: 'YYYY-MM-DD'}}`
 })
 export class FormesComponent implements OnInit {
   accounts: Array<any> = [];
@@ -70,8 +69,14 @@ export class FormesComponent implements OnInit {
               if (data["Message"]) {
                 console.log(data["Message"]);
               } else {
-                this.accounts = data;
-                this.FilterList = data;
+                for(var i=0; i<data.length; i++){
+                  if(data[i].Status != 'offline'){
+                    this.accounts.push(data[i]);
+                    this.FilterList.push(data[i]);
+                  }
+                }
+                // this.accounts = data;
+                // this.FilterList = data;
 
               }
             },

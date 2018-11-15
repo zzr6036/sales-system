@@ -28,6 +28,26 @@ div.input-group  {
     cursor: pointer;
 }
 
+#dropdownMenuButton {
+    width: 100px;
+    height: 40px;
+    border-radius: 6px;
+    box-shadow: 0 3px #ffffff
+}
+
 // #searchSelction {
 //     position: fixed;
 // }
+
+// .searchEngine {
+//     margin: auto;
+// }
+
+.input-group{
+    width: 50%;
+    margin: 0px;
+}
+
+.searchEngine {
+    padding-left: 20px;
+}

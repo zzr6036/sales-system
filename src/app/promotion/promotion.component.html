@@ -55,11 +55,11 @@
                 <td>
                   <div class="between">
                     <span>From</span>
-                    <span>{{promotionCode.StartTime | amLocal | amDateFormat: 'MM-DD-YYYY'}}</span>
+                    <span>{{promotionCode.StartTime | amLocal | amDateFormat: 'YYYY-MM-DD'}}</span>
                   </div>
                   <div class="between">
                     <span>To</span>
-                    <span>{{promotionCode.EndTime | amLocal | amDateFormat: 'MM-DD-YYYY'}}</span>
+                    <span>{{promotionCode.EndTime | amLocal | amDateFormat: 'YYYY-MM-DD'}}</span>
                   </div>
                 </td>
                 <td>
@@ -71,7 +71,6 @@
                 <td>
                   <div class="dropdown">
                     <button [ngClass]="promotionCode.EndTime >= currentDate ? 'btn btn-info dropdown-toggle':'btn btn-warning dropdown-toggle'" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <!-- <button class="btn btn-outline-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> -->
                       Action
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -86,7 +85,7 @@
                   </div>
                 </td>
                 <td>
-                    <button [ngClass]="promotionCode.EndTime >= currentDate ? 'btn btn-info':'btn btn-warning'" type="button" (click)="viewDetail(promotionCode)">ViewDetail</button>
+                    <button [ngClass]="promotionCode.EndTime >= currentDate ? 'btn btn-info':'btn btn-warning'" type="button" id="viewDetail" (click)="viewDetail(promotionCode)">ViewDetail</button>
                   <!-- <button *ngIf="promotionCode.EndTime >= currentDate"? class="btn btn-info":class="btn btn-warning" type="button" (click)="viewDetail(promotionCode)">ViewDetail</button> -->
                 </td>
             </tr>

@@ -41,6 +41,7 @@ class OperationItem {
 export class EditMenuComponent implements OnInit {
   menuDetails: MenuView = new MenuView();
   restaurant: FormGroup;
+  mobilePattern = "^[+][5-6]{2}[-][0-9]{8}";
   offlineMerchantInfoes: any;
   onlineMerchantInfoes: any;
   operationListJson: Array<any> = [];
@@ -86,10 +87,9 @@ export class EditMenuComponent implements OnInit {
     this.menuDetails.BusinessLegalName = assignMerchantInfoes['BusinessLegalName'];
     this.menuDetails.Country = assignMerchantInfoes['Country'];
     this.menuDetails.PostalCode = assignMerchantInfoes['PostalCode'];
-    this.menuDetails.RegisteredAddress = assignMerchantInfoes['RegisteredAddress']
-    this.checkDuplicateUserName()
-    this.initOperationList();
-    // this.editOperationList();
+    this.menuDetails.RegisteredAddress = assignMerchantInfoes['RegisteredAddress'];
+    this.menuDetails.OpenTiming = JSON.parse(assignMerchantInfoes['OpenTiming']);
+
     let tokenNo = localStorage.getItem("Token");
     let getMerchantUrl = global.host + "merchantinfoes" + "?token=" + tokenNo;
     this.http.get(getMerchantUrl, {}).map(res => res.json()).subscribe(merchantInfoData =>{
@@ -103,34 +103,22 @@ export class EditMenuComponent implements OnInit {
     //   classes: 'myclass custom-class'
     // }
 
-    // this.menuDetails.OpenTiming = [{Name: 'Monday', ShortName: 'Mon', OperationHourList: [], ClosedToday: false},
-    //                                {Name: 'Tuesday', ShortName: 'Tue', OperationHourList: [], ClosedToday: false},
-    //                                {Name: 'Wednesday', ShortName: 'Wed', OperationHourList: [], ClosedToday: false},
-    //                                {Name: 'Thursday', ShortName: 'Thur', OperationHourList: [], ClosedToday: false},
-    //                                {Name: 'Friday', ShortName: 'Fri', OperationHourList: [], ClosedToday: false},
-    //                                {Name: 'Saturday', ShortName: 'Sat', OperationHourList: [], ClosedToday: false},
-    //                                {Name: 'Sunday', ShortName: 'Sun', OperationHourList: [], ClosedToday: false},
-    //                                {Name: 'Eve Of Public Holiday', ShortName: 'EveOfP.H', OperationHourList: [], ClosedToday: false},
-    //                                {Name: 'Public Holiday', ShortName: 'P.H', OperationHourList: [], ClosedToday: false}]
-
     this.restaurant = this.frmBuilder.group({
-      // CoverPhoto: [""],
       CoverPhoto: [""],
-      // UserName: [null, Validators.compose([Validators.required])],
       UserName: ["", [Validators.required]],
       Password: ["", [Validators.required]],
+      Mobile: ["", Validators.pattern(this.mobilePattern)],
       Email: [""],
-      Mobile: [""],
       RestaurantName: [""],
       BusinessLegalName: [""],
       Country: [""],
       PostalCode: [""],
       RegisteredAddress: [""],
       LegalEntityType: [""],
-      OpenTime: [""],
-      CloseTime: [""],
-      ClosedToday: [false],
-      ConvertToOnboarding: [false],
+      // OpenTime: [""],
+      // CloseTime: [""],
+      // ClosedToday: [false],
+      // ConverToOnboarding: [false],
     })
   }
 
@@ -159,18 +147,6 @@ export class EditMenuComponent implements OnInit {
  
 
   initOperationList(){
-    // this.menuDetails.OpenTiming = []
-    // let isOperationListStringValid = this.isJsonString(this.menuDetails.OpenTiming)
-    // for(var i=0; i<this.menuDetails.OpenTiming.length; i++){
-    //   this.operationListJson.push(this.menuDetails.OpenTiming[i].Name)
-    // }
-    // for(let operationData of this.operationListJson){
-    //   let operationHourList = [];
-    //   for( let operationHourData of operationData){
-    //     operationHourList.push(new OperationHour(operationHourData.OenTime, operationHourData.CloseTime))
-    //   }
-    //   this.menuDetails.OpenTiming.push(new OperationItem(operationData.Name, operationData.ShortName, operationHourList,operationData.ClosedToday));
-    // }
     this.menuDetails.OpenTiming.push(new OperationItem('Monday', 'Mon', [new OperationHour()], false));
     this.menuDetails.OpenTiming.push(new OperationItem('Tuesday', 'Tue', [new OperationHour()], false));
     this.menuDetails.OpenTiming.push(new OperationItem('Wednesday', 'Wed', [new OperationHour()], false));
@@ -181,17 +157,6 @@ export class EditMenuComponent implements OnInit {
     this.menuDetails.OpenTiming.push(new OperationItem('Eve Of Public Holiday', 'EveOfP.H', [new OperationHour()], false));
     this.menuDetails.OpenTiming.push(new OperationItem('Public Holiday', 'P.H', [new OperationHour()], false));
     // console.log(this.menuDetails.OpenTiming)
-  }
-  editOperation(){
-    this.editOperationList = []
-    for(let operationData of this.menuDetails.OpenTiming){
-      let copyOpTimeList = []
-      for(let operationTime of operationData.OperationHourList){
-        let copyOpTime = new OperationHour(operationTime.OpenTime, operationTime.CloseTime)
-        copyOpTimeList.push(copyOpTime)
-      }
-      this.editOperationList.push(new OperationItem(operationData.Name, operationData.ShortName, copyOpTimeList, operationData.ClosedToday))
-    }
   }
   // onItemSelect(item: any){
   //   // console.log(this.ReservationSelectedItems)
@@ -204,64 +169,28 @@ export class EditMenuComponent implements OnInit {
   // onDeSelectAll(items: any){
   // }
 
-  // addOperationTime(inDayIdx, inOpTimeIdx){
-  //   let operationHourItem: any;
-  //   for(let operationData of this.menuDetails.OpenTiming[inDayIdx]){
-  //     operationHourItem.push(new OperationHour(operationData.OpenTime, operationData.CloseTime))
-  //     // operationHourItem.push(new OperationHour(operationTime[inOpTimeIdx].OpenTime, operationTime[inOpTimeIdx].CloseTime))
-  //   }
-  //   this.menuDetails.OpenTiming[inDayIdx].OperationHourList.push(operationHourItem)
-  //   // operationHourItem = {}
-  //   // this.menuDetails.OpenTiming[inDayIdx].OperationHourList.push(new OperationHour())
-  //   console.log(this.menuDetails.OpenTiming[0].OperationHourList)
-  //   console.log(this.menuDetails.OpenTiming)
-  // }
-
-  
 
   addOperationTime(inDayIdx, inOpTimeIdx){
-    let operationHourItem: any;
-    for(let operationData of this.menuDetails.OpenTiming[inDayIdx].OperationHourList){
-      operationHourItem = new OperationHour(operationData.OpenTime, operationData.CloseTime)
-    }
-    this.menuDetails.OpenTiming[inDayIdx].OperationHourList.push(operationHourItem)
+    this.menuDetails.OpenTiming[inDayIdx].OperationHourList.push(new OperationHour("08:00", "22:00"));
     console.log(this.menuDetails.OpenTiming)
   }
 
-
-  // addOperationTime(inDayIdx, inOpTimeIdx){
-  //   let env = this;
-  //   let operationOpenTime: any;
-  //   let operationCloseTime: any;
-  //   let copyOpTimeList = []
-  //   this.editOperationList = [];
-  //   let operationData: any
-  //   let operationTime: any;
-  //   let operationTimeItem: any;
-  //   for (operationData of this.menuDetails.OpenTiming){
-  //     for(let operationTime of operationData.OperationHourList){
-  //       operationTimeItem = new OperationHour(operationTime.OpenTime, operationTime.CloseTime)
-  //       copyOpTimeList.push(operationTimeItem)
-  //     }
-  //     // this.editOperationList.push(new OperationItem(operationData.Name, operationData.ShortName, copyOpTimeList, operationData.ClosedToday))
-  //   }
-  //   // this.editOperationList.push(new OperationItem(operationData.Name, operationData.ShortName, copyOpTimeList, operationData.ClosedToday))
-  //   // console.log(copyOpTimeList)
-  //   // this.menuDetails.OpenTiming[inDayIdx].operationHourList.push(copyOpTimeList)
-  //   console.log(this.editOperationList)
-  // }
-
-  // addOperationTime(inDayIdx, inOpTimeIdx) {
-  //   let operationItem = {OpenTime: '09:00', CloseTime: '05:00'}
-  //   this.menuDetails.OpenTiming[0].OperationHourList.push(operationItem)
-  //   // for(var n=0; n<this.menuDetails.OpenTiming.length; n++){
-  //   //   let operationData = this.menuDetails.OpenTiming[n].OperationHourList;
-  //   //   console.log(operationData)
-  //   // }
-  // }
-
   removeOperationTime(inDayIdx, inOpTimeIdx){
     this.menuDetails.OpenTiming[inDayIdx].OperationHourList.splice(inOpTimeIdx, 1)
+  }
+
+  openTimeChanged(event,dayIdx, i){
+    if(event == ""){
+      this.menuDetails.OpenTiming[dayIdx].OperationHourList[i].OpenTime = "00:00";
+    }
+    console.log(event);
+  }
+
+  closeTimeChanged(event,dayIdx, i){
+    if(event == ""){
+      this.menuDetails.OpenTiming[dayIdx].OperationHourList[i].CloseTime = "00:00";
+    }
+    console.log(event);
   }
 
   isJsonString(str) {
@@ -284,7 +213,7 @@ export class EditMenuComponent implements OnInit {
       for (let merchantInfoe of merchantInfoes){
         this.existingMerchants.push((merchantInfoe.UserName).toUpperCase())
       }
-      console.log(this.existingMerchants)
+      // console.log(this.existingMerchants)
     })
   }
 
@@ -292,16 +221,16 @@ export class EditMenuComponent implements OnInit {
     let token = localStorage.getItem("Token");
     let postOnlineMerchantUrl = global.host + "merchantinfoes" + "?token=" + token;
     let postOfflineMerchantUrl = global.host + "merchantinfoes" + "?token=" + token;
-    if(this.restaurant.valid){
+    if(this.menuDetails.UserName != undefined && this.menuDetails.Password != undefined && this.menuDetails.Mobile != undefined){
       //No tick the convert to online merchant checkbox, now online = offline onboard
-    if(!this.menuDetails.ConvertToOnboarding){
+    if(!this.menuDetails.ConverToOnboarding){
       this.offlineMerchantInfoes = {
         Id: this.menuDetails.Id,
-        CoverPhoto: this.menuDetails.CoverPhoto,
+        OutletPhoto: this.menuDetails.CoverPhoto,
         UserName: this.menuDetails.UserName,
         Password: this.menuDetails.Password,
         Email: this.menuDetails.Email,
-        Mobile: '+65-'+this.menuDetails.Mobile,
+        Mobile: this.menuDetails.Mobile,
         RestaurantName: this.menuDetails.RestaurantName,
         BusinessLegalName: this.menuDetails.BusinessLegalName,
         Country: this.menuDetails.Country,
@@ -339,7 +268,7 @@ export class EditMenuComponent implements OnInit {
         UserName: this.menuDetails.UserName,
         Password: this.menuDetails.Password,
         Email: this.menuDetails.Email,
-        Mobile: '+65-'+this.menuDetails.Mobile,
+        Mobile: this.menuDetails.Mobile,
         RestaurantName: this.menuDetails.RestaurantName,
         BusinessLegalName: this.menuDetails.BusinessLegalName,
         Country: this.menuDetails.Country,
@@ -351,7 +280,7 @@ export class EditMenuComponent implements OnInit {
       }
       console.log(this.onlineMerchantInfoes)
           this.http.post(postOnlineMerchantUrl, this.onlineMerchantInfoes, {}).map(res => res.json()).subscribe(data =>{
-            console.log(data)
+            // console.log(data)
             if(data['Message']==undefined){
               Swal({
                 position: 'center',

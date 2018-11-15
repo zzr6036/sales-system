@@ -38,9 +38,8 @@ export class PromotionService {
       Title: promotion.Title,
       Description: promotion.Description,
       Description2: promotion.Description2,
-      // Image: JSON.stringify(promotion.Image)
+      Image: promotion.Image
     };
-
     console.log(promInfo)
 
     let tokenNo = localStorage.getItem("Token");
