@@ -27,6 +27,7 @@ export class AssignPromotionUsersComponent implements OnInit {
   assignQty: Number;
   Message: String;
   Subject: string;
+  ExpiryDate: Date;
 
   //loading bar
   value = 0;
@@ -90,13 +91,7 @@ export class AssignPromotionUsersComponent implements OnInit {
   initSelectedUser() {
     this.selectedUsers = new Array<boolean>(this.userInfoes.length).fill(false);
   }
-  // ngAfterViewInit() {
-  //   const loadingBar = setInterval(() => {
-  //     this.value <this.userInfoes.length ? this.value++ : clearInterval(loadingBar);
-  //   }, 100);
-  //   console.log(this.value)
-  // }
-
+  
   BalanceRange() {
     let tokenNo = localStorage.getItem("Token");
     let userListUrl = global.host + "search/" + "user/" + "?keyword=" + "&token=" + tokenNo;
@@ -152,6 +147,9 @@ export class AssignPromotionUsersComponent implements OnInit {
     // Assign Promotion Code to selected user
     let tokenNo = localStorage.getItem("Token");
     let assignPromoCodeUrl = global.host + "promocodes/" + "?token=" + tokenNo;
+    let timeZoneDifference = (new Date()).getTimezoneOffset();
+    let expiryDateMoment = moment(this.ExpiryDate).toISOString();
+
     this.assignUsersPromoCode = {
       Id: this.promotionDetail.Id,
       Code: this.promotionDetail.Code,
@@ -176,6 +174,7 @@ export class AssignPromotionUsersComponent implements OnInit {
       CreatedByUserId: this.promotionDetail.CreatedByUserId,
       DeleteByUserId: this.promotionDetail.DeleteByUserId,
       Image: this.promotionDetail.Image,
+      ExpiryDate: expiryDateMoment,
       //Above attribute all duplicate, only assign to different to different userId 
       UserId: null
     };

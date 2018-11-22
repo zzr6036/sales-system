@@ -164,7 +164,6 @@ export class CreateuserEditComponent implements OnInit {
      this.businessLegalName = assignMerchantDetails["BusinessLegalName"];
      this.acra = assignMerchantDetails["ACRA"];
      this.registeredAddress = assignMerchantDetails["RegisteredAddress"];
-     this.qr = assignMerchantDetails["QR"];
      this.country = assignMerchantDetails["Country"];
      this.postalcode = assignMerchantDetails["PostalCode"];
      this.outletAddress = JSON.parse(assignMerchantDetails["OutletAddress"]);

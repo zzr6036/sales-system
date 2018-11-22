@@ -25,6 +25,15 @@ export class PromotionEditComponent implements OnInit {
   promotionCodes:any;
   statusSelections = ["active", "deleted", "expired"];
 
+  //HawkerCenters
+  HawkerCenterSelected = [];
+  HawkerCenterLists = [];
+  //search merchant Id function
+  merchantName: String;
+  merchantSearchItems: Array<any> = [];
+  merchantSelected = [];
+  searchSelectedMerchantInfo: Array<any> = [];
+
    //Expired checking
    public EndTime: String;
    EndTimeArr: Array<any> = [];
@@ -62,7 +71,8 @@ export class PromotionEditComponent implements OnInit {
     this.promotionDetail.Description = assignPromotionCodes["Description"];
     this.promotionDetail.Description2 = assignPromotionCodes["Description2"];
     this.promotionDetail.Status = assignPromotionCodes["Status"];
-    this.promotionDetail.Image = JSON.stringify(assignPromotionCodes["Image"]);
+    this.promotionDetail.Image = assignPromotionCodes["Image"];
+    this.promotionDetail.HawkerCenterId = assignPromotionCodes["HawkerCenterId"];
     console.log(this.promotionDetail.Image)
 
     this.expireCheck();
@@ -78,26 +88,82 @@ export class PromotionEditComponent implements OnInit {
       this.buttonName = "Assign to Merchant";
     }
   }
-  _handleReaderLoaded(readerEvt) {
-    var reader = readerEvt.target;
-    this.promotionDetail.Image = reader.result;
-    this.loaded = true;
+
+  searchHawerCenter(){
+    let tokenNo = localStorage.getItem('Token');
+    let getHawkerCenter = global.host + "HawkerCenters" + "?token=" + tokenNo;
+    this.http.get(getHawkerCenter, {}).map(res => res.json()).subscribe(data => {
+      // console.log(data)
+      if(data['Message']){
+        console.log(data['Message']);
+      }
+      else{
+        this.HawkerCenterLists = data;
+        this.initSelectedHawkerCenters();
+      }
+    })
   }
-  handleFileSelect(evt){
-    var file = evt.dataTransfer ? evt.dataTransfer.files[0]:evt.target.files[0];
-    if (file == undefined){
-      this.promotionDetail.Image = undefined
-      return;
+
+  initSelectedHawkerCenters(){
+    this.HawkerCenterSelected = new Array<boolean>(this.HawkerCenterLists.length).fill(false)
+  }
+  HawkerCenterSelection(){
+    let i=0;
+    for(let isSelected of this.HawkerCenterSelected){
+      if(isSelected){
+        this.promotionDetail.HawkerCenterId = this.HawkerCenterLists[i].Id;
+      }
+      ++i;
     }
-    var pattern = /image-*/;
-    var reader = new FileReader();
-    if(!file.type.match(pattern)){
-      window.alert("invaild format");
-      return;
+    // console.log(this.promotionDetail.HawkerCenterId)
+  }
+
+  searchMerchant(){
+    let tokenNo = localStorage.getItem("Token");
+    let searchUrl = global.host + "Search/" + "?keyword=" + this.merchantName + "&token=" + tokenNo;
+    (!this.merchantName)?
+    alert('Search can not be empty'):
+    this.http.get(searchUrl, {}).map(res => res.json()).subscribe(searchItem => {
+      // console.log(searchItem);
+      if(searchItem.length>0){
+        this.merchantSearchItems = searchItem;
+        // console.log(this.merchantSearchItems)
+      }
+      else{
+        alert('Merchant is not existing...')
+      }
+    })
+  }
+
+  initSelectedMerchantId(){
+    this.merchantSelected = new Array<boolean>(this.merchantSearchItems.length).fill(false);
+  }
+
+  selectedMerchantInfo() {
+    let i=0;
+    for(let isMerchantSelected of this.merchantSelected){
+      if(isMerchantSelected){
+        this.searchSelectedMerchantInfo = this.merchantSearchItems[i];
+      }
+      ++i;
     }
-    this.loaded = false;
-    reader.onload = this._handleReaderLoaded.bind(this);
-    reader.readAsDataURL(file);
+    // console.log(this.searchSelectedMerchantInfo)
+  }
+
+  confirmMerchant(){
+    this.selectedMerchantInfo();
+    this.promotionDetail.MerchantId = this.searchSelectedMerchantInfo['Id'];
+  }
+
+  handleFileSelect(event){
+    if(event.target.files && event.target.files[0]){
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = e => {
+        this.promotionDetail.Image = reader.result;
+      }
+    reader.readAsDataURL(file)
+    }
   }
 
   expireCheck(){
@@ -120,6 +186,7 @@ export class PromotionEditComponent implements OnInit {
       "Description": this.promotionDetail.Description,
       "Description2": this.promotionDetail.Description2,
       "Image": this.promotionDetail.Image,
+      "HawkerCenterId": this.promotionDetail.HawkerCenterId,
       "Status": 'expired',
       // "Image": JSON.stringify(this.promotionDetail.Image),
     }
@@ -140,11 +207,15 @@ export class PromotionEditComponent implements OnInit {
   }
 
   updatePromotion(){
+    let timeZoneDifference = (new Date()).getTimezoneOffset();
+    let endDateMoment = moment(this.promotionDetail.EndTime).toISOString();
+    let startDateMoment = moment(this.promotionDetail.StartTime).toISOString();
+
     const promInfo = {
       "Id":  this.promotionDetail.Id,
       "Code": this.promotionDetail.Code,
-      "StartTime": this.promotionDetail.StartTime,
-      "EndTime": this.promotionDetail.EndTime,
+      "StartTime": startDateMoment,
+      "EndTime": endDateMoment,
       "Qty": this.promotionDetail.Qty,
       "MerchantId": this.promotionDetail.MerchantId,
       "IsPercent": this.promotionDetail.IsPercent,
@@ -160,6 +231,7 @@ export class PromotionEditComponent implements OnInit {
       "Description2": this.promotionDetail.Description2,
       "Image": this.promotionDetail.Image,
       "Status": this.promotionDetail.Status,
+      "HawkerCenterId": this.promotionDetail.HawkerCenterId,
       // "Image": JSON.stringify(this.promotionDetail.Image),
     }
     this.promotionCodes = localStorage.getItem("EditingPromoCode");

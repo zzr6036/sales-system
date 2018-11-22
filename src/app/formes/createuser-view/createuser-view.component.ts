@@ -155,7 +155,6 @@ export class CreateuserViewComponent implements OnInit {
      this.acra = assignMerchantDetails["ACRA"];
      this.registeredAddress = assignMerchantDetails["RegisteredAddress"];
      this.outletAddress = JSON.parse(assignMerchantDetails["OutletAddress"]);
-     this.qr = assignMerchantDetails["QR"];
      this.country = assignMerchantDetails["Country"];
      this.postalcode = assignMerchantDetails["PostalCode"];
      this.servChargeRate = assignMerchantDetails["ServChargeRate"];

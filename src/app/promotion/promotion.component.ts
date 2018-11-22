@@ -191,19 +191,11 @@ export class PromotionComponent implements OnInit {
 
   loadPromotionList(){
     this.promotionService.getPromotionList().subscribe(data =>{
-      console.log(data)
+      // console.log(data)
       if(data["Message"]){
         console.log(data["Message"]);
       }
       else{
-        // for(var i=0; i<data.length; i++){
-        //   if(data[i]['EndTime']>=this.currentDate){
-        //     this.promotionCodes.push(data[i])
-        //   }
-        //   else{
-        //     this.expiredPromotionCodes.push(data[i])
-        //   }
-        // }
         this.promotionCodes = data;
       }
     }, error => {
@@ -235,91 +227,6 @@ export class PromotionComponent implements OnInit {
     this.selectUser.push(e);
     console.log(this.selectUser)
   }
-
-  // searchUser(){
-  //   // console.log(this.selectUser);
-  //   let tokenNo = localStorage.getItem("Token");
-  //    let mobileNo = this.MobileNumber;
-  //    let getResUrl = global.host + "search" + "user" + "?keyword=" + mobileNo + "&token="+ tokenNo;
-
-  //   (!this.modeluser)?
-  //   this.alert={class:"alert-danger", message:"Search can not be empty"}:
-  //   this.http.get(`http://xindotsbackend.azurewebsites.net/_xin/api/search/user/?keyword=${this.modeluser}&token=${localStorage.getItem("Token")}`).
-  //   map(res => res.json()).subscribe(data => {
-  //     // console.log(data);
-  //     this.users = data;
-  //     // console.log(this.users);
-
-  //     if(!true){
-  //       this.alert ={
-  //         class: "alert-danger",
-  //         message:"Server error, please try again"
-  //       };
-  //     }
-  //   }), error => {
-  //     console.log(error);
-  //   }
-  // }
-  
-  //Unused, to be update
-  // assignCode(){
-  //   // console.log(this.codeAssign);
-  //   let tokenNo = localStorage.getItem("Token");
-  //    let mobileNo = this.MobileNumber;
-  //    let codeAssignNo = this.codeAssign;
-  //    let getPromUrl = global.host + "promocode" + "?promocode=" + codeAssignNo;
-
-  //   // let getPromUrl = `http://xindotsbackend.azurewebsites.net/_xin/api/promocode/?promocode=${this.codeAssign}`;
-  //   this.http.get(getPromUrl, {}).map(res => res.json()).subscribe(data =>{
-  //     // console.log(data);
-  //     // console.log(data["Code"]);
-  //     let promCodeAssign = data["Code"];
-  //     let UserId = this.UserId;
-  //     // console.log(UserId);
-
-  //     const userPromCode ={
-  //       "Id": data["Id"],
-  //       "Code": data["Code"],
-  //       "StartTime": data["StartTime"],
-  //       "EndTime": data["EndTime"],
-  //       "Qty": data["Qty"],
-  //       "MerchantId": data["MerchantId"],
-  //       "IsPercent": data["IsPercent"],
-  //       "IsJoint": data["IsJoint"],
-  //       "IsSpecial": data["IsSpecial"],
-  //       "MaxRedemptPerUser": data["MaxRedemptPerUser"],
-  //       "Amount": data["Amount"],
-  //       "MinUsed": data["MinUsed"],
-  //       "MaxDiscount": data["MaxDiscount"],
-  //       "Title": data["Title"],
-  //       "Description": data["Description"],
-  //       "Description2": data["Description2"],
-  //       "Status": data["Status"],
-  //       "CreatedByUserId": data["CreatedByUserId"],
-  //       "DeleteByUser": data["DeleteByUser"],
-  //       "UserId": UserId,
-  //     }
-  //     let tokenNo = localStorage.getItem("Token");
-  //     let postUserUrl = global.host + "promocodes" + "?token=" + tokenNo;
-
-  //     // let postUserUrl = `http://xindotsbackend.azurewebsites.net/_xin/api/promocodes/?token=${localStorage.getItem('Token')}`;
-  //     this.http.post(postUserUrl, userPromCode, {}).map(res => res.json()).subscribe(data => {
-  //       // console.log(data);
-  //       if(data["Message"] == undefined ){
-  //         console.log(data["Message"]);
-  //         this.router.navigate(['/promotion']);
-  //       }
-  //       else{
-  //         console.log(data["Message"]);
-  //       }
-  //     }, error=>{
-  //       console.log(error);
-  //     })
-  //   })
-
-    
-
-  // }
 }
 
 

@@ -14,6 +14,7 @@ import { log } from "util";
 import * as moment from 'moment';
 import { Md5 } from "ts-md5/dist/md5";
 import Swal from "sweetalert2";
+import { window } from "rxjs/operators/window";
 
 @Component({
   selector: "app-promotion-code",
@@ -24,6 +25,14 @@ export class PromotionCodeComponent implements OnInit {
   promotionDetail: PromotionView = new PromotionView();
   Id: Number;
   promocodeInfoes: any;
+  //HawkerCenters
+  HawkerCenterSelected = [];
+  HawkerCenterLists = [];
+  //search merchant Id function
+  merchantName: String;
+  merchantSearchItems: Array<any> = [];
+  merchantSelected = [];
+  searchSelectedMerchantInfo: Array<any> = [];
 
   //Toggle for show
   show: Boolean = false;
@@ -38,9 +47,6 @@ export class PromotionCodeComponent implements OnInit {
   CodeArr: Array<any> = [];
   //upload image
   loaded = false;
-  //HawkerCenters
-  HawkerCenterSelected = [];
-  HawkerCenterLists = [];
 
   constructor(
     public http: Http,
@@ -78,6 +84,7 @@ export class PromotionCodeComponent implements OnInit {
       }
     })
   }
+
   initSelectedHawkerCenters(){
     this.HawkerCenterSelected = new Array<boolean>(this.HawkerCenterLists.length).fill(false)
   }
@@ -89,51 +96,74 @@ export class PromotionCodeComponent implements OnInit {
       }
       ++i;
     }
-    console.log(this.promotionDetail.HawkerCenterId)
+    // console.log(this.promotionDetail.HawkerCenterId)
   }
 
-  // onSelectFile(event){
-  //   if(event.target.files && event.target.files[0]){
-  //     var reader = new FileReader();
-  //     reader.readAsDataURL(event.target.files[0]); // read file as data url
-  //     reader.onload = (event) => {
-  //       this.promotionDetail.Image = reader.result;
-  //     }
-  //   }
-  // }
-
-  _handleReaderLoaded(readerEvt) {
-    var reader = readerEvt.target;
-    this.promotionDetail.Image = reader.result;
-    this.loaded = true;
+  searchMerchant(){
+    let tokenNo = localStorage.getItem("Token");
+    let searchUrl = global.host + "Search/" + "?keyword=" + this.merchantName + "&token=" + tokenNo;
+    (!this.merchantName)?
+    alert('Search can not be empty'):
+    this.http.get(searchUrl, {}).map(res => res.json()).subscribe(searchItem => {
+      // console.log(searchItem);
+      if(searchItem.length>0){
+        this.merchantSearchItems = searchItem;
+        // console.log(this.merchantSearchItems)
+      }
+      else{
+        alert('Merchant is not existing...')
+      }
+    })
   }
-  handleFileSelect(evt){
-    var file = evt.dataTransfer ? evt.dataTransfer.files[0]:evt.target.files[0];
-    if (file == undefined){
-      this.promotionDetail.Image = undefined
-      return;
+
+  initSelectedMerchantId(){
+    this.merchantSelected = new Array<boolean>(this.merchantSearchItems.length).fill(false);
+  }
+
+  selectedMerchantInfo() {
+    let i=0;
+    for(let isMerchantSelected of this.merchantSelected){
+      if(isMerchantSelected){
+        this.searchSelectedMerchantInfo = this.merchantSearchItems[i];
+      }
+      ++i;
     }
-    var pattern = /image-*/;
-    var reader = new FileReader();
-    if(!file.type.match(pattern)){
-      window.alert("invaild format");
-      return;
-    }
-    this.loaded = false;
-    reader.onload = this._handleReaderLoaded.bind(this);
-    reader.readAsDataURL(file);
+    // console.log(this.searchSelectedMerchantInfo)
   }
 
+  confirmMerchant(){
+    this.selectedMerchantInfo();
+    this.promotionDetail.MerchantId = this.searchSelectedMerchantInfo['Id'];
+  }
+
+  handleFileSelect(event){
+    if(event.target.files && event.target.files[0]){
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = e => {
+        this.promotionDetail.Image = reader.result;
+      }
+    reader.readAsDataURL(file)
+    }
+  }
   addPromotion(){
     // localStorage.setItem("PromoCode", this.promotionDetail.Code);
     // this.promotionService.addPromotion(this.promotionDetail);
     let tokenNo = localStorage.getItem("Token");
     let addPromoCodeUrl = global.host + "addcode" + "?token=" + tokenNo;
+    let timeZoneDifference = (new Date()).getTimezoneOffset();
+    // console.log(timeZoneDifference);
+
+    // let endDateMoment = moment(this.promotionDetail.EndTime).add(timeZoneDifference, "minute").toISOString();
+    // let startDateMoment = moment(this.promotionDetail.StartTime).add(timeZoneDifference, "minute").toISOString();
+    let endDateMoment = moment(this.promotionDetail.EndTime).toISOString();
+    let startDateMoment = moment(this.promotionDetail.StartTime).toISOString();
     this.promocodeInfoes = {
       Id: this.promotionDetail.Id,
       Code: this.promotionDetail.Code,
-      StartTime: this.promotionDetail.StartTime,
-      EndTime: this.promotionDetail.EndTime,
+      StartTime: startDateMoment,
+      // EndTime: this.promotionDetail.EndTime,
+      EndTime: endDateMoment,
       Qty: this.promotionDetail.Qty,
       MerchantId: this.promotionDetail.MerchantId,
       IsPercent: this.promotionDetail.IsPercent,
@@ -147,7 +177,8 @@ export class PromotionCodeComponent implements OnInit {
       Title: this.promotionDetail.Title,
       Description: this.promotionDetail.Description,
       Description2: this.promotionDetail.Description2,
-      Image: this.promotionDetail.Image
+      Image: this.promotionDetail.Image,
+      HawkerCenterId: this.promotionDetail.HawkerCenterId,
     }
     // console.log(this.promocodeInfoes);
     this.http.post(addPromoCodeUrl, this.promocodeInfoes, {}).map(res => res.json()).subscribe(promocodeDatas =>{
@@ -165,7 +196,7 @@ export class PromotionCodeComponent implements OnInit {
       }
       else {
         console.log(promocodeDatas['Message']);
-        window.alert(promocodeDatas['Message']);
+        alert(promocodeDatas['Message']);
       }
     }, error =>{
       console.log(error)
