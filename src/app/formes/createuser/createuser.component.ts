@@ -550,7 +550,6 @@ export class CreateuserComponent implements OnInit {
         NoOfOutlet: this.numberOfOutlet,
         LegalEntityType: this.legalEntitySelection,
         OpenTiming: JSON.stringify(this.OpenTiming),
-        //image to base64
         NricFrontImage:  this.nricFrontImage,
         NricBackImage: this.nricBackImage,
         NeaLicenseImage: this.neaLicenseImage,

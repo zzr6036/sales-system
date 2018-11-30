@@ -108,7 +108,7 @@
     </div>
 
     <div class="row">
-      <div class="col col-lg-6">
+      <div class="col col-lg-6 mt-3">
         <h6 class="card-title">Please select following: </h6>
       </div>
     </div>
@@ -132,8 +132,18 @@
           <th style="width: 5%;">Email</th>
           <th style="width: 5%;">Balance</th>
           <th style="width: 8%;">
-            <input type="checkbox" name="selectAll" [(ngModel)]="selectedAll" (change)="checkAll()">
-            Select/Deselect All
+            <div class="dropdown">
+              <button class="btn btn-info dropdown-toggle" type="button" id="dropdownSelectionButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Selection
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownSelectionButton">
+                <input class="dropdown-item" type="checkbox" name="selectAll" [(ngModel)]="selectedAll" (change)="checkAll()">
+                  Select/Deselect All
+                <div class="dropdown-divider"></div>
+              </div>
+            </div>
+            <!-- <input type="checkbox" name="selectAll" [(ngModel)]="selectedAll" (change)="checkAll()">
+            Select/Deselect All -->
           </th>
         </tr>
       </thead>

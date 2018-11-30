@@ -64,7 +64,7 @@ export class PromotionCodeComponent implements OnInit {
 
     if(this.show){
       this.buttonName = "Not Assign to Merchant";
-    }
+    } 
     else {
       this.buttonName = "Assign to Merchant";
     }
