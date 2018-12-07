@@ -7,6 +7,7 @@ export class MenuView{
     Password: String;
     Email: String;
     Mobile: String;
+    MobileFormat: String;
     RestaurantName: String;
     BusinessLegalName: String;
     Country: String;

@@ -146,18 +146,16 @@ export class PromotionCodeComponent implements OnInit {
     reader.readAsDataURL(file)
     }
   }
+
   addPromotion(){
-    // localStorage.setItem("PromoCode", this.promotionDetail.Code);
-    // this.promotionService.addPromotion(this.promotionDetail);
     let tokenNo = localStorage.getItem("Token");
     let addPromoCodeUrl = global.host + "addcode" + "?token=" + tokenNo;
     let timeZoneDifference = (new Date()).getTimezoneOffset();
-    // console.log(timeZoneDifference);
+    // let endDateMoment = moment(this.promotionDetail.EndTime).toISOString();
+    // let startDateMoment = moment(this.promotionDetail.StartTime).toISOString();
+    let endDateMoment = moment((this.promotionDetail.EndTime).toString()).subtract(8,'hours').format('YYYY-MM-DDTHH:mm:ss');
+    let startDateMoment = moment((this.promotionDetail.StartTime).toString()).subtract(8,'hours').format('YYYY-MM-DDTHH:mm:ss');
 
-    // let endDateMoment = moment(this.promotionDetail.EndTime).add(timeZoneDifference, "minute").toISOString();
-    // let startDateMoment = moment(this.promotionDetail.StartTime).add(timeZoneDifference, "minute").toISOString();
-    let endDateMoment = moment(this.promotionDetail.EndTime).toISOString();
-    let startDateMoment = moment(this.promotionDetail.StartTime).toISOString();
     this.promocodeInfoes = {
       Id: this.promotionDetail.Id,
       Code: this.promotionDetail.Code,

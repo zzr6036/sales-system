@@ -40,6 +40,10 @@ export class AssignPromotionUsersComponent implements OnInit {
   userList: Array<any> = [];
   // Filter by balance
 
+  // Even/Old Selection
+  selectedOdd = false;
+  selectedEven = false;
+
   constructor(
     public http: Http,
     private router: Router,
@@ -54,7 +58,11 @@ export class AssignPromotionUsersComponent implements OnInit {
     this.promotionDetail.Title = assignPromoCodeAll["Title"];
     this.promotionDetail.MinUsed = assignPromoCodeAll["MinUsed"];
     this.promotionDetail.StartTime = assignPromoCodeAll["StartTime"];
+    // let startTime = moment(assignPromoCodeAll["StartTime"]).add(8, 'hours').format('YYYY-MM-DDTHH:mm:ss');
+    // this.promotionDetail.StartTime = startTime;
     this.promotionDetail.EndTime = assignPromoCodeAll["EndTime"];
+    // let endTime = moment(assignPromoCodeAll["EndTime"]).add(8, 'hours').format('YYYY-MM-DDTHH:mm:ss');
+    // this.promotionDetail.EndTime = endTime;
     this.promotionDetail.Qty = assignPromoCodeAll["Qty"];
     this.promotionDetail.IsSpecial = assignPromoCodeAll["IsSpecial"];
     this.promotionDetail.IsPercent = assignPromoCodeAll["IsPencent"];
@@ -73,6 +81,7 @@ export class AssignPromotionUsersComponent implements OnInit {
 
     let tokenNo = localStorage.getItem("Token");
     let getUserUrl = global.host + "search/" + "user/" + "?keyword=" + "&token=" + tokenNo;
+    // console.log(getUserUrl);
     this.http.get(getUserUrl, {}).map(res => res.json()).subscribe(data => {
           if (data["Message"]) {
             console.log(data["Message"]);
@@ -123,6 +132,7 @@ export class AssignPromotionUsersComponent implements OnInit {
   checkAll() {
     if (this.selectedAll) {
       this.selectedUsers = new Array<boolean>(this.userInfoes.length).fill(true);
+      // console.log(this.selectedUsers)
       this.selectedUsersObj = this.userInfoes;
       // console.log(this.selectedUsersObj)
     } else {
@@ -130,6 +140,40 @@ export class AssignPromotionUsersComponent implements OnInit {
       this.selectedUsersObj = [];
     }
     // console.log(this.selectedUsers)
+  }
+
+  checkOdd(){
+    this.selectedUsers = [];
+    if(this.selectedOdd) {
+      for (var i=0; i<this.userInfoes.length; i++){
+        if(this.userInfoes[i].Id % 2 == 1){
+          this.selectedUsers.push(true);
+          this.selectedUsersObj.push(this.userInfoes[i]);
+        }
+        else{
+          this.selectedUsers.push(false)
+        }
+      }
+      console.log(this.selectedUsers);
+      console.log(this.selectedUsersObj);
+    }
+  }
+
+  checkEven(){
+    this.selectedUsers = [];
+    if(this.selectedEven) {
+      for(var i=0; i<this.userInfoes.length; i++){
+        if(this.userInfoes[i].Id % 2 == 0){
+          this.selectedUsers.push(true);
+          this.selectedUsersObj.push(this.userInfoes[i]);
+        }
+        else {
+          this.selectedUsers.push(false);
+        }
+      }
+      console.log(this.selectedUsers);
+      console.log(this.selectedUsersObj);
+    }
   }
 
   submit() {
@@ -187,6 +231,7 @@ export class AssignPromotionUsersComponent implements OnInit {
     if(inIndex < this.selectedUsersObj.length){
       this.assignUsersPromoCode.UserId = this.selectedUsersObj[inIndex]["Id"];
       if (this.promotionDetail.Qty > this.selectedUsersObj.length) {
+        console.log(this.assignUsersPromoCode)
         this.http.post(assignPromoCodeUrl, this.assignUsersPromoCode, {}).map(res => res.json()).subscribe(data => {
           // If post each user successfully,  call recursiveSubmit() function again and assign&check to next user   
           if (data["Message"] == undefined) {
@@ -205,7 +250,8 @@ export class AssignPromotionUsersComponent implements OnInit {
               this.recursiveSubmit(inIndex, assignPromoCodeUrl);
             }
           );
-      } else {
+      } 
+      else {
         Swal({
           position: "center",
           type: "warning",

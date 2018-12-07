@@ -71,7 +71,11 @@ export class AssignPromotionComponent implements OnInit {
     this.promotionDetail.Id = assignPromotionCodes["Id"];
     this.promotionDetail.Code = assignPromotionCodes["Code"];
     this.promotionDetail.StartTime = assignPromotionCodes["StartTime"];
+    // let startTime = moment(assignPromotionCodes["StartTime"]).add(8, 'hours').format('YYYY-MM-DDTHH:mm:ss');
+    // this.promotionDetail.StartTime = startTime;
     this.promotionDetail.EndTime = assignPromotionCodes["EndTime"];
+    // let endTime = moment(assignPromotionCodes["EndTime"]).add(8, 'hours').format('YYYY-MM-DDTHH:mm:ss');
+    // this.promotionDetail.EndTime = endTime;
     this.promotionDetail.IsPercent = assignPromotionCodes["IsPercent"];
     this.promotionDetail.IsJoint = assignPromotionCodes["IsJoint"];
     this.promotionDetail.IsSpecial = assignPromotionCodes["IsSpecial"];
@@ -259,7 +263,7 @@ export class AssignPromotionComponent implements OnInit {
       "Status": 'expired',
     }
     this.TodayTime = moment().format();//String
-    this.EndTime = moment(expirePromInfo['EndTime']).format() //String
+    this.EndTime = moment((expirePromInfo['EndTime']).toString()).format() //String
     let tokenNo = localStorage.getItem("Token");
     let editExpireUrl = global.host + "updatecode" + "?token=" + tokenNo;
     // const editExpireUrl = `http://xindotsbackend.azurewebsites.net/_xin/api/updatecode/?token=${localStorage.getItem("Token")}`;

@@ -3,8 +3,8 @@ import { Md5 } from "ts-md5/dist/md5";
 export class PromotionView {
     Id: Number;
     Code: String;
-    StartTime: Date;
-    EndTime: Date; 
+    StartTime: String
+    EndTime: String; 
     IsPercent: Boolean;
     IsJoint: Boolean;
     IsSpecial: Boolean;

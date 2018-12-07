@@ -117,12 +117,14 @@
       <div class="col col-lg-6 mt-2">
         <!-- <mdb-progress [value]="value" min="0" max="100" type="success" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">{{value}} %</mdb-progress> -->
       </div>
-      
+
       <div class="col col-lg-6 mt-2">
-        <button type="button" id="submit" name="submit" class="btn btn-info" (click)="submit()"><strong>Submit</strong></button>
+        <button type="button" id="submit" name="submit" class="btn btn-info" (click)="submit()">
+          <strong>Submit</strong>
+        </button>
       </div>
     </div>
-    
+
     <table class="table table-bordered table-striped" id="users-table">
       <thead>
         <tr>
@@ -132,13 +134,41 @@
           <th style="width: 5%;">Email</th>
           <th style="width: 5%;">Balance</th>
           <th style="width: 8%;">
+
             <div class="dropdown">
               <button class="btn btn-info dropdown-toggle" type="button" id="dropdownSelectionButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Selection
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownSelectionButton">
-                <input class="dropdown-item" type="checkbox" name="selectAll" [(ngModel)]="selectedAll" (change)="checkAll()">
-                  Select/Deselect All
+
+                <div class="row">
+                  <div class="col col-lg-2 mt-1">
+                    <input class="dropdown-item" id="selectAllDropdown" type="checkbox" name="selectAll" [(ngModel)]="selectedAll" *ngIf="!(selectedEven || selectedOdd)" (change)="checkAll()">
+                  </div>
+                  <div class="col col-lg-10">
+                    Select/Deselect All
+                  </div>
+                </div>
+                <div class="dropdown-divider"></div>
+
+                <div class="row">
+                  <div class="col col-lg-2 mt-1">
+                    <input class="dropdown-item" id="selectOddDropdown" type="checkbox" name="selectOdd" [(ngModel)]="selectedOdd" *ngIf="!(selectedEven || selectedAll)" (change)="checkOdd()">
+                  </div>
+                  <div class="col col-lg-10">
+                    Odd Selected
+                  </div>
+                </div>
+                <div class="dropdown-divider"></div>
+
+                <div class="row">
+                  <div class="col col-lg-2 mt-1">
+                    <input class="dropdown-item" id="selectedEvenDropdown" type="checkbox" name="selectEven" [(ngModel)]="selectedEven" *ngIf="!(selectedOdd || selectedAll)" (change)="checkEven()">
+                  </div>
+                  <div class="col col-lg-10">
+                    Even Selected
+                  </div>
+                </div>
                 <div class="dropdown-divider"></div>
               </div>
             </div>
@@ -154,12 +184,16 @@
           <th>{{userInfo.MobileNumber}}</th>
           <th>{{userInfo.Email}}</th>
           <th>{{userInfo.XinDollar}}</th>
-          <th><input type="checkbox" name="selectUser" [(ngModel)]="selectedUsers[i]"></th>
+          <th>
+            <input type="checkbox" name="selectUser" [(ngModel)]="selectedUsers[i]">
+          </th>
         </tr>
       </tbody>
     </table>
     <!-- {{selectedUsers | json}} -->
     <!-- <div *ngIf="isSendingPromo">{{sendingAmount}}/{{sendingMaxAmount}}</div> -->
-    <button type="button" id="submit" name="submit" class="btn btn-info" (click)="submit()"><strong>Submit</strong></button>
+    <button type="button" id="submit" name="submit" class="btn btn-info" (click)="submit()">
+      <strong>Submit</strong>
+    </button>
   </div>
 </div>

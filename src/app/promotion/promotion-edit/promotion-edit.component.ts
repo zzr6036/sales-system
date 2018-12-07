@@ -55,8 +55,14 @@ export class PromotionEditComponent implements OnInit {
     let assignPromotionCodes = JSON.parse(this.promotionCodes);
     this.promotionDetail.Id = assignPromotionCodes["Id"];
     this.promotionDetail.Code = assignPromotionCodes["Code"];
+
     this.promotionDetail.StartTime = assignPromotionCodes["StartTime"];
+    // let startTime = moment(assignPromotionCodes["StartTime"]).add(8, 'hours').format('YYYY-MM-DDTHH:mm:ss');
+    // this.promotionDetail.StartTime = startTime;
     this.promotionDetail.EndTime = assignPromotionCodes["EndTime"];
+    // let endTime = moment(assignPromotionCodes["EndTime"]).add(8, 'hours').format('YYYY-MM-DDTHH:mm:ss');
+    // this.promotionDetail.EndTime = endTime;
+
     this.promotionDetail.IsPercent = assignPromotionCodes["IsPercent"];
     this.promotionDetail.IsJoint = assignPromotionCodes["IsJoint"];
     this.promotionDetail.IsSpecial = assignPromotionCodes["IsSpecial"];
@@ -73,7 +79,7 @@ export class PromotionEditComponent implements OnInit {
     this.promotionDetail.Status = assignPromotionCodes["Status"];
     this.promotionDetail.Image = assignPromotionCodes["Image"];
     this.promotionDetail.HawkerCenterId = assignPromotionCodes["HawkerCenterId"];
-    console.log(this.promotionDetail.Image)
+    // console.log(this.promotionDetail.Image)
 
     this.expireCheck();
   }
@@ -191,7 +197,7 @@ export class PromotionEditComponent implements OnInit {
       // "Image": JSON.stringify(this.promotionDetail.Image),
     }
     this.TodayTime = moment().format();//String
-    this.EndTime = moment(expirePromInfo['EndTime']).format() //String
+    // this.EndTime = moment(expirePromInfo['EndTime']).format() //String
 
     // console.log(this.TodayTime);
     // console.log(this.EndTime);
@@ -208,14 +214,18 @@ export class PromotionEditComponent implements OnInit {
 
   updatePromotion(){
     let timeZoneDifference = (new Date()).getTimezoneOffset();
-    let endDateMoment = moment(this.promotionDetail.EndTime).toISOString();
-    let startDateMoment = moment(this.promotionDetail.StartTime).toISOString();
+    // let endDateMoment = moment(this.promotionDetail.EndTime).toISOString();
+    // let startDateMoment = moment(this.promotionDetail.StartTime).toISOString();
+    let endDateMoment = moment((this.promotionDetail.EndTime).toString()).subtract(8,'hours').format('YYYY-MM-DDTHH:mm:ss');
+    let startDateMoment = moment((this.promotionDetail.StartTime).toString()).subtract(8,'hours').format('YYYY-MM-DDTHH:mm:ss');
 
     const promInfo = {
       "Id":  this.promotionDetail.Id,
       "Code": this.promotionDetail.Code,
       "StartTime": startDateMoment,
       "EndTime": endDateMoment,
+      // "StartTime": this.promotionDetail.StartTime,
+      // "EndTime": this.promotionDetail.EndTime,
       "Qty": this.promotionDetail.Qty,
       "MerchantId": this.promotionDetail.MerchantId,
       "IsPercent": this.promotionDetail.IsPercent,

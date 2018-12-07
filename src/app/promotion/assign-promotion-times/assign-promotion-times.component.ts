@@ -46,7 +46,11 @@ export class AssignPromotionTimesComponent implements OnInit {
     this.promotionDetail.Title = assignPromoCodeAll["Title"];
     this.promotionDetail.MinUsed = assignPromoCodeAll["MinUsed"];
     this.promotionDetail.StartTime = assignPromoCodeAll["StartTime"];
+    // let startTime = moment(assignPromoCodeAll["StartTime"]).add(8, 'hours').format('YYYY-MM-DDTHH:mm:ss');
+    // this.promotionDetail.StartTime = startTime;
     this.promotionDetail.EndTime = assignPromoCodeAll["EndTime"];
+    // let endTime = moment(assignPromoCodeAll["EndTime"]).add(8, 'hours').format('YYYY-MM-DDTHH:mm:ss');
+    // this.promotionDetail.EndTime = endTime;
     this.promotionDetail.Qty = assignPromoCodeAll["Qty"];
     this.promotionDetail.IsSpecial = assignPromoCodeAll["IsSpecial"];
     this.promotionDetail.IsPercent = assignPromoCodeAll["IsPencent"];

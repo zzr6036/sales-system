@@ -20,7 +20,7 @@ class OperationHour {
   OpenTime;
   CloseTime;
 
-  constructor(inOpenTime = '08:00', inCloseTime  = '22:00'){
+  constructor(inOpenTime = '11:00', inCloseTime  = '14:00'){
     this.OpenTime = inOpenTime;
     this.CloseTime = inCloseTime;
   }
@@ -193,7 +193,7 @@ export class CreateuserViewComponent implements OnInit {
   }
 
   addOperationTime(inDayIdx, inOpTimeIdx){
-    this.OpenTiming[inDayIdx].OperationHourList.push(new OperationHour("08:00", "22:00"));
+    this.OpenTiming[inDayIdx].OperationHourList.push(new OperationHour("11:00", "14:00"));
     console.log(this.OpenTiming)
   }
 

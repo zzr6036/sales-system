@@ -75,6 +75,7 @@ export class EditMenuComponent implements OnInit {
               private router: Router,) { }
 
   ngOnInit() {
+    
     this.editMerchantInfoes = localStorage.getItem('OfflineMerchantInfoes');
     let assignMerchantInfoes = JSON.parse(this.editMerchantInfoes);
     this.menuDetails.Id = assignMerchantInfoes['Id'];
@@ -171,7 +172,7 @@ export class EditMenuComponent implements OnInit {
 
 
   addOperationTime(inDayIdx, inOpTimeIdx){
-    this.menuDetails.OpenTiming[inDayIdx].OperationHourList.push(new OperationHour("08:00", "22:00"));
+    this.menuDetails.OpenTiming[inDayIdx].OperationHourList.push(new OperationHour("11:00", "14:00"));
     console.log(this.menuDetails.OpenTiming)
   }
 
@@ -221,7 +222,7 @@ export class EditMenuComponent implements OnInit {
     let token = localStorage.getItem("Token");
     let postOnlineMerchantUrl = global.host + "merchantinfoes" + "?token=" + token;
     let postOfflineMerchantUrl = global.host + "merchantinfoes" + "?token=" + token;
-    if(this.menuDetails.UserName != undefined && this.menuDetails.Password != undefined && this.menuDetails.Mobile != undefined){
+    if(this.menuDetails.UserName != undefined && this.menuDetails.Password != undefined && this.menuDetails.PostalCode != undefined){
       //No tick the convert to online merchant checkbox, now online = offline onboard
     if(!this.menuDetails.ConverToOnboarding){
       this.offlineMerchantInfoes = {
