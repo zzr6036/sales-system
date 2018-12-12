@@ -154,8 +154,8 @@ export class AssignPromotionUsersComponent implements OnInit {
           this.selectedUsers.push(false)
         }
       }
-      console.log(this.selectedUsers);
-      console.log(this.selectedUsersObj);
+      // console.log(this.selectedUsers);
+      // console.log(this.selectedUsersObj);
     }
   }
 
@@ -171,8 +171,8 @@ export class AssignPromotionUsersComponent implements OnInit {
           this.selectedUsers.push(false);
         }
       }
-      console.log(this.selectedUsers);
-      console.log(this.selectedUsersObj);
+      // console.log(this.selectedUsers);
+      // console.log(this.selectedUsersObj);
     }
   }
 
@@ -231,7 +231,7 @@ export class AssignPromotionUsersComponent implements OnInit {
     if(inIndex < this.selectedUsersObj.length){
       this.assignUsersPromoCode.UserId = this.selectedUsersObj[inIndex]["Id"];
       if (this.promotionDetail.Qty > this.selectedUsersObj.length) {
-        console.log(this.assignUsersPromoCode)
+        // console.log(this.assignUsersPromoCode)
         this.http.post(assignPromoCodeUrl, this.assignUsersPromoCode, {}).map(res => res.json()).subscribe(data => {
           // If post each user successfully,  call recursiveSubmit() function again and assign&check to next user   
           if (data["Message"] == undefined) {

@@ -75,7 +75,7 @@ export class EditMenuComponent implements OnInit {
               private router: Router,) { }
 
   ngOnInit() {
-    
+    // this.menuDetails.MobileFormat = "+65-";
     this.editMerchantInfoes = localStorage.getItem('OfflineMerchantInfoes');
     let assignMerchantInfoes = JSON.parse(this.editMerchantInfoes);
     this.menuDetails.Id = assignMerchantInfoes['Id'];
@@ -222,86 +222,103 @@ export class EditMenuComponent implements OnInit {
     let token = localStorage.getItem("Token");
     let postOnlineMerchantUrl = global.host + "merchantinfoes" + "?token=" + token;
     let postOfflineMerchantUrl = global.host + "merchantinfoes" + "?token=" + token;
-    if(this.menuDetails.UserName != undefined && this.menuDetails.Password != undefined && this.menuDetails.PostalCode != undefined){
-      //No tick the convert to online merchant checkbox, now online = offline onboard
+    
     if(!this.menuDetails.ConverToOnboarding){
-      this.offlineMerchantInfoes = {
-        Id: this.menuDetails.Id,
-        OutletPhoto: this.menuDetails.CoverPhoto,
-        UserName: this.menuDetails.UserName,
-        Password: this.menuDetails.Password,
-        Email: this.menuDetails.Email,
-        Mobile: this.menuDetails.Mobile,
-        RestaurantName: this.menuDetails.RestaurantName,
-        BusinessLegalName: this.menuDetails.BusinessLegalName,
-        Country: this.menuDetails.Country,
-        PostalCode: this.menuDetails.PostalCode,
-        RegisteredAddress: this.menuDetails.RegisteredAddress,
-        LegalEntityType: this.menuDetails.LegalEntityType,
-        OpenTiming: JSON.stringify(this.menuDetails.OpenTiming),
-        Status: 'offline',
-      }
-        this.http.post(postOfflineMerchantUrl, this.offlineMerchantInfoes, {}).map(res => res.json()).subscribe(data => {
-          if(data['Message']==undefined){
-            Swal({
-              position: 'center',
-              type: 'success',
-              title: 'Offline Onboarding Successfully',
-              showConfirmButton: false, 
-              timer: 2000,
-            }).then(() =>{
-              this.router.navigate(['/menu'])
-            })
-          }
-          else {
-            console.log(data['Message']);
-            window.alert(data['Message']);
-          }
-        }, error => {
-          console.log(error)
-        })
-    }
-    //Tick the convert to online merchant checkbox, now online = offline onboard
-    else {
-      this.onlineMerchantInfoes = {
-        Id: this.menuDetails.Id,
-        OutletPhoto: this.menuDetails.CoverPhoto,
-        UserName: this.menuDetails.UserName,
-        Password: this.menuDetails.Password,
-        Email: this.menuDetails.Email,
-        Mobile: this.menuDetails.Mobile,
-        RestaurantName: this.menuDetails.RestaurantName,
-        BusinessLegalName: this.menuDetails.BusinessLegalName,
-        Country: this.menuDetails.Country,
-        PostalCode: this.menuDetails.PostalCode,
-        RegisteredAddress: this.menuDetails.RegisteredAddress,
-        LegalEntityType: this.menuDetails.LegalEntityType,
-        OpenTiming: JSON.stringify(this.menuDetails.OpenTiming),
-        Status: 'draft',
-      }
-      console.log(this.onlineMerchantInfoes)
-          this.http.post(postOnlineMerchantUrl, this.onlineMerchantInfoes, {}).map(res => res.json()).subscribe(data =>{
-            // console.log(data)
+      if(this.menuDetails.UserName != undefined && this.menuDetails.Password != undefined && this.menuDetails.PostalCode != undefined){
+        this.offlineMerchantInfoes = {
+          Id: this.menuDetails.Id,
+          OutletPhoto: this.menuDetails.CoverPhoto,
+          UserName: this.menuDetails.UserName,
+          Password: this.menuDetails.Password,
+          Email: this.menuDetails.Email,
+          Mobile: '+65-'+this.menuDetails.Mobile,
+          RestaurantName: this.menuDetails.RestaurantName,
+          BusinessLegalName: this.menuDetails.BusinessLegalName,
+          Country: this.menuDetails.Country,
+          PostalCode: this.menuDetails.PostalCode,
+          RegisteredAddress: this.menuDetails.RegisteredAddress,
+          LegalEntityType: this.menuDetails.LegalEntityType,
+          OpenTiming: JSON.stringify(this.menuDetails.OpenTiming),
+          Status: 'offline',
+        }
+        if(this.existingMerchants.includes(((this.menuDetails.UserName).toUpperCase()).toString())){
+          window.alert('Existing username, please change a new username.');
+        }
+        else {
+          this.http.post(postOfflineMerchantUrl, this.offlineMerchantInfoes, {}).map(res => res.json()).subscribe(data => {
             if(data['Message']==undefined){
               Swal({
                 position: 'center',
                 type: 'success',
-                title: 'Convert to online merchant successfully',
-                showConfirmButton: false,
+                title: 'Offline Onboarding Successfully',
+                showConfirmButton: false, 
                 timer: 2000,
               }).then(() =>{
-                this.router.navigate(['/formes'])
+                this.router.navigate(['/menu'])
               })
             }
             else {
               console.log(data['Message']);
-              window.alert(data['Message'])
+              window.alert(data['Message']);
             }
-          }, error =>{
+          }, error => {
             console.log(error)
           })
+        }
+      }
+      else {
+        alert('All the * fields are required')
+      }
     }
+    else {
+      if(this.menuDetails.UserName != undefined && this.menuDetails.Password != undefined && this.menuDetails.PostalCode != undefined && this.menuDetails.Mobile != undefined){
+        this.onlineMerchantInfoes = {
+          Id: this.menuDetails.Id,
+          OutletPhoto: this.menuDetails.CoverPhoto,
+          UserName: this.menuDetails.UserName,
+          Password: this.menuDetails.Password,
+          Email: this.menuDetails.Email,
+          Mobile: '+65-'+this.menuDetails.Mobile,
+          // Mobile: this.menuDetails.Mobile,
+          RestaurantName: this.menuDetails.RestaurantName,
+          BusinessLegalName: this.menuDetails.BusinessLegalName,
+          Country: this.menuDetails.Country,
+          PostalCode: this.menuDetails.PostalCode,
+          RegisteredAddress: this.menuDetails.RegisteredAddress,
+          LegalEntityType: this.menuDetails.LegalEntityType,
+          OpenTiming: JSON.stringify(this.menuDetails.OpenTiming),
+          Status: 'draft',
+        }
+        console.log(this.onlineMerchantInfoes)
+          if(this.existingMerchants.includes(((this.menuDetails.UserName).toUpperCase()).toString())){
+            window.alert('Existing username, please change a new username.');
+          }
+          else {
+            this.http.post(postOnlineMerchantUrl, this.onlineMerchantInfoes, {}).map(res => res.json()).subscribe(data =>{
+              console.log(data)
+              if(data['Message']==undefined){
+                Swal({
+                  position: 'center',
+                  type: 'success',
+                  title: 'Convert to online merchant successfully',
+                  showConfirmButton: false,
+                  timer: 2000,
+                }).then(() =>{
+                  this.router.navigate(['/formes'])
+                })
+              }
+              else {
+                console.log(data['Message']);
+                window.alert(data['Message'])
+              }
+            }, error =>{
+              console.log(error)
+            })
+          }
+      }
+      else {
+        alert('All the * fields are required')
+      }
     }
   }
-
 }

@@ -45,10 +45,10 @@
         <!-- <font color="blue"> (Format: +65-xxxxxxxx) </font> -->
       </label>
       <input type="text" class="form-control" formControlName="Mobile" [(ngModel)]="menuDetails.Mobile">
-      <!-- <div class="form-control-feedback" *ngIf="restaurant.controls['Mobile'].errors && (restaurant.controls['Mobile'].touched || restaurant.controls['Mobile'].touched)">
+      <div class="form-control-feedback" *ngIf="restaurant.controls['Mobile'].errors && (restaurant.controls['Mobile'].touched || restaurant.controls['Mobile'].touched)">
         <p *ngIf="restaurant.controls['Mobile'].errors.required"><font color="red">Mobile No. is required</font></p>
         <p *ngIf="restaurant.controls['Mobile'].errors.pattern"><font color="red">Mobile No. is in 8 digitals</font></p>
-      </div> -->
+      </div>
       <font color="blue">Please fill in Mobile No. as convert to online onboarding merchant</font>
     </div>
 
