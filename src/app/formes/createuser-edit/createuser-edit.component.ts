@@ -166,7 +166,7 @@ export class CreateuserEditComponent implements OnInit {
      this.registeredAddress = assignMerchantDetails["RegisteredAddress"];
      this.country = assignMerchantDetails["Country"];
      this.postalcode = assignMerchantDetails["PostalCode"];
-     this.outletAddress = JSON.parse(assignMerchantDetails["OutletAddress"]);
+    //  this.outletAddress = JSON.parse(assignMerchantDetails["OutletAddress"]);
      this.servChargeRate = assignMerchantDetails["ServChargeRate"];
      this.numberOfOutlet = assignMerchantDetails["NoOfOutlet"];
      this.legalEntitySelection = assignMerchantDetails["LegalEntityType"];
@@ -513,7 +513,10 @@ export class CreateuserEditComponent implements OnInit {
         ConvertToOnboarding: false,
       };
       let tokenNo = localStorage.getItem("Token");
-      let getResUrl = global.host + "merchantinfoes" + "?token=" + tokenNo;
+      let id = this.id;
+      // let getResUrl = global.host + "merchantinfoes" + "?token=" + tokenNo;
+      let getResUrl = global.host + "merchantinfoes" + "?token=" + tokenNo + "&id=" + id;
+      // /_xin/api/merchantInfoes/?token={token}&id={id}
       let isExistingUser = this.appInfo["Id"] > 0;
 
       //Checking existing username
@@ -535,11 +538,13 @@ export class CreateuserEditComponent implements OnInit {
                   this.router.navigate(["/formes"]);
                 }
               } else {
+                alert(data['Message'])
                 console.log(data["Message"]);
               }
             },
             error => {
               console.log(error);
+              alert(error)
             }
           );
         // });
@@ -603,7 +608,9 @@ export class CreateuserEditComponent implements OnInit {
         ConvertToOnboarding: true,
       };
       let tokenNo = localStorage.getItem("Token");
-      let getResUrl = global.host + "merchantinfoes" + "?token=" + tokenNo;
+      let id = this.id;
+      let getResUrl = global.host + "merchantinfoes" + "?token=" + tokenNo + "&id=" + id;
+      // let getResUrl = global.host + "merchantinfoes" + "?token=" + tokenNo;
       let isExistingUser = this.appInfo["Id"] > 0;
 
       //Checking existing username
@@ -633,11 +640,13 @@ export class CreateuserEditComponent implements OnInit {
                 }
                 })
               } else {
+                alert(data['Message'])
                 console.log(data["Message"]);
               }
             },
             error => {
               console.log(error);
+              alert(error)
             }
           );
         // });

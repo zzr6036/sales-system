@@ -42,6 +42,7 @@ export class CreateMenuComponent implements OnInit {
   menuDetails: MenuView = new MenuView();
   restaurant: FormGroup;
   mobilePattern = "^[0-9]{8}";
+  postalCodePattern = "^[0-9]{6}"
   offlineMerchantInfoes: any;
   onlineMerchantInfoes: any;
   operationListJson: Array<any> = [];
@@ -103,7 +104,7 @@ export class CreateMenuComponent implements OnInit {
       RestaurantName: [""],
       BusinessLegalName: [""],
       Country: [""],
-      PostalCode: [""],
+      PostalCode: ["", Validators.pattern(this.postalCodePattern)],
       RegisteredAddress: [""],
       LegalEntityType: [""],
       // OpenTime: [""],
@@ -266,7 +267,8 @@ export class CreateMenuComponent implements OnInit {
       }
     }
     else {
-      if(this.menuDetails.UserName != undefined && this.menuDetails.Password != undefined && this.menuDetails.PostalCode != undefined && this.menuDetails.Mobile != undefined){
+      if(this.menuDetails.UserName != undefined && this.menuDetails.Password != undefined && this.menuDetails.PostalCode != undefined && 
+         this.menuDetails.Mobile != undefined && this.menuDetails.Email != undefined){
         this.onlineMerchantInfoes = {
           Id: this.menuDetails.Id,
           OutletPhoto: this.menuDetails.CoverPhoto,

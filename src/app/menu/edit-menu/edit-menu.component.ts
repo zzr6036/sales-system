@@ -42,6 +42,7 @@ export class EditMenuComponent implements OnInit {
   menuDetails: MenuView = new MenuView();
   restaurant: FormGroup;
   mobilePattern = "^[+][5-6]{2}[-][0-9]{8}";
+  postalCodePattern = "^[0-9]{6}"
   offlineMerchantInfoes: any;
   onlineMerchantInfoes: any;
   operationListJson: Array<any> = [];
@@ -78,6 +79,7 @@ export class EditMenuComponent implements OnInit {
     // this.menuDetails.MobileFormat = "+65-";
     this.editMerchantInfoes = localStorage.getItem('OfflineMerchantInfoes');
     let assignMerchantInfoes = JSON.parse(this.editMerchantInfoes);
+    //console.log(assignMerchantInfoes);
     this.menuDetails.Id = assignMerchantInfoes['Id'];
     this.menuDetails.CoverPhoto = assignMerchantInfoes['OutletPhoto'];
     this.menuDetails.UserName = assignMerchantInfoes['UserName'];
@@ -89,6 +91,7 @@ export class EditMenuComponent implements OnInit {
     this.menuDetails.Country = assignMerchantInfoes['Country'];
     this.menuDetails.PostalCode = assignMerchantInfoes['PostalCode'];
     this.menuDetails.RegisteredAddress = assignMerchantInfoes['RegisteredAddress'];
+   //console.log(assignMerchantInfoes['OpenTiming']);
     this.menuDetails.OpenTiming = JSON.parse(assignMerchantInfoes['OpenTiming']);
 
     let tokenNo = localStorage.getItem("Token");
@@ -113,7 +116,7 @@ export class EditMenuComponent implements OnInit {
       RestaurantName: [""],
       BusinessLegalName: [""],
       Country: [""],
-      PostalCode: [""],
+      PostalCode: ["", Validators.pattern(this.postalCodePattern)],
       RegisteredAddress: [""],
       LegalEntityType: [""],
       // OpenTime: [""],
@@ -220,8 +223,11 @@ export class EditMenuComponent implements OnInit {
 
   createRestaurant(){
     let token = localStorage.getItem("Token");
-    let postOnlineMerchantUrl = global.host + "merchantinfoes" + "?token=" + token;
-    let postOfflineMerchantUrl = global.host + "merchantinfoes" + "?token=" + token;
+    let id = this.menuDetails.Id;
+    let postOnlineMerchantUrl = global.host + "merchantinfoes" + "?token=" + token + "&id=" + id;
+    let postOfflineMerchantUrl = global.host + "merchantinfoes" + "?token=" + token + "&id=" + id;
+    // let postOnlineMerchantUrl = global.host + "merchantinfoes" + "?token=" + token;
+    // let postOfflineMerchantUrl = global.host + "merchantinfoes" + "?token=" + token;
     
     if(!this.menuDetails.ConverToOnboarding){
       if(this.menuDetails.UserName != undefined && this.menuDetails.Password != undefined && this.menuDetails.PostalCode != undefined){
@@ -231,7 +237,7 @@ export class EditMenuComponent implements OnInit {
           UserName: this.menuDetails.UserName,
           Password: this.menuDetails.Password,
           Email: this.menuDetails.Email,
-          Mobile: '+65-'+this.menuDetails.Mobile,
+          Mobile: this.menuDetails.Mobile,
           RestaurantName: this.menuDetails.RestaurantName,
           BusinessLegalName: this.menuDetails.BusinessLegalName,
           Country: this.menuDetails.Country,
@@ -246,6 +252,7 @@ export class EditMenuComponent implements OnInit {
         }
         else {
           this.http.post(postOfflineMerchantUrl, this.offlineMerchantInfoes, {}).map(res => res.json()).subscribe(data => {
+            console.log(data)
             if(data['Message']==undefined){
               Swal({
                 position: 'center',
@@ -271,14 +278,15 @@ export class EditMenuComponent implements OnInit {
       }
     }
     else {
-      if(this.menuDetails.UserName != undefined && this.menuDetails.Password != undefined && this.menuDetails.PostalCode != undefined && this.menuDetails.Mobile != undefined){
+      if(this.menuDetails.UserName != undefined && this.menuDetails.Password != undefined && this.menuDetails.PostalCode != undefined && 
+         this.menuDetails.Mobile != undefined && this.menuDetails.Email != undefined && this.menuDetails.Mobile != '' && this.menuDetails.Email != ''){
         this.onlineMerchantInfoes = {
           Id: this.menuDetails.Id,
           OutletPhoto: this.menuDetails.CoverPhoto,
           UserName: this.menuDetails.UserName,
           Password: this.menuDetails.Password,
           Email: this.menuDetails.Email,
-          Mobile: '+65-'+this.menuDetails.Mobile,
+          Mobile: this.menuDetails.Mobile,
           // Mobile: this.menuDetails.Mobile,
           RestaurantName: this.menuDetails.RestaurantName,
           BusinessLegalName: this.menuDetails.BusinessLegalName,
@@ -289,13 +297,13 @@ export class EditMenuComponent implements OnInit {
           OpenTiming: JSON.stringify(this.menuDetails.OpenTiming),
           Status: 'draft',
         }
-        console.log(this.onlineMerchantInfoes)
+        // console.log(this.onlineMerchantInfoes)
           if(this.existingMerchants.includes(((this.menuDetails.UserName).toUpperCase()).toString())){
             window.alert('Existing username, please change a new username.');
           }
           else {
             this.http.post(postOnlineMerchantUrl, this.onlineMerchantInfoes, {}).map(res => res.json()).subscribe(data =>{
-              console.log(data)
+              // console.log(data)
               if(data['Message']==undefined){
                 Swal({
                   position: 'center',

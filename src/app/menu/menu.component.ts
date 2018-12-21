@@ -6,6 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
 import { DOCUMENT } from '@angular/common';
 import * as moment from 'moment';
+import { ExcelService } from '../services/excel.service';
 
 @Component({
   selector: 'app-menu',
@@ -17,7 +18,8 @@ export class MenuComponent implements OnInit {
 
   constructor(public http: Http, 
               route: ActivatedRoute, 
-              private router: Router,) { }
+              private router: Router,
+              private excelService: ExcelService,) { }
 
   ngOnInit() {
     let token = localStorage.getItem("Token");
@@ -25,6 +27,7 @@ export class MenuComponent implements OnInit {
     this.http.get(getOfflineMerchantUrl, {}).map(res => res.json()).subscribe(datas => {
       // console.log(datas)
       if(datas['Message']){
+        alert(datas['Message'])
         console.log(datas['Message']);
       }
       else {
@@ -35,6 +38,7 @@ export class MenuComponent implements OnInit {
         }
       }
     }, error => {
+      alert(error)
       console.log(error);
     })
   }
@@ -42,6 +46,10 @@ export class MenuComponent implements OnInit {
   createOnboarding(){
     this.router.navigate(['/menu/create-menu/'])
   }
+
+  exportAsXLSX():void {
+    this.excelService.exportAsExcelFile(this.merchantInfoes, 'offlineBoarding');
+ }
 
   linkToMenu(){
     //Open external url to replace current url

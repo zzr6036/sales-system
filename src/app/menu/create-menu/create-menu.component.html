@@ -57,6 +57,7 @@
         <strong>Email</strong>
       </label>
       <input type="text" class="form-control" formControlName="Email" [(ngModel)]="menuDetails.Email">
+      <font color="blue">Please fill in Email as convert to online onboarding merchant</font>
     </div>
 
     <div class="form-group">
@@ -86,9 +87,11 @@
         <strong>Postal Code</strong>
       </label>
       <input type="text" class="form-control" formControlName="PostalCode" [(ngModel)]="menuDetails.PostalCode">
-      <div class="form-control-feedback" *ngIf="restaurant.controls['PostalCode'].hasError('required') && restaurant.controls['PostalCode'].touched">
-        <font color="red">PostalCode is required</font>
+      <div class="form-control-feedback" *ngIf="restaurant.controls['PostalCode'].errors && (restaurant.controls['PostalCode'].touched || restaurant.controls['PostalCode'].touched)">
+        <p *ngIf="restaurant.controls['PostalCode'].errors.required"><font color="red">Postal Code is required</font></p>
+        <p *ngIf="restaurant.controls['PostalCode'].errors.pattern"><font color="red">Postal Code is in 6 digitals</font></p>
       </div>
+        <!-- <font color="red">PostalCode is required</font> -->
     </div>
 
     <div class="form-group">

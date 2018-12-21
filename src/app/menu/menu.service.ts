@@ -7,6 +7,7 @@ import { Md5 } from "ts-md5/dist/md5";
 import { MenuView } from "./menu-view.model";
 import Swal from "sweetalert2";
 
+
 @Injectable()
 export class MenuService {
   selectedMenu: MenuView = new MenuView();

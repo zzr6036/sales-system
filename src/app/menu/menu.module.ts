@@ -10,6 +10,7 @@ import { MenuComponent } from './menu.component';
 import { MenuRoutes } from './menu.routing'
 import { CreateMenuComponent } from './create-menu/create-menu.component';
 import { EditMenuComponent } from './edit-menu/edit-menu.component';
+import { ExcelService } from '../services/excel.service';
 
 @NgModule({
   imports: [CommonModule, RouterModule.forChild(MenuRoutes), 
@@ -17,7 +18,8 @@ import { EditMenuComponent } from './edit-menu/edit-menu.component';
             AngularMultiSelectModule,
             AngularDateTimePickerModule],
   declarations: [MenuComponent, CreateMenuComponent, EditMenuComponent],
-  providers: [{provide: NG_VALUE_ACCESSOR, useExisting: MenuModule, multi: true}]
+  providers: [{provide: NG_VALUE_ACCESSOR, useExisting: MenuModule, multi: true},
+              ExcelService]
   // providers: [PromotionCodeService]
 //   providers: [PromotionService]
 })

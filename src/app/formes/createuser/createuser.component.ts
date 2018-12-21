@@ -502,10 +502,12 @@ export class CreateuserComponent implements OnInit {
                 }
               } else {
                 console.log(data["Message"]);
+                alert(data['Message'])
               }
             },
             error => {
               console.log(error);
+              alert(error)
             }
           );
         });
@@ -579,7 +581,7 @@ export class CreateuserComponent implements OnInit {
           }
           let httpCall = isExistingUser ? this.http.post(getResUrl, this.appInfo, {}): this.http.post(getResUrl, this.appInfo, {});
           httpCall.map(res => res.json()).subscribe(data => {
-              console.log(data);
+              // console.log(data);
               if (data["Message"] == undefined) {
                 Swal({
                   position: 'center',
@@ -595,11 +597,13 @@ export class CreateuserComponent implements OnInit {
                 }
                 })
               } else {
+                alert(data['Message'])
                 console.log(data["Message"]);
               }
             },
             error => {
               console.log(error);
+              alert(error)
             }
           );
         });

@@ -197,12 +197,13 @@ export class PromotionComponent implements OnInit {
         console.log(data["Message"]);
       }
       else{
-        // for(var i=0; i<data.length; i++){
+        for(var i=0; i<data.length; i++){
           
-        //   data[i]['StartTime'] = moment(data[i]["StartTime"]).add(8, 'hours').format('YYYY-MM-DDTHH:mm:ss')
-        //   data[i]['EndTime'] = moment(data[i]["EndTime"]).add(8, 'hours').format('YYYY-MM-DDTHH:mm:ss')
-        // }
-        this.promotionCodes = data;
+          data[i]['StartTime'] = moment(data[i]["StartTime"]).add(8, 'hours').format('YYYY-MM-DDTHH:mm:ss')
+          data[i]['EndTime'] = moment(data[i]["EndTime"]).add(8, 'hours').format('YYYY-MM-DDTHH:mm:ss')
+          this.promotionCodes.push(data[i]);
+        }
+        // this.promotionCodes = data;
       }
     }, error => {
       console.log(error);

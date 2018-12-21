@@ -479,7 +479,9 @@ export class CreateuserViewComponent implements OnInit {
         ConvertToOnboarding: false,
       };
       let tokenNo = localStorage.getItem("Token");
-      let getResUrl = global.host + "merchantinfoes" + "?token=" + tokenNo;
+      let id = this.id;
+      let getResUrl = global.host + "merchantinfoes" + "?token=" + tokenNo + "&id=" + id;
+      // let getResUrl = global.host + "merchantinfoes" + "?token=" + tokenNo;
       let isExistingUser = this.appInfo["Id"] > 0;
 
       //Checking existing username
@@ -564,7 +566,9 @@ export class CreateuserViewComponent implements OnInit {
         ConvertToOnboarding: true,
       };
       let tokenNo = localStorage.getItem("Token");
-      let getResUrl = global.host + "merchantinfoes" + "?token=" + tokenNo;
+      let id = this.id;
+      let getResUrl = global.host + "merchantinfoes" + "?token=" + tokenNo + "&id=" + id;
+      // let getResUrl = global.host + "merchantinfoes" + "?token=" + tokenNo;
       let isExistingUser = this.appInfo["Id"] > 0;
 
       //Checking existing username
