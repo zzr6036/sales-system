@@ -28,6 +28,7 @@ export class AssignPromotionUsersComponent implements OnInit {
   Message: String;
   Subject: string;
   ExpiryDate: Date;
+  // ExpiryDate: String;
 
   //loading bar
   value = 0;
@@ -192,6 +193,8 @@ export class AssignPromotionUsersComponent implements OnInit {
     let tokenNo = localStorage.getItem("Token");
     let assignPromoCodeUrl = global.host + "promocodes/" + "?token=" + tokenNo;
     let timeZoneDifference = (new Date()).getTimezoneOffset();
+    // let expiryDateMoment = moment(this.ExpiryDate).toISOString();
+    // let expiryDateMoment = moment((this.ExpiryDate).toString()).subtract(8,'hours').format('YYYY-MM-DDTHH:mm:ss');
     let expiryDateMoment = moment(this.ExpiryDate).toISOString();
 
     this.assignUsersPromoCode = {
@@ -218,7 +221,9 @@ export class AssignPromotionUsersComponent implements OnInit {
       CreatedByUserId: this.promotionDetail.CreatedByUserId,
       DeleteByUserId: this.promotionDetail.DeleteByUserId,
       Image: this.promotionDetail.Image,
-      ExpiryDate: expiryDateMoment,
+      // ExpiryDate: this.ExpiryDate,
+      // ExpiryDate: this.ExpiryDate ? this.ExpiryDate : this.promotionDetail.EndTime,
+      ExpiryDate: this.ExpiryDate ? expiryDateMoment : this.promotionDetail.EndTime,
       //Above attribute all duplicate, only assign to different to different userId 
       UserId: null
     };

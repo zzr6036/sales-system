@@ -24,9 +24,9 @@ export class FormesComponent implements OnInit {
   accounts: Array<any> = [];
   Id: number;
   Email: string;
-  public term: any;
 
   //Search
+  public term: any;
   itemSelected: String;
   selections = ["Id", "RestaurantName", "Mobile", "Email", "Status"];
   idList: Array<any> = [];
@@ -56,8 +56,12 @@ export class FormesComponent implements OnInit {
 
   ngOnInit() {
     this.router.navigate(['/formes/'])
-    let roleName = localStorage.getItem("RoleName");
+    // let roleName = localStorage.getItem("RoleName");
     // if (roleName === "Sales" || roleName === "TeamLeader" || roleName === "TeamMember") {
+    this.loadAccounts();
+  }
+
+  loadAccounts(){
       let tokenNo = localStorage.getItem("Token");
       let getResUrl = global.host + "merchantinfoes/?token=" + tokenNo;
       if (tokenNo === "") {
@@ -68,16 +72,19 @@ export class FormesComponent implements OnInit {
               // console.log(data);
               if (data["Message"]) {
                 console.log(data["Message"]);
-              } else {
+              } 
+              else {
+                this.accounts = [];
                 for(var i=0; i<data.length; i++){
                   if(data[i].Status != 'offline'){
                     this.accounts.push(data[i]);
-                    this.FilterList.push(data[i]);
+                    //this.FilterList.push(data[i]);
                   }
                 }
+                this.onKeySearch(this.term);
+                // location.reload();
                 // this.accounts = data;
                 // this.FilterList = data;
-
               }
             },
             error => {
@@ -86,6 +93,7 @@ export class FormesComponent implements OnInit {
           );
       }
   }
+
   onSelect(){
     let tokenNo = localStorage.getItem("Token");
     let getResUrl = global.host + "merchantinfoes/?token=" + tokenNo;
@@ -228,12 +236,12 @@ export class FormesComponent implements OnInit {
     // } 
   }
 
-  merchantSearch(event, formData) {
-    let query = formData.value["q"];
-    if (query) {
-      this.router.navigate(["formes", { q: query }]);
-    }
-  }
+  // merchantSearch(event, formData) {
+  //   let query = formData.value["q"];
+  //   if (query) {
+  //     this.router.navigate(["formes", { q: query }]);
+  //   }
+  // }
   showDetail(account) {
     localStorage.setItem("EditingUser", JSON.stringify(account));
     let Status = account.Status;
@@ -255,6 +263,28 @@ export class FormesComponent implements OnInit {
         })
       }
     }
+  }
+  deleteInfoes(account){
+    localStorage.setItem("DeletingUser", JSON.stringify(account));
+    // console.log(account)
+  }
+
+  delete(){ 
+    let tokenNo = localStorage.getItem("Token");
+    let getMerchantDetails = localStorage.getItem("DeletingUser");
+    let deleteMerchantDetails = JSON.parse(getMerchantDetails);
+    let id = deleteMerchantDetails['Id']
+
+    let deleteResUrl = global.host + "merchantinfoes" + "?id=" + id + "&token=" + tokenNo
+    this.http.delete(deleteResUrl, {}).map(res => res.json()).subscribe(deleteMerchantInfoes => {
+      // console.log(deleteMerchantInfoes)
+      // alert(deleteMerchantInfoes['Message'])
+      if(deleteMerchantInfoes['Message']){
+        console.log(deleteMerchantInfoes['Message'])
+        alert(deleteMerchantInfoes['Message'])
+        this.loadAccounts();
+      }
+    })
   }
 
   //Empty input

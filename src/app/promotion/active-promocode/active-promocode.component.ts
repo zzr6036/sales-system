@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpModule, Http, Response } from '@angular/http';
-import { global } from '../global';
+import { global } from '../../global';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { RequestOptions } from '@angular/http/src/base_request_options';
@@ -8,24 +8,28 @@ import { OrderModule, OrderPipe } from 'ngx-order-pipe';
 import * as moment from 'moment';
 import Swal from 'sweetalert2';
 import { TruncatePipe } from 'angular-pipes';
-import { PromotionService } from './promotion.service';
-import { PromotionView } from './promotion-view.model';
-import { PromotionEditComponent } from './promotion-edit/promotion-edit.component';
-import { AssignPromotionComponent } from './assign-promotion/assign-promotion.component';
-import { AssignPromotionUsersComponent } from './assign-promotion-users/assign-promotion-users.component';
+import { PromotionService } from './../promotion.service';
+import { PromotionView } from './../promotion-view.model';
+import { PromotionEditComponent } from './../promotion-edit/promotion-edit.component';
+import { AssignPromotionComponent } from './../assign-promotion/assign-promotion.component';
+import { AssignPromotionUsersComponent } from './../assign-promotion-users/assign-promotion-users.component';
 
 @Component({
-  selector: 'app-promotion',
-  templateUrl: './promotion.component.html',
-  styleUrls: ['./promotion.component.scss'],
+  selector: 'app-active-promocode',
+  templateUrl: './active-promocode.component.html',
+  styleUrls: ['./active-promocode.component.scss'],
   providers: [PromotionService, PromotionEditComponent]
 })
-export class PromotionComponent implements OnInit {
-
-  promotionCodes:Array<any> = [];
+export class ActivePromocodeComponent implements OnInit {
+  activePromocodeInfoes: Array<any> = [];
+  promotionCodes: Array<any> = [];
   expiredPromotionCodes: Array<any> = [];
   searchPromotionCodes: Array<any>=[];
   promotionDetail: PromotionView = new PromotionView();
+
+  // token & api url
+  tokenNo = localStorage.getItem("Token");
+  getPromocodesUrl = global.host + "promocodes" + "?token=" + this.tokenNo;
 
   public code:String;
   public term: any;
@@ -40,7 +44,6 @@ export class PromotionComponent implements OnInit {
   //Expired checking
   public EndTime: Date;
   EndTimeArr: Array<any> = [];
-
 
   //Sorting
   public order: String = 'index'; 
@@ -191,30 +194,29 @@ export class PromotionComponent implements OnInit {
 
 
   loadPromotionList(){
-    this.promotionService.getPromotionList().subscribe(data =>{
-      // console.log(data)
-      if(data["Message"]){
-        console.log(data["Message"]);
+    this.http.get(this.getPromocodesUrl, {}).map(res => res.json()).subscribe(activePromocode =>{
+      // console.log(activePromocode)
+      if(activePromocode['Message']){
+        console.log(activePromocode['Message'])
+        alert(activePromocode['Message'])
       }
       else{
-        for(var i=0; i<data.length; i++){
-          
-          data[i]['StartTime'] = moment(data[i]["StartTime"]).add(8, 'hours').format('YYYY-MM-DDTHH:mm:ss')
-          data[i]['EndTime'] = moment(data[i]["EndTime"]).add(8, 'hours').format('YYYY-MM-DDTHH:mm:ss')
-          this.promotionCodes.push(data[i]);
+        for(var i=0; i<activePromocode.length; i++){
+            if((moment(activePromocode[i]["EndTime"]).add(8, 'hours').format('YYYY-MM-DDTHH:mm:ss')) >= this.currentDate){
+              activePromocode[i]['StartTime'] =  moment(activePromocode[i]["StartTime"]).add(8, 'hours').format('YYYY-MM-DDTHH:mm:ss')
+              activePromocode[i]['EndTime'] =  moment(activePromocode[i]["EndTime"]).add(8, 'hours').format('YYYY-MM-DDTHH:mm:ss')
+              this.promotionCodes.push(activePromocode[i])
+          }
         }
-        // this.promotionCodes = data;
+        // console.log(this.promotionCodes)
       }
-    }, error => {
-      console.log(error);
     })
   }
 
   loadPromotionCodeList(){
-     let tokenNo = localStorage.getItem("Token");
-     let mobileNo = this.MobileNumber;
-     let getResUrl = global.host + "search" + "user" + "?keyword=" + mobileNo + "&token="+ tokenNo;
-    // let getResUrl = `http://xindotsbackend.azurewebsites.net/_xin/api/search/user/?keyword=${this.MobileNumber}&token=${localStorage.getItem("Token")}`;
+    let tokenNo = localStorage.getItem("Token");
+    let mobileNo = this.MobileNumber;
+    let getResUrl = global.host + "search" + "user" + "?keyword=" + mobileNo + "&token="+ tokenNo;
     this.http.get(getResUrl, {}).map(res => res.json()).subscribe(data => {
       // console.log(data);
       if(data['Message']){
@@ -226,7 +228,6 @@ export class PromotionComponent implements OnInit {
     }, error =>{
       console.log(error);
     });
-
   }
 
   //Search promotion code
@@ -247,6 +248,5 @@ export class PromotionComponent implements OnInit {
   expiryPromoCode(){
     this.router.navigate(['/promotion/expiry-promocode'])
   }
+
 }
-
-

@@ -128,7 +128,19 @@ export class CreateuserViewComponent implements OnInit {
      this.merchantDetails = localStorage.getItem("EditingUser");
      let assignMerchantDetails = JSON.parse(this.merchantDetails);
     //  console.log(assignMerchantDetails);
-     this.outletPhoto = assignMerchantDetails["OutletPhoto"];
+
+    // Convert Outlet photo based on merchant id
+    let id = assignMerchantDetails["Id"];
+    let tokenNo = localStorage.getItem("Token");
+    let getResUrl = global.host + "merchantinfoes" + "?token=" + tokenNo + "&id=" + id;
+    this.http.get(getResUrl, {}).map(res => res.json()).subscribe(merchantInfoesData => {
+      // console.log(merchantInfoesData[0]['Id'])
+      if(merchantInfoesData[0]['Id'] == id){
+        this.outletPhoto = merchantInfoesData[0]['OutletPhoto']
+      }
+    })
+
+    //  this.outletPhoto = assignMerchantDetails["OutletPhoto"];
      this.id = assignMerchantDetails["Id"];
      this.username = assignMerchantDetails["UserName"];
      this.password = assignMerchantDetails["Password"];

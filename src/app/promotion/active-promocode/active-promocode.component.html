@@ -1,0 +1,118 @@
+<h3> Manage Promotion Code
+    <a class="btn btn-primary" style="font-size: 1rem;float: right;" id="createnewpromotion" (click)="createNewPromotion()">Create Promotion Code</a>
+  </h3>
+  <div class="row">
+    <div class="col col-lg-12">
+      <div class="card card-body">
+        <div class="no-more-tables">
+          <div class="row">
+            <div class="col col-lg-3 mt-2">
+              <h4>Promotion Code List</h4>
+            </div>
+            <div class="col col-lg-6">
+              <div class="input-group mb-3">
+                <div class="input-group-addon">
+                  <img src="assets/images/search.png" height="20px" width="20px">
+                </div>
+                <input type="text" class="form-control" placeholder="Promotion Code" aria-label="Code" aria-describedby="basic-addon2" name="searchString"
+                  [(ngModel)]="term" style="width: 60%">
+              </div>
+            </div>
+          </div>
+          <br>
+  
+          <div class="card card-body buttonContainer">
+            <div class="buttonGroup">
+              <div class="row">
+              <div class="col col-lg-3 mt-2">
+                <button type="button" class="btn btn-success promocode-button" (click)="allPromoCode()"><strong>All Promocode</strong></button>
+              </div>
+              <div class="col col-lg-3 mt-2">
+                <button type="button" class="btn btn-info promocode-button" (click)="activePromoCode()"><strong>Active Promocode</strong></button>
+              </div>
+              <div class="col col-lg-3 mt-2">
+                <button type="button" class="btn btn-warning promocode-button" (click)="expiryPromoCode()"><strong>Expiry Promocode</strong></button>
+              </div>
+            </div>
+            </div>
+            
+          </div>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th style="width:10%">Title</th>
+                <th [class.active]="order === 'info.Code'" (click)="setOrder('info.Code')" class="mdl-data-table__cell--non-numeric" style="cursor: pointer;">Code
+                  <span [hidden]="reverse">▼</span>
+                  <span [hidden]="!reverse">▲</span>
+                </th>
+                <th style="width: 15%;">Promotion info</th>
+                <th>Date</th>
+                <th>Qty</th>
+                <th style="width: 15%;">Descirption</th>
+                <th>Action</th>
+                <th>View</th>
+              </tr>
+            </thead>
+            <!-- Active PromoCode -->
+            <tbody>
+              <tr *ngFor="let promotionCode of promotionCodes | filter: term | orderBy: order: reverse: 'case-insensitive'; let i=index;">
+                <!-- <td>{{i+1}}</td> -->
+                <td data-title="Id">{{promotionCode.Id}}</td>
+                <td data-title="Title">{{promotionCode.Title}}</td>
+                <td>{{promotionCode.Code}}</td>
+                <td>
+                  <div class="between">
+                    <span>Max Discount</span>
+                    <span contenteditable>{{promotionCode.MaxDiscount}}</span>
+                  </div>
+                  <div class="between">
+                    <span>Min Spend</span>
+                    <span contenteditable>{{promotionCode.MinUsed}}</span>
+                  </div>
+                  <td>
+                    <div class="between">
+                      <span>From</span>
+                      <span>{{promotionCode.StartTime | amLocal | amDateFormat: 'YYYY-MM-DD'}}</span>
+                    </div>
+                    <div class="between">
+                      <span>To</span>
+                      <span>{{promotionCode.EndTime | amLocal | amDateFormat: 'YYYY-MM-DD'}}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="between">
+                      <span>{{promotionCode.Qty}}</span>
+                    </div>
+                  </td>
+                  <td>{{promotionCode.Description}}</td>
+                  <td>
+                    <div class="dropdown">
+                      <button type="button" class="btn btn-info" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <!-- <button [ngClass]="promotionCode.EndTime >= currentDate ? 'btn btn-info dropdown-toggle':'btn btn-warning dropdown-toggle'" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> -->
+                        Action
+                      </button>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <span class="dropdown-item" (click)="editPromCode(promotionCode)">Edit</span>
+                        <div class="dropdown-divider"></div>
+                        <!-- <span class="dropdown-item" (click)="assignPromotion(promotionCode)" *ngIf="promotionCode.IsSpecial != true">Assign by Mobile</span>
+                        <div class="dropdown-divider"></div> -->
+                        <span class="dropdown-item" (click)="assignPromotionToAll(promotionCode)" *ngIf="promotionCode.IsSpecial != true">Assign to All</span>
+                        <div class="dropdown-divider"></div>
+                        <span class="dropdown-item" (click)="assignPromitonByTimes(promotionCode)" *ngIf="promotionCode.IsSpecial != true">Assign by Times</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                      <button class="btn btn-info" type="button" id="viewDetail" (click)="viewDetail(promotionCode)">ViewDetail</button>
+                    <!-- <button [ngClass]="promotionCode.EndTime >= currentDate ? 'btn btn-info':'btn btn-warning'" type="button" id="viewDetail" (click)="viewDetail(promotionCode)">ViewDetail</button> -->
+                    <!-- <button *ngIf="promotionCode.EndTime >= currentDate"? class="btn btn-info":class="btn btn-warning" type="button" (click)="viewDetail(promotionCode)">ViewDetail</button> -->
+                  </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="notification is-success" *ngIf="promotionCodes.length === 0">No Promotion Code for using!</div>
+  </div>

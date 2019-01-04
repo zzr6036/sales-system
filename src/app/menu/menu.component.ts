@@ -16,6 +16,18 @@ import { ExcelService } from '../services/excel.service';
 export class MenuComponent implements OnInit {
   merchantInfoes: Array<any> = [];
 
+  //Search
+  public term: any;
+  itemSelected: String;
+  // selections = ["Id", "OutletName", "Mobile", "Email", "Status"];
+  selections = ["Id", "OutletName", "Mobile", "Status"];
+  idList: Array<any> = [];
+  restaurantNameList: Array<any> = [];
+  emailList: Array<any> = [];
+  mobileNoList: Array<any> = [];
+  statusList: Array<any> = [];
+  FilterList: Array<any> = [];
+
   constructor(public http: Http, 
               route: ActivatedRoute, 
               private router: Router,
@@ -34,8 +46,10 @@ export class MenuComponent implements OnInit {
         for(var i=0; i<datas.length; i++){
           if(datas[i].Status == 'offline'){
             this.merchantInfoes.push(datas[i]);
+            this.FilterList.push(datas[i]);
           }
         }
+        // console.log(this.FilterList)
       }
     }, error => {
       alert(error)
@@ -65,4 +79,133 @@ export class MenuComponent implements OnInit {
     this.router.navigate(['menu/edit-menu/' + merchantInfo.Id])
   }
 
+  onSelect(){
+    let tokenNo = localStorage.getItem("Token");
+    let getResUrl = global.host + "merchantinfoes/?token=" + tokenNo;
+      if(this.itemSelected == 'Id'){
+        for(var i=0; i<this.merchantInfoes.length; i++){
+          this.idList.push(this.merchantInfoes[i]["Id"]);
+        }
+        // console.log(this.idList)
+      }
+      if(this.itemSelected == 'OutletName'){
+        for(var i=0; i<this.merchantInfoes.length; i++){
+          this.restaurantNameList.push(this.merchantInfoes[i]["RestaurantName"]);
+        }
+      }
+      if(this.itemSelected == 'Mobile'){
+        for(var i=0; i<this.merchantInfoes.length; i++){
+          this.mobileNoList.push(this.merchantInfoes[i]["Mobile"]);
+        }
+      }
+      // if(this.itemSelected == 'Email'){
+      //   for(var i=0; i<this.merchantInfoes.length; i++){
+      //     this.emailList.push(this.merchantInfoes[i]["Email"]);
+      //   }
+      // }
+      if(this.itemSelected == 'Status'){
+        for(var i=0; i<this.merchantInfoes.length; i++){
+          this.statusList.push(this.merchantInfoes[i]["Status"]);
+        }
+      }
+  }
+
+  onKeySearch(value: any){
+    //Search By Id
+    if(this.itemSelected == 'Id'){
+      if(this.term == ''){
+        this.emptyInput();
+      }
+      else {
+        this.FilterList = []
+        for(var i=0; i<this.idList.length;i++){
+          if((JSON.stringify(this.idList[i])).toLowerCase().includes((this.term).toLowerCase())){
+            this.FilterList.push(this.merchantInfoes[i])
+          }
+          console.log(this.FilterList)
+        }
+        this.merchantInfoes = this.FilterList;
+      }
+    }
+    //Search By Restaurant Name
+    if(this.itemSelected == 'OutletName'){
+      let allItems = this.merchantInfoes;
+      if(this.term == ''){
+        this.emptyInput();
+      }
+      else {
+        this.FilterList = [];
+        for(var i=0; i<this.restaurantNameList.length; i++){
+          if((JSON.stringify(this.restaurantNameList[i])).toLowerCase().includes((this.term).toLowerCase()) && JSON.stringify(this.restaurantNameList[i] != 'null')){
+            this.FilterList.push(this.merchantInfoes[i])
+          }
+        }
+        this.merchantInfoes = this.FilterList;
+      }
+    }
+      
+    //Search By Mobile No
+    if(this.itemSelected == 'Mobile'){
+      let allItems = this.merchantInfoes;
+      if(this.term == ''){
+        this.emptyInput();
+      }
+      else {
+        this.FilterList = [];
+        for(var i=0; i<this.mobileNoList.length; i++){
+          if((JSON.stringify(this.mobileNoList[i])).toLowerCase().includes((this.term).toLowerCase()) && (JSON.stringify(this.mobileNoList[i])) != "null"){
+            this.FilterList.push(this.merchantInfoes[i])
+          }
+        }
+        this.merchantInfoes = this.FilterList;
+      }
+    }
+
+    //Search By Email
+    if(this.itemSelected == 'Email'){
+      let allItems = this.merchantInfoes;
+      if(this.term == ''){
+        this.emptyInput();
+      }
+      else {
+        this.FilterList = [];
+        for(var i=0; i<this.emailList.length; i++){
+          if((JSON.stringify(this.emailList[i])).toLowerCase().includes((this.term).toLowerCase()) && (JSON.stringify(this.emailList[i])) != 'null'){
+            this.FilterList.push(this.merchantInfoes[i])
+          }
+        }
+        this.merchantInfoes = this.FilterList;
+      }
+    }
+ 
+    //Search By Status
+    if(this.itemSelected == 'Status'){
+      let allItems = this.merchantInfoes;
+      if(this.term == ''){
+        this.emptyInput();
+      }
+      else {
+        this.FilterList = []
+        for(var i=0; i<this.statusList.length; i++){
+          if((JSON.stringify(this.statusList[i])).toLowerCase().includes((this.term).toLowerCase()) && (JSON.stringify(this.statusList[i])) != "null"){
+            this.FilterList.push(this.merchantInfoes[i])
+          }
+        }
+        this.merchantInfoes = this.FilterList;
+      }
+    }
+  }
+
+  onKeydown(event){
+    this.onKeySearch(String);
+  }
+
+    //Empty input
+    emptyInput(){
+      let tokenNo = localStorage.getItem("Token");
+      let getResUrl = global.host + "merchantinfoes/?token=" + tokenNo;
+      this.http.get(getResUrl, {}).map(res => res.json()).subscribe(data =>{
+        this.merchantInfoes = data;
+      })
+    }
 }

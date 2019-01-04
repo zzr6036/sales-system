@@ -5,8 +5,10 @@ import { PromotionCodeComponent } from './promotion-code/promotion-code.componen
 import { PromotionEditComponent } from './promotion-edit/promotion-edit.component';
 import { PromotionUserlistComponent } from './promotion-userlist/promotion-userlist.component';
 import { AssignPromotionComponent } from './assign-promotion/assign-promotion.component';
-import { AssignPromotionUsersComponent } from './assign-promotion-users/assign-promotion-users.component'
-import { AssignPromotionTimesComponent } from './assign-promotion-times/assign-promotion-times.component'
+import { AssignPromotionUsersComponent } from './assign-promotion-users/assign-promotion-users.component';
+import { AssignPromotionTimesComponent } from './assign-promotion-times/assign-promotion-times.component';
+import { ActivePromocodeComponent } from './active-promocode/active-promocode.component';
+import { ExpiryPromocodeComponent } from './expiry-promocode/expiry-promocode.component';
 
 export const PromotionRoutes: Routes = [{
     path: '',
@@ -17,6 +19,12 @@ export const PromotionRoutes: Routes = [{
   },{
     path: 'promotion-code',
     component:PromotionCodeComponent,
+  },{
+    path: 'active-promocode',
+    component:ActivePromocodeComponent,
+  },{
+    path: 'expiry-promocode',
+    component:ExpiryPromocodeComponent,
   },{
     path: 'promotion-edit/:Id',
     component: PromotionEditComponent,

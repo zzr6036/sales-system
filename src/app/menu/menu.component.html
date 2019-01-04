@@ -1,11 +1,34 @@
 <h3> Manage Offline Onboarding
   <a class="btn btn-primary" style="font-size: 1rem;float: right;" id="onboarding" (click)="createOnboarding()">Create New!</a>
 </h3>
+<div class="card-body searchEngine">
+  <div class="form-group">
+    <font color="blue"><strong>Search by:</strong></font>
+    <div class="row">
+      <div class="col col-md-3" >
+        <select class="form-control amber-border" id="searchSelection" [(ngModel)]="itemSelected" name="itemSelected" (ngModelChange)="onSelect()" style="width: 100%; height: 35px">
+          <option *ngFor="let selection of selections">{{selection}}</option>
+        </select>
+      </div>
+      <div class="col col-md-8">
+        <div class="row">
+          <div class="col col-md-5">
+            <input type="text" class="form-control" name="searchString" placeholder="Search..." [(ngModel)]="term"  (keydown.enter)="onKeydown($event)">
+          </div>
+          <div class="col col-md-1 mt-2" id="searchboxicon">
+            <img src="assets/images/search.png" height="20px" width="20px"  (click)="onKeySearch($event)" >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="card-body">
     <button class="btn btn-primary btn-sm" (click)="exportAsXLSX()" style="float: right;"><strong>Export to Excel</strong></button>
   </div>
 
-<div class="card" style="width: 100%">
+<div class="card items" style="width: 100%">
   <div class="card-title">
     <!-- <h3><font color="blue">Offline Merchant List</font></h3> -->
   </div>

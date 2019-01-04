@@ -1,8 +1,4 @@
 <form id="filter">
-  <script src="moment.js"></script>
-  <script>
-    moment().format();
-  </script>
   <h3> Manage Merchant Information
     <a class="btn btn-primary" style="font-size: 1rem;float: right;" id="createnewuser" (click)="createNewUser()">Create New Merchant!</a>
   </h3>
@@ -33,7 +29,7 @@
     <div class="card-body">
       <button class="btn btn-primary btn-sm" (click)="exportAsXLSX()" style="float: right;"><strong>Export to Excel</strong></button>
     </div>
-    <div class="card-body">
+    <div class="card-body items">
       <div class="no-more-tables">
         <table class="table table-bordered table-striped mb-0">
           <thead>
@@ -63,7 +59,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let account of accounts; let i = index">
+            <tr *ngFor="let account of accounts; let i = index;">
               <td data-title="ID">
                 {{account.Id}}
               </td>
@@ -94,15 +90,37 @@
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <span class="dropdown-item" (click)="showDetail(account)" *ngIf="account.Status == 'draft' || account.Status == 'rejected'">Edit</span>
                     <span class="dropdown-item" (click)="showDetail(account)" *ngIf="account.Status == 'approved' || account.Status == 'pending'">View</span>
+                    <!-- <span class="dropdown-item" (click)="delete(deleteAccount)" *ngIf="account.Status == 'draft' || account.Status == 'rejected'"> -->
+                    <span class="dropdown-item" (click)="deleteInfoes(account)" data-toggle="modal" data-target="#deleteModal" *ngIf="account.Status == 'draft' || account.Status == 'rejected'">  
+                      Delete
+                    </span> 
                   </div>
                   </div>
                 <!-- <button type="button" class="btn btn-link" (click)=showDetail(account)>{{account.Status}}</button> -->
               </td>
-
             </tr>
-
           </tbody>
         </table>
+
+        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">DELETE</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <strong>Confirm Delete Current Merchant Information</strong>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" (click)="delete()" data-dismiss="modal">Confirm</button>
+                </div>
+              </div>
+            </div>
+          </div>
       </div>
     </div>
     <!-- <div class="container"> -->

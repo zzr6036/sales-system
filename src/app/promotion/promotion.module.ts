@@ -22,6 +22,8 @@ import { PromotionUserlistComponent } from './promotion-userlist/promotion-userl
 import { AssignPromotionComponent } from './assign-promotion/assign-promotion.component';
 import { AssignPromotionUsersComponent } from './assign-promotion-users/assign-promotion-users.component';
 import { AssignPromotionTimesComponent } from './assign-promotion-times/assign-promotion-times.component';
+import { ActivePromocodeComponent } from './active-promocode/active-promocode.component';
+import { ExpiryPromocodeComponent } from './expiry-promocode/expiry-promocode.component';
 // import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @NgModule({
@@ -33,7 +35,7 @@ import { AssignPromotionTimesComponent } from './assign-promotion-times/assign-p
             AngularDateTimePickerModule,
             MomentModule,
             OrderModule,],
-  declarations: [PromotionComponent, PromotionCodeComponent, PromotionEditComponent, PromotionUserlistComponent, AssignPromotionComponent, AssignPromotionUsersComponent, AssignPromotionTimesComponent],
+  declarations: [PromotionComponent, PromotionCodeComponent, PromotionEditComponent, PromotionUserlistComponent, AssignPromotionComponent, AssignPromotionUsersComponent, AssignPromotionTimesComponent, ActivePromocodeComponent, ExpiryPromocodeComponent],
   // providers: [PromotionCodeService]
   providers: [PromotionService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
