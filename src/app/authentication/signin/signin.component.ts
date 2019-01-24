@@ -66,50 +66,85 @@ export class SigninComponent implements OnInit {
             result = JSON.parse(data["UserInfo"]);
             result.Token = data["Token"];
             let loginToken = result.Token;
-
             localStorage.setItem("Email", loginUserName);
-            // localStorage.setItem("Password", loginPassword);
             localStorage.setItem("Token", loginToken);
             localStorage.setItem("UserInfo_Id", result.Id);
-            // localStorage.setItem("UserInfo_RoleName", result.Role.Name);
             localStorage.setItem("UserInfo_Name", result.FirstName);
-            this.router.navigate(["/formes"]);
+            this.roleId = JSON.parse(data["UserInfo"]).RoleId;
+            this.loadRole(loginToken);
           } else {
             //Alert message for invalid login
             Swal({
               position: 'center',
               type: 'warning',
               title: 'Please input the correct username and password!',
+              text: data["Message"],
               showConfirmButton: true,
               // timer: 2000,
             })
             console.log(data["Message"]);
+            window.localStorage.clear();
             this.router.navigate(["/authentication/signin"]);
           }
-
-          let tokenNo = data["Token"];
-          let roleCheckUrl = global.host + 'roles/' + '?token=' + tokenNo;
-          // console.log(roleCheckUrl);
-          this.roleId = JSON.parse(data["UserInfo"]).RoleId;
-          this.http.get(roleCheckUrl, {}).map(res => res.json()).subscribe(data => {
-            //Check roles
-            let roleCheckResult = data;
-            for(var i=0; i<data.length; i++){
-              this.idList.push(data[i]["Id"]);
-            }
-            let roleName;
-            for(var n=0; n<data.length; n++){
-              if(this.roleId === this.idList[n]){
-              roleName = roleCheckResult[n]["Name"];
-              }
-            }
-            localStorage.setItem('RoleName', roleName);
-          })
         },
         error => {
           console.log(error);
+          Swal({
+            position: 'center',
+            type: 'warning',
+            title: "Error Status: "+error.status,
+            text: error.statusText,
+            showConfirmButton: true,
+            // timer: 2000,
+          })
           //this.onErrorBackToLogin(error);
         }
       ); 
+  }
+
+  loadRole(inToken){
+    let roleCheckUrl = global.host + 'roles/' + '?token=' + inToken;
+    this.http.get(roleCheckUrl, {}).map(resp => resp.json()).subscribe(data2 => {
+      //Check roles
+      if (data2["Message"] == undefined) {
+        this.idList = [];
+        // console.log(data2)
+        let roleCheckResult = data2;
+        for(var i=0; i<data2.length; i++){
+          this.idList.push(data2[i]["Id"]);
+        }
+        let roleName;
+        for(var n=0; n<data2.length; n++){
+          if(this.roleId === this.idList[n]){
+          roleName = roleCheckResult[n]["Name"];
+          }
+        }
+        localStorage.setItem('RoleName', roleName);
+        this.router.navigate(["/formes"]);
+      }
+      else{
+        Swal({
+          position: 'center',
+          type: 'warning',
+          title: data2["Message"],
+          showConfirmButton: true,
+          // timer: 2000,
+        })
+        window.localStorage.clear();
+        this.router.navigate(["/authentication/signin"]);
+      }
+    },
+    error => {
+      console.log(error);
+      Swal({
+        position: 'center',
+        type: 'warning',
+        title: "Error Status: "+error.status,
+        text: error.statusText,
+        showConfirmButton: true,
+        // timer: 2000,
+      })
+      //this.onErrorBackToLogin(error);
+    });
   }
 }

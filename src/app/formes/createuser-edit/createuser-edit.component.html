@@ -7,12 +7,10 @@
           <div class="row">
             <div class="col">
               <label>Outlet Photo</label>
-              <input type="file" accept="image/*" (keyup)="autosave()" base-sixty-four-input (change)="changeListenerOutletPhoto($event)"/>
-            </div>
-            <div class="col">
               <div *ngIf="outletPhoto != undefined && outletPhoto != ''">
-                <img [src]="outletPhoto" style="width:30%; height:30%;" align="right"/>
+                <img [src]="outletPhoto" style="width:50%; height:50%;"/>
               </div>
+              <input type="file" accept="image/*" base-sixty-four-input (change)="changeListenerOutletPhoto($event)"/>
             </div>
           </div>
         </div>

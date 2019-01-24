@@ -61,7 +61,10 @@
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <span class="dropdown-item" (click)="showDetail(merchantInfo)">Edit</span>
-                <!-- <div class="dropdown-divider"></div> -->
+                <!-- <div class="dropdown-divider"></div>
+                <span class="dropdown-item" (click)="deleteInfoes(merchantInfo)" data-toggle="modal" data-target="#deleteModal" *ngIf="merchantInfo.Status == 'offline' || merchantInfo.Status == 'Offline'">
+                  Delete
+                </span> -->
               </div>
             </div>
             <!-- <button type="button" class="btn btn-link" (click)=showDetail(merchantInfo)>{{merchantInfo.Status}}</button> -->
@@ -72,5 +75,25 @@
         </tr>
       </tbody>
     </table>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">DELETE</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              <strong>Confirm Delete Current Offline Merchant Information</strong>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" (click)="delete()" data-dismiss="modal">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

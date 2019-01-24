@@ -8,6 +8,10 @@ import { MenuView } from '../menu-view.model'
 import { FormControl } from '@angular/forms/src/model';
 import { global } from '../../global';
 import Swal from 'sweetalert2';
+import { Observable } from "rxjs/Rx";
+import { map, expand } from "rxjs/operators";
+import "rxjs/add/observable/empty";
+import { CompressorService } from ".././compressor.service";
 
 class OperationHour {
   OpenTime;
@@ -70,10 +74,29 @@ export class EditMenuComponent implements OnInit {
   // ReservationSelectedItems = [];
   // ReservationDropdownSettings = {};
 
+    //compress
+    data: FileList;
+    compressedImages = [];
+    recursiveCompress = (image: File, index, array, width:number = 500) => {
+      return this.compressor.compress(image, width).pipe(
+        map(response => {
+          //Code block after completing each compression
+          // console.log("compressed " + index + image.name);
+          this.compressedImages.push(response);
+          return {
+            data: response,
+            index: index + 1,
+            array: array
+          };
+        })
+      );
+    };
+
   constructor(private frmBuilder: FormBuilder,
               public http: Http,
               private cdRef: ChangeDetectorRef,
-              private router: Router,) { }
+              private router: Router,
+              private compressor: CompressorService) { }
 
   ngOnInit() {
     // this.menuDetails.MobileFormat = "+65-";
@@ -81,7 +104,16 @@ export class EditMenuComponent implements OnInit {
     let assignMerchantInfoes = JSON.parse(this.editMerchantInfoes);
     //console.log(assignMerchantInfoes);
     this.menuDetails.Id = assignMerchantInfoes['Id'];
-    this.menuDetails.CoverPhoto = assignMerchantInfoes['OutletPhoto'];
+    let token = localStorage.getItem("Token")
+    let getResUrl = global.host + "merchantinfoes" + "?token=" + token + "&id=" + this.menuDetails.Id;
+    this.http.get(getResUrl, {}).map(res => res.json()).subscribe(merchantInfoesData => {
+      // console.log(merchantInfoesData[0]['Id'])
+      if(merchantInfoesData[0]['Id'] == this.menuDetails.Id){
+        this.menuDetails.CoverPhoto = merchantInfoesData[0]['OutletPhoto']
+      }
+    })
+
+    // this.menuDetails.CoverPhoto = assignMerchantInfoes['OutletPhoto'];
     this.menuDetails.UserName = assignMerchantInfoes['UserName'];
     this.menuDetails.Password = assignMerchantInfoes['Password'];
     this.menuDetails.Email = assignMerchantInfoes['Email'];
@@ -126,27 +158,38 @@ export class EditMenuComponent implements OnInit {
     })
   }
 
-  _handleReaderLoaded(readerEvt) {
-    var reader = readerEvt.target;
-    this.menuDetails.CoverPhoto = reader.result;
-    this.loaded = true;
+  compress(event, width:number = 500) {
+    this.data = event.target.files;
+    const compress = this.recursiveCompress(this.data[0], 0, this.data, width).pipe(
+      expand(res => {
+        return res.index > res.array.length - 1
+          ? Observable.empty()
+          : this.recursiveCompress(this.data[res.index], res.index, this.data, width);
+      })
+    );
+    return compress;
   }
 
-  handleFileSelect(evt){
-    var file = evt.dataTransfer ? evt.dataTransfer.files[0] : evt.target.files[0];
-    if (file == undefined){
-      this.menuDetails.CoverPhoto = undefined;
-      return;
+  //Convert outlet photo to base64
+  handleFileSelect(event) {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      const reader = new FileReader()
+      let compressObs = this.compress(event, 600);
+      compressObs.subscribe(res => {
+          if (res.index > res.array.length - 1) {
+            reader.onloadend = e => {
+              this.menuDetails.CoverPhoto = reader.result;
+            };
+            reader.readAsDataURL(this.compressedImages[0]);
+            // reader.readAsDataURL(file)
+          }
+        });
     }
-    var pattern = /image-*/;
-    var reader = new FileReader();
-    if(!file.type.match(pattern)){
-      alert("invalid format");
-      return;
-    }
-    this.loaded = false;
-    reader.onload = this._handleReaderLoaded.bind(this);
-    reader.readAsDataURL(file);
+  }
+
+  removeOutlet(){
+    this.menuDetails.CoverPhoto = '';
   }
  
 
@@ -252,7 +295,7 @@ export class EditMenuComponent implements OnInit {
         }
         else {
           this.http.post(postOfflineMerchantUrl, this.offlineMerchantInfoes, {}).map(res => res.json()).subscribe(data => {
-            console.log(data)
+            // console.log(data)
             if(data['Message']==undefined){
               Swal({
                 position: 'center',

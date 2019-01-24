@@ -206,7 +206,7 @@ export class ExpiryPromocodeComponent implements OnInit {
             if((moment(expiryPromocode[i]["EndTime"]).add(8, 'hours').format('YYYY-MM-DDTHH:mm:ss')) < this.currentDate){
               expiryPromocode[i]['StartTime'] =  moment(expiryPromocode[i]["StartTime"]).add(8, 'hours').format('YYYY-MM-DDTHH:mm:ss')
               expiryPromocode[i]['EndTime'] =  moment(expiryPromocode[i]["EndTime"]).add(8, 'hours').format('YYYY-MM-DDTHH:mm:ss')
-              this.promotionCodes.push(expiryPromocode[i])
+              this.promotionCodes.push(expiryPromocode[i]) 
           }
         }
         // console.log(this.promotionCodes)

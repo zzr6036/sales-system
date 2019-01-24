@@ -11,6 +11,7 @@ import { MenuRoutes } from './menu.routing'
 import { CreateMenuComponent } from './create-menu/create-menu.component';
 import { EditMenuComponent } from './edit-menu/edit-menu.component';
 import { ExcelService } from '../services/excel.service';
+import { CompressorService } from './compressor.service'
 
 @NgModule({
   imports: [CommonModule, RouterModule.forChild(MenuRoutes), 
@@ -19,7 +20,7 @@ import { ExcelService } from '../services/excel.service';
             AngularDateTimePickerModule],
   declarations: [MenuComponent, CreateMenuComponent, EditMenuComponent],
   providers: [{provide: NG_VALUE_ACCESSOR, useExisting: MenuModule, multi: true},
-              ExcelService]
+              ExcelService, CompressorService]
   // providers: [PromotionCodeService]
 //   providers: [PromotionService]
 })

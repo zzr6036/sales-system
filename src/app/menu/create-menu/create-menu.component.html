@@ -6,13 +6,16 @@
           <label for="CoverPhoto">
             <strong>Outlet Photo</strong>
           </label>
+          <div *ngIf="menuDetails.CoverPhoto != undefined && menuDetails.CoverPhoto !=''">
+            <img [src]="menuDetails.CoverPhoto" style="height: 70%; width:70%" align="left">
+          </div>
           <input type="file" class="form-control" id="CoverPhoto" accept="image/*" formControlName="CoverPhoto" (change)="handleFileSelect($event)">
         </div>
-        <div class="col">
-          <div *ngIf="menuDetails.CoverPhoto != undefined && menuDetails.CoverPhoto !=''">
-            <img [src]="menuDetails.CoverPhoto" style="height: 30%; width:30%" align="right">
-          </div>
-        </div>
+        <!-- <div class="col mt-4">
+          <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeOutlet()" style="float: right;">
+            Remove
+          </button>
+        </div> -->
       </div>
     </div>
 

@@ -17,6 +17,9 @@ import { AngularMultiSelectModule } from "angular2-multiselect-dropdown/angular2
 import Swal from 'sweetalert2';
 import { log } from "util";
 import { toString } from "@ng-bootstrap/ng-bootstrap/util/util";
+import { map, expand } from "rxjs/operators";
+import "rxjs/add/observable/empty";
+import { CompressorService } from ".././compressor.service";
 
 class OperationHour {
   OpenTime;
@@ -123,6 +126,24 @@ export class CreateuserEditComponent implements OnInit {
   legalEntitySelection: "";
 
   public myForm: FormGroup;
+
+    //compress
+    data: FileList;
+    compressedImages = [];
+    recursiveCompress = (image: File, index, array, width:number = 500) => {
+      return this.compressor.compress(image, width).pipe(
+        map(response => {
+          //Code block after completing each compression
+          // console.log("compressed " + index + image.name);
+          this.compressedImages.push(response);
+          return {
+            data: response,
+            index: index + 1,
+            array: array
+          };
+        })
+      );
+    };
   
   constructor(
     private router: Router,
@@ -131,7 +152,8 @@ export class CreateuserEditComponent implements OnInit {
     public http: Http,
     public route: ActivatedRoute,
     private fBuilder: FormBuilder,
-    private alerts: AlertsService
+    private alerts: AlertsService,
+    private compressor: CompressorService
   ) {}
 
   ngOnInit() {
@@ -257,148 +279,118 @@ export class CreateuserEditComponent implements OnInit {
     console.log(event);
   }
 
-  // Convert outlet photo to base64
-  _outletPhotohandleReaderLoaded(e) {
-    var reader = e.target;
-    this.outletPhoto = reader.result;
-    this.loaded = true;
-  }
-  // Convert outlet photo to Base64 format
-  changeListenerOutletPhoto(e) {
-    var file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
-    if (file == undefined) {
-      this.outletPhoto = undefined;
-      return;
-    }
-    var pattern = /image-*/;
-    var reader = new FileReader();
-    if (!file.type.match(pattern)) {
-      alert("invalid format");
-      return;
-    }
-    this.loaded = false;
-    reader.onload = this._outletPhotohandleReaderLoaded.bind(this);
-    reader.readAsDataURL(file);
+  compress(event, width:number = 500) {
+    this.data = event.target.files;
+    const compress = this.recursiveCompress(this.data[0], 0, this.data, width).pipe(
+      expand(res => {
+        return res.index > res.array.length - 1
+          ? Observable.empty()
+          : this.recursiveCompress(this.data[res.index], res.index, this.data, width);
+      })
+    );
+    return compress;
   }
 
-  // Convert Nric(Front) image to base64
-  _nricFrontHandleReaderLoaded(e) {
-    var reader = e.target;
-    this.nricFrontImage = reader.result;
-    this.loaded = true;
-  }
-  // Convert Nric(Front) Image to Base64 format
-  changeListenerNricFront(e) {
-    var file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
-    if (file == undefined) {
-      this.nricFrontImage = undefined;
-      return;
+  //Convert outlet photo to base64
+  changeListenerOutletPhoto(event) {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      const reader = new FileReader()
+      let compressObs = this.compress(event, 600);
+      compressObs.subscribe(res => {
+          if (res.index > res.array.length - 1) {
+            reader.onloadend = e => {
+              this.outletPhoto = reader.result;
+            };
+            // reader.readAsDataURL(this.compressedImages[0]);
+            reader.readAsDataURL(file)
+          }
+        });
     }
-    var pattern = /image-*/;
-    var reader = new FileReader();
-    if (!file.type.match(pattern)) {
-      alert("invalid format");
-      return;
-    }
-    this.loaded = false;
-    reader.onload = this._nricFrontHandleReaderLoaded.bind(this);
-    reader.readAsDataURL(file);
   }
 
-  // Convert Nric(Back) image to base64
-  _nricBackhandleReaderLoaded(e) {
-    var reader = e.target;
-    this.nricBackImage = reader.result;
-    this.loaded = true;
+  //convert nric(front) to base64
+  changeListenerNricFront(event){
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      const reader = new FileReader()
+      let compressObs = this.compress(event, 600);
+      compressObs.subscribe(res => {
+          if (res.index > res.array.length - 1) {
+            reader.onloadend = e => {
+              this.nricFrontImage = reader.result;
+            };
+            reader.readAsDataURL(file)
+          }
+        });
+    }
   }
+
   // Convert Nric(Back) Image to Base64 format
-  changeListenerNricBack(e) {
-    var file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
-    if (file == undefined) {
-      this.nricBackImage = undefined;
-      return;
+  changeListenerNricBack(event) {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      const reader = new FileReader()
+      let compressObs = this.compress(event, 600);
+      compressObs.subscribe(res => {
+          if (res.index > res.array.length - 1) {
+            reader.onloadend = e => {
+              this.nricBackImage = reader.result;
+            };
+            reader.readAsDataURL(file)
+          }
+        });
     }
-    var pattern = /image-*/;
-    var reader = new FileReader();
-    if (!file.type.match(pattern)) {
-      alert("invalid format");
-      return;
-    }
-    this.loaded = false;
-    reader.onload = this. _nricBackhandleReaderLoaded.bind(this);
-    reader.readAsDataURL(file);
-  }
-
-  // Convert acraBizFile image to base64
-  _acraBizFilehandleReaderLoaded(e) {
-    var reader = e.target;
-    this.acraBizFile = reader.result;
-    this.loaded = true;
   }
   // Convert acraBizFile Image to Base64 format
-  changeListenerAcraBizFile(e) {
-    var file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
-    if (file == undefined) {
-      this.acraBizFile = undefined;
-      return;
+  changeListenerAcraBizFile(event) {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      const reader = new FileReader()
+      let compressObs = this.compress(event, 600);
+      compressObs.subscribe(res => {
+          if (res.index > res.array.length - 1) {
+            reader.onloadend = e => {
+              this.acraBizFile = reader.result;
+            };
+            reader.readAsDataURL(file)
+          }
+        });
     }
-    var pattern = /image-*/;
-    var reader = new FileReader();
-    if (!file.type.match(pattern)) {
-      alert("invalid format");
-      return;
-    }
-    this.loaded = false;
-    reader.onload = this. _acraBizFilehandleReaderLoaded.bind(this);
-    reader.readAsDataURL(file);
   }
 
   // Convert NeaLicense image to base64
-  _neaHandleReaderLoaded(e) {
-    var reader = e.target;
-    this.neaLicenseImage = reader.result;
-    this.loaded = true;
-  }
-  // Convert NeaLicense Image to Base64 format
-  changeListenerNea(e) {
-    var file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
-    if (file == undefined) {
-      this.neaLicenseImage = undefined;
-      return;
+  changeListenerNea(event) {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      const reader = new FileReader()
+      let compressObs = this.compress(event, 600);
+      compressObs.subscribe(res => {
+          if (res.index > res.array.length - 1) {
+            reader.onloadend = e => {
+              this.neaLicenseImage = reader.result;
+            };
+            reader.readAsDataURL(file)
+          }
+        });
     }
-    var pattern = /image-*/;
-    var reader = new FileReader();
-    if (!file.type.match(pattern)) {
-      alert("invalid format");
-      return;
-    }
-    this.loaded = false;
-    reader.onload = this._neaHandleReaderLoaded.bind(this);
-    reader.readAsDataURL(file);
   }
 
-  // Convert TobaccoAlcoholLicense image to base64
-  _tobHandleReaderLoaded(e) {
-    var reader = e.target;
-    this.tobaccoAlcoholLicense = reader.result;
-    this.loaded = true;
-  }
   // Convert TobaccoAlcoholLicense Image to Base64 format
-  changeListenerTob(e) {
-    var file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
-    if (file == undefined) {
-      this.tobaccoAlcoholLicense = undefined;
-      return;
+  changeListenerTob(event) {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      const reader = new FileReader()
+      let compressObs = this.compress(event, 600);
+      compressObs.subscribe(res => {
+          if (res.index > res.array.length - 1) {
+            reader.onloadend = e => {
+              this.tobaccoAlcoholLicense = reader.result;
+            };
+            reader.readAsDataURL(file)
+          }
+        });
     }
-    var pattern = /image-*/;
-    var reader = new FileReader();
-    if (!file.type.match(pattern)) {
-      alert("invalid format");
-      return;
-    }
-    this.loaded = false;
-    reader.onload = this._tobHandleReaderLoaded.bind(this);
-    reader.readAsDataURL(file);
   }
 
   removeFrontIC() {

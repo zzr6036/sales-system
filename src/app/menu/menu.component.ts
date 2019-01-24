@@ -34,6 +34,11 @@ export class MenuComponent implements OnInit {
               private excelService: ExcelService,) { }
 
   ngOnInit() {
+    this.router.navigate(['/menu/'])
+    this.loadOfflineMerchant()
+  }
+
+  loadOfflineMerchant(){
     let token = localStorage.getItem("Token");
     let getOfflineMerchantUrl = global.host + "merchantinfoes" + "?token=" + token;
     this.http.get(getOfflineMerchantUrl, {}).map(res => res.json()).subscribe(datas => {
@@ -43,6 +48,7 @@ export class MenuComponent implements OnInit {
         console.log(datas['Message']);
       }
       else {
+        this.merchantInfoes = [];
         for(var i=0; i<datas.length; i++){
           if(datas[i].Status == 'offline'){
             this.merchantInfoes.push(datas[i]);
@@ -200,12 +206,31 @@ export class MenuComponent implements OnInit {
     this.onKeySearch(String);
   }
 
-    //Empty input
-    emptyInput(){
-      let tokenNo = localStorage.getItem("Token");
-      let getResUrl = global.host + "merchantinfoes/?token=" + tokenNo;
-      this.http.get(getResUrl, {}).map(res => res.json()).subscribe(data =>{
-        this.merchantInfoes = data;
-      })
-    }
+  deleteInfoes(merchantInfo){
+    localStorage.setItem("DeletingOfflineUser", JSON.stringify(merchantInfo));
+  }
+
+  delete(){
+    let tokenNo = localStorage.getItem("Token");
+    let getMerchantDetails = localStorage.getItem("DeletingOfflineUser");
+    let deleteMerchantDetails = JSON.parse(getMerchantDetails);
+    let id = deleteMerchantDetails['Id']
+
+    this.http.delete(getMerchantDetails, {}).map(res => res.json()).subscribe(offlineMerchantInfoes => {
+      if(offlineMerchantInfoes['Message']){
+        console.log(offlineMerchantInfoes['Message'])
+        alert(offlineMerchantInfoes['Message'])
+        this.loadOfflineMerchant();
+      }
+    })
+  }
+
+  //Empty input
+  emptyInput(){
+    let tokenNo = localStorage.getItem("Token");
+    let getResUrl = global.host + "merchantinfoes/?token=" + tokenNo;
+    this.http.get(getResUrl, {}).map(res => res.json()).subscribe(data =>{
+      this.merchantInfoes = data;
+    })
+  }
 }
